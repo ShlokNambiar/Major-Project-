@@ -27,3 +27,7 @@
 [   900s]   [nonbr] epoch 2/5 loss 0.3180
 [   940s]   [nonbr] epoch 3/5 loss 0.2320
 [   980s]   [nonbr] epoch 4/5 loss 0.2035
+[  1021s]   [nonbr] epoch 5/5 loss 0.1978
+[  1030s] nonbr seed 1 macro F1 0.810 ConstPosOffset F1 0.861
+[  1072s]   [nonbr] epoch 1/5 loss 0.4845
+[  1113s]   [nonbr] epoch 2/5 loss 0.2792
