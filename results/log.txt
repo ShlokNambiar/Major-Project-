@@ -49,3 +49,32 @@
 [  1677s] full seed 1 macro F1 0.816 ConstPosOffset F1 0.908
 [  1718s]   [full] epoch 1/5 loss 0.4974
 [  1760s]   [full] epoch 2/5 loss 0.2200
+[  1802s]   [full] epoch 3/5 loss 0.1881
+[  1843s]   [full] epoch 4/5 loss 0.1796
+[  1884s]   [full] epoch 5/5 loss 0.1721
+[  1899s] full seed 2 macro F1 0.840 ConstPosOffset F1 0.920
+[  1981s]   [full] epoch 1/5 loss 1.1533
+[  2064s]   [full] epoch 2/5 loss 1.2052
+[  2146s]   [full] epoch 3/5 loss 1.4303
+[  2229s]   [full] epoch 4/5 loss 1.0846
+[  2312s]   [full] epoch 5/5 loss 0.8520
+[  2321s] dann 0.05 seed 0 macro F1 0.456
+[  2404s]   [full] epoch 1/5 loss 1.2372
+[  2488s]   [full] epoch 2/5 loss 1.1785
+[  2578s]   [full] epoch 3/5 loss 1.3317
+[  2663s]   [full] epoch 4/5 loss 1.2160
+[  2747s]   [full] epoch 5/5 loss 1.1170
+[  2755s] dann 0.05 seed 1 macro F1 0.089
+[  2841s]   [full] epoch 1/5 loss 1.3394
+[  2924s]   [full] epoch 2/5 loss 1.9505
+[  3007s]   [full] epoch 3/5 loss 1.1718
+[  3091s]   [full] epoch 4/5 loss 1.2691
+[  3173s]   [full] epoch 5/5 loss 0.8874
+[  3182s] dann 0.2 seed 0 macro F1 0.417
+[  3265s]   [full] epoch 1/5 loss 1.3822
+[  3347s]   [full] epoch 2/5 loss 1.6049
+[  3434s]   [full] epoch 3/5 loss 1.1233
+[  3518s]   [full] epoch 4/5 loss 0.9801
+[  3599s]   [full] epoch 5/5 loss 0.8458
+[  3607s] dann 0.2 seed 1 macro F1 0.075
+[  3607s] done
