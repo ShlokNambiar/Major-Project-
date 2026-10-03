@@ -1,1 +1,19 @@
 {'train': (61708, 16, 10, 8), 'val': (11251, 16, 10, 8), 'test': (26255, 16, 10, 8)}
+  [persender] epoch 1/5 loss 0.2931
+  [persender] epoch 2/5 loss 0.1610
+  [persender] epoch 3/5 loss 0.1157
+  [persender] epoch 4/5 loss 0.0866
+  [persender] epoch 5/5 loss 0.0664
+persender 0 {"Overall": {"f1": 0.973421249405207, "auc": 0.9962486916325172}, "A3": {"f1": 0.969895901716215, "auc": 0.9969657605147715}, "A5": {"f1": 0.9609275922459086, "auc": 0.9943679965225638}}
+  [persender] epoch 1/5 loss 0.2830
+  [persender] epoch 2/5 loss 0.1605
+  [persender] epoch 3/5 loss 0.1151
+  [persender] epoch 4/5 loss 0.0883
+  [persender] epoch 5/5 loss 0.0690
+persender 1 {"Overall": {"f1": 0.973188159237836, "auc": 0.9967724959369764}, "A3": {"f1": 0.9704391891891891, "auc": 0.9970215409417638}, "A5": {"f1": 0.9601745771958538, "auc": 0.9961193122132742}}
+  [persender] epoch 1/5 loss 0.2851
+  [persender] epoch 2/5 loss 0.1554
+  [persender] epoch 3/5 loss 0.1106
+  [persender] epoch 4/5 loss 0.0830
+  [persender] epoch 5/5 loss 0.0653
+persender 2 {"Overall": {"f1": 0.9724365292458281, "auc": 0.9963845471151804}, "A3": {"f1": 0.9690934226866931, "auc": 0.996807268761086}, "A5": {"f1": 0.95774477846191, "auc": 0.9952758523272734}}
