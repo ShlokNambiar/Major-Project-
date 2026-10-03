@@ -55,20 +55,19 @@ def build(cfg: SimConfig, seeds, id_base=0, **kw):
 
 
 # ---------------------------------------------------------------- real VeReMi logs
-def load_veremi(trace_dir, gt_file, T=10, K=16, comm_range=300.0, stride=3, max_receivers=None):
-    """Load a VeReMi / VeReMi Extension simulation folder.
+def load_veremi(trace_dir, gt_file=None, T=10, K=16, comm_range=300.0, stride=3, max_receivers=None):
+    """Load a VeReMi Extension simulation folder (validated against the real Zenodo archives).
 
-    trace_dir: folder with traceJSON-<vehId>-*.json (one log per receiver); each line is
-        type 2 (received BSM: pos, spd, hed, sender, rcvTime) or type 3 (own ground truth).
-    gt_file: traceGroundTruthJSON-*.json; each line holds sender id and `attackerType`
-        (0 = benign). Messages are binned to 1 s. NOTE: written to the published format
-        but not validated against the real archives in this sandbox (no network access).
+    trace_dir: folder with traceJSON-<vehId>-<pseudo>-A<attackType>-<start>-<run>.json, one log per
+        vehicle; each line is type 2 (receiver's own state) or type 3 (received BSM with `sender`,
+        `rcvTime`, pos, spd, hed). The attack type of vehicle <vehId> is encoded in its filename
+        (A0 = benign); sender ids in BSMs are vehicle ids, so labels are looked up from filenames.
+        Messages are binned to 1 s. gt_file is unused (kept for API compatibility).
     """
     gt = {}
-    with open(gt_file) as f:
-        for line in f:
-            r = json.loads(line)
-            gt[r["sender"]] = int(r.get("attackerType", 0))
+    for fp in glob.glob(os.path.join(trace_dir, "traceJSON-*.json")):
+        p = os.path.basename(fp).split("-")
+        gt[int(p[1])] = int(p[3][1:])
     X, M, Y, SID = [], [], [], []
     files = sorted(glob.glob(os.path.join(trace_dir, "traceJSON-*.json")))[:max_receivers]
     for fp in files:
@@ -77,7 +76,7 @@ def load_veremi(trace_dir, gt_file, T=10, K=16, comm_range=300.0, stride=3, max_
             for line in f:
                 r = json.loads(line)
                 t = int(r["rcvTime"])
-                if r["type"] == 3:
+                if r["type"] == 2:
                     own[t] = np.array(r["pos"][:2])
                 else:
                     bsm.setdefault(t, {})[r["sender"]] = (np.array(r["pos"][:2]), float(np.linalg.norm(r["spd"][:2])),
