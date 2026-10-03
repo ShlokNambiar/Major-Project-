@@ -1,0 +1,6 @@
+__pycache__/
+*.pyc
+*.npz
+*.aux
+*.log
+!results/log.txt

@@ -1,0 +1,26 @@
+[    16s] windows {'train': (12320, 16, 10, 8), 'val': (3080, 16, 10, 8), 'test': (6160, 16, 10, 8), 'tgt': (6160, 16, 10, 8)}
+[    53s]   [persender] epoch 1/5 loss 0.5021
+[    89s]   [persender] epoch 2/5 loss 0.3669
+[   126s]   [persender] epoch 3/5 loss 0.3534
+[   165s]   [persender] epoch 4/5 loss 0.3447
+[   203s]   [persender] epoch 5/5 loss 0.3418
+[   211s] persender seed 0 macro F1 0.676 ConstPosOffset F1 0.000
+[   252s]   [persender] epoch 1/5 loss 0.4918
+[   291s]   [persender] epoch 2/5 loss 0.3607
+[   331s]   [persender] epoch 3/5 loss 0.3474
+[   370s]   [persender] epoch 4/5 loss 0.3417
+[   408s]   [persender] epoch 5/5 loss 0.3395
+[   416s] persender seed 1 macro F1 0.677 ConstPosOffset F1 0.000
+[   454s]   [persender] epoch 1/5 loss 0.5061
+[   493s]   [persender] epoch 2/5 loss 0.3566
+[   531s]   [persender] epoch 3/5 loss 0.3486
+[   570s]   [persender] epoch 4/5 loss 0.3435
+[   608s]   [persender] epoch 5/5 loss 0.3401
+[   616s] persender seed 2 macro F1 0.672 ConstPosOffset F1 0.001
+[   656s]   [nonbr] epoch 1/5 loss 0.4836
+[   695s]   [nonbr] epoch 2/5 loss 0.3756
+[   734s]   [nonbr] epoch 3/5 loss 0.2374
+[   773s]   [nonbr] epoch 4/5 loss 0.2176
+[   812s]   [nonbr] epoch 5/5 loss 0.2111
+[   820s] nonbr seed 0 macro F1 0.675 ConstPosOffset F1 0.750
+[   859s]   [nonbr] epoch 1/5 loss 0.4658
