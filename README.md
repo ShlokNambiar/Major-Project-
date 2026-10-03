@@ -17,9 +17,9 @@ paper/main.tex       conference paper (IEEEtran)
 Run: `pip install -r requirements.txt && python run_experiments.py && python make_tables.py`
 (`--quick` for a smoke test).
 
-## Important status note
-The sandbox this was built in could not reach Zenodo/GitHub, so **the reported numbers come from the
-included simulator, not from the real VeReMi / VeReMi Extension / NextGen data**. `data.load_veremi` implements
-the published log format but has not been run against the real archives. Before submission, download the
-datasets, run `load_veremi`, and replace the simulated results (Section "Threats to validity" in the paper
-says this explicitly).
+## Status note
+`nambd/sim.py` results (results/results.json) come from the included simulator. `data.load_veremi` has now been
+validated on the real **VeReMi Extension** archives (Zenodo 20090854; RandomPos_1416 and ConstSpeed_1416 only).
+`run_real.py` trains on the 50400-54000 s slices and tests on the later 54000-57600 s slices
+(receiver-disjoint val/test blocks), 3 seeds; output in results/results_real.json and results/real_log.txt.
+Original VeReMi, NextGen and the other Extension attacks have not been run yet.
