@@ -17,3 +17,22 @@ persender 1 {"Overall": {"f1": 0.973188159237836, "auc": 0.9967724959369764}, "A
   [persender] epoch 4/5 loss 0.0830
   [persender] epoch 5/5 loss 0.0653
 persender 2 {"Overall": {"f1": 0.9724365292458281, "auc": 0.9963845471151804}, "A3": {"f1": 0.9690934226866931, "auc": 0.996807268761086}, "A5": {"f1": 0.95774477846191, "auc": 0.9952758523272734}}
+  [nonbr] epoch 1/5 loss 0.2827
+  [nonbr] epoch 2/5 loss 0.1394
+  [nonbr] epoch 3/5 loss 0.0996
+  [nonbr] epoch 4/5 loss 0.0758
+  [nonbr] epoch 5/5 loss 0.0577
+nonbr 0 {"Overall": {"f1": 0.9818437625619724, "auc": 0.9965638572078943}, "A3": {"f1": 0.9824343872700971, "auc": 0.9979577597230874}, "A5": {"f1": 0.947576301615799, "auc": 0.992907994139574}}
+  [nonbr] epoch 1/5 loss 0.2713
+  [nonbr] epoch 2/5 loss 0.1424
+  [nonbr] epoch 3/5 loss 0.0980
+  [nonbr] epoch 4/5 loss 0.0790
+  [nonbr] epoch 5/5 loss 0.0614
+nonbr 1 {"Overall": {"f1": 0.9831259015733503, "auc": 0.9966335092918825}, "A3": {"f1": 0.9842642863715837, "auc": 0.9978661449664392}, "A5": {"f1": 0.9520601503759398, "auc": 0.9934006094368444}}
+  [nonbr] epoch 1/5 loss 0.2790
+  [nonbr] epoch 2/5 loss 0.1377
+  [nonbr] epoch 3/5 loss 0.1017
+  [nonbr] epoch 4/5 loss 0.0791
+  [nonbr] epoch 5/5 loss 0.0633
+nonbr 2 {"Overall": {"f1": 0.9800623261736421, "auc": 0.9963311271339114}, "A3": {"f1": 0.9814428260121574, "auc": 0.9979147991061506}, "A5": {"f1": 0.9411694224778336, "auc": 0.9921775455078388}}
+  [full] epoch 1/5 loss 0.2652
