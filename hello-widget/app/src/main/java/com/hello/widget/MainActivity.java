@@ -13,7 +13,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
@@ -86,7 +85,6 @@ public class MainActivity extends Activity {
     }
 
     private void bindPreview() {
-        ((ImageView) preview.findViewById(R.id.hello)).setImageBitmap(HelloText.render(this));
         Weather.Cached w = Weather.cached(this);
         ((TextView) preview.findViewById(R.id.temp)).setText(w == null ? "--°" : w.temp + "°");
         ((TextView) preview.findViewById(R.id.weather_icon)).setText(w == null ? "⛅" : w.icon);

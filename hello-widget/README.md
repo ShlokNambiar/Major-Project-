@@ -5,6 +5,7 @@ An iOS-style "hello" home-screen widget for Android:
 > *hello* [● 09] Thu
 > It's 🕕 6:15 PM , [22° ⛅]
 
+- **Fonts**: Inter SemiBold for text (closest open match to SF Pro); "hello" is a hand-traced vector of the Apple-style lettering
 - **Date / day / time / analog clock**: live, ticks every minute (uses `TextClock` / `AnalogClock`, no battery drain)
 - **Weather**: real current temperature + condition from [Open-Meteo](https://open-meteo.com) (free, no API key), refreshes every 30 min
 - Location: typed city → device location (if allowed) → IP-based fallback

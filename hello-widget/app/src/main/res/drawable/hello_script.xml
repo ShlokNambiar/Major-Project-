@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Hand-traced monoline "hello" lettering -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="79dp" android:height="35dp"
+    android:viewportWidth="158" android:viewportHeight="70">
+    <group android:translateX="-2" android:translateY="-3">
+        <path
+            android:pathData="M4.8,64.0 C20.2,54.0 37.6,30.0 41.4,17.0 C44.8,7.0 38.1,5.0 35.0,13.0 C30.4,24.0 24.8,50.0 21.0,70.0 C27.2,54.0 33.6,44.0 40.6,44.0 C47.6,44.0 47.7,51.0 44.7,58.0 C41.7,65.0 44.0,70.0 50.0,70.0 C57.0,70.0 64.0,63.0 68.8,57.0 C75.7,51.0 76.8,43.0 71.8,43.0 C65.8,43.0 62.4,53.0 62.4,60.0 C63.4,67.0 69.0,70.0 75.0,70.0 C82.0,70.0 91.5,52.0 97.3,32.0 C102.7,15.0 102.1,5.0 97.8,7.0 C93.5,9.0 89.6,30.0 87.5,52.0 C86.8,64.0 89.0,70.0 95.0,70.0 C102.0,70.0 111.5,52.0 117.3,32.0 C122.7,15.0 122.1,5.0 117.8,7.0 C113.5,9.0 109.6,30.0 107.5,52.0 C106.8,64.0 109.0,70.0 115.0,70.0 C121.3,68.0 127.1,48.0 134.5,45.0 C142.9,42.0 145.8,50.0 142.5,59.0 C139.3,68.0 130.7,72.0 128.7,65.0 C126.7,58.0 132.2,47.0 140.4,46.0 C145.5,45.0 149.4,46.0 156.1,41.0"
+            android:strokeColor="#FFFFFF"
+            android:strokeWidth="5"
+            android:strokeLineCap="round"
+            android:strokeLineJoin="round" />
+    </group>
+</vector>

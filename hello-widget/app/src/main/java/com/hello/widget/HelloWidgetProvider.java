@@ -58,7 +58,6 @@ public class HelloWidgetProvider extends AppWidgetProvider {
 
     static RemoteViews buildViews(Context context) {
         RemoteViews v = new RemoteViews(context.getPackageName(), R.layout.widget_hello);
-        v.setImageViewBitmap(R.id.hello, HelloText.render(context));
 
         Weather.Cached w = Weather.cached(context);
         v.setTextViewText(R.id.temp, w == null ? "--°" : w.temp + "°");
