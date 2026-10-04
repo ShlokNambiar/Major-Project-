@@ -138,6 +138,40 @@ public class MainActivity extends Activity {
     private void buildIcons() {
         category("Music");
         for (Icons.AppIcon icon : Icons.ALL) iconCard(icon);
+
+        category("Icon widget style");
+        Switch label = new Switch(this);
+        label.setText("Show app name under icon");
+        label.setTextColor(Color.WHITE);
+        label.setTypeface(medium);
+        label.setChecked(IconWidgetProvider.prefs(this).getBoolean("show_label", false));
+        label.setOnCheckedChangeListener((b, on) -> {
+            IconWidgetProvider.prefs(this).edit().putBoolean("show_label", on).apply();
+            IconWidgetProvider.updateAll(this);
+        });
+        content.addView(label, lp(dp(6)));
+
+        content.addView(text("Icon size — match your home screen icons", 13.5f, 0xCCFFFFFF, medium), lp(dp(16)));
+        LinearLayout sizes = new LinearLayout(this);
+        sizes.setPadding(dp(4), dp(4), dp(4), dp(4));
+        sizes.setBackground(round(SURFACE, dp(20)));
+        String[] names = {"S", "M", "L", "XL"};
+        int current = IconWidgetProvider.prefs(this).getInt("size", IconWidgetProvider.DEFAULT_SIZE);
+        for (int i = 0; i < names.length; i++) {
+            final int size = IconWidgetProvider.SIZES[i];
+            boolean on = size == current;
+            TextView b = text(names[i], 14, on ? 0xFF15151A : 0xCCFFFFFF, bold);
+            b.setGravity(Gravity.CENTER);
+            b.setPadding(0, dp(9), 0, dp(9));
+            if (on) b.setBackground(round(ACCENT, dp(16)));
+            b.setOnClickListener(v -> {
+                IconWidgetProvider.prefs(this).edit().putInt("size", size).apply();
+                IconWidgetProvider.updateAll(this);
+                showTab(1);
+            });
+            sizes.addView(b, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+        }
+        content.addView(sizes, lp(dp(8)));
         TextView note = text("Android doesn't let one app change another app's icon, so each icon can be "
                 + "added as a 1×1 icon widget (looks like a normal icon, no badge) or as a shortcut. "
                 + "Launchers that support icon packs (Nova, Lawnchair…) can also pick Hello Widget as an icon pack.",
