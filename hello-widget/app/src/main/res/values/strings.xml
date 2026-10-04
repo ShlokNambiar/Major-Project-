@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">Hello Widget</string>
+    <string name="widget_name">hello</string>
+    <string name="widget_desc">Date, time and live weather</string>
+</resources>
