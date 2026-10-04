@@ -44,20 +44,70 @@ final class Weather {
         return prefs(c).getBoolean("fahrenheit", false);
     }
 
-    /** Blocking: resolve location, fetch current conditions, store them. Call off the main thread. */
+    /** Blocking: resolve location, fetch current conditions + 7-day strip, store them. Off main thread. */
     static void fetchAndStore(Context c) throws Exception {
         double[] loc = resolveLocation(c);
         String unit = fahrenheit(c) ? "fahrenheit" : "celsius";
-        JSONObject cur = new JSONObject(get("https://api.open-meteo.com/v1/forecast?latitude=" + loc[0]
+        JSONObject res = new JSONObject(get("https://api.open-meteo.com/v1/forecast?latitude=" + loc[0]
                 + "&longitude=" + loc[1] + "&current=temperature_2m,weather_code,is_day"
-                + "&temperature_unit=" + unit)).getJSONObject("current");
+                + "&daily=weather_code,temperature_2m_max,temperature_2m_min"
+                + "&past_days=3&forecast_days=4&timezone=auto"
+                + "&temperature_unit=" + unit));
+        JSONObject cur = res.getJSONObject("current");
+        int code = cur.getInt("weather_code");
         long temp = Math.round(cur.getDouble("temperature_2m"));
-        String icon = icon(cur.getInt("weather_code"), cur.optInt("is_day", 1) == 1);
+        String icon = icon(code, cur.optInt("is_day", 1) == 1);
         prefs(c).edit()
                 .putString("temp", String.valueOf(temp))
                 .putString("icon", icon)
+                .putString("condition", condition(code))
+                .putString("daily", res.getJSONObject("daily").toString())
                 .putLong("time", System.currentTimeMillis())
                 .apply();
+    }
+
+    /** One day of the 7-day strip (3 past days, today, 3 ahead). */
+    static final class Day {
+        final String date; final long max, min; final int code;
+        Day(String date, long max, long min, int code) { this.date = date; this.max = max; this.min = min; this.code = code; }
+    }
+
+    /** Daily forecast keyed by ISO date (yyyy-MM-dd), or empty if not fetched yet. */
+    static java.util.Map<String, Day> daily(Context c) {
+        java.util.Map<String, Day> out = new java.util.HashMap<>();
+        try {
+            JSONObject d = new JSONObject(prefs(c).getString("daily", "{}"));
+            JSONArray t = d.getJSONArray("time"), mx = d.getJSONArray("temperature_2m_max"),
+                    mn = d.getJSONArray("temperature_2m_min"), wc = d.getJSONArray("weather_code");
+            for (int i = 0; i < t.length(); i++) {
+                out.put(t.getString(i), new Day(t.getString(i), Math.round(mx.optDouble(i)),
+                        Math.round(mn.optDouble(i)), wc.optInt(i)));
+            }
+        } catch (Exception ignored) { }
+        return out;
+    }
+
+    static String condition(Context c) {
+        return prefs(c).getString("condition", "");
+    }
+
+    static String place(Context c) {
+        return prefs(c).getString("place", "");
+    }
+
+    static String condition(int code) {
+        if (code == 0) return "CLEAR";
+        if (code == 1) return "MOSTLY CLEAR";
+        if (code == 2) return "PARTLY CLOUDY";
+        if (code == 3) return "OVERCAST";
+        if (code == 45 || code == 48) return "FOGGY";
+        if (code >= 51 && code <= 57) return "DRIZZLE";
+        if (code >= 61 && code <= 67) return "RAIN";
+        if (code >= 71 && code <= 77) return "SNOW";
+        if (code >= 80 && code <= 82) return "SHOWERS";
+        if (code == 85 || code == 86) return "SNOW SHOWERS";
+        if (code >= 95) return "THUNDERSTORM";
+        return "";
     }
 
     /** Manual city > device location > IP geolocation. */
@@ -77,13 +127,30 @@ final class Weather {
                 } catch (SecurityException ignored) { }
             }
             if (best != null) {
-                p.edit().putString("place", "Current location").apply();
+                p.edit().putString("place", cityName(c, best.getLatitude(), best.getLongitude())).apply();
                 return new double[]{best.getLatitude(), best.getLongitude()};
             }
         }
         JSONObject ip = new JSONObject(get("https://get.geojs.io/v1/ip/geo.json"));
         p.edit().putString("place", ip.optString("city", "Approximate location")).apply();
         return new double[]{ip.getDouble("latitude"), ip.getDouble("longitude")};
+    }
+
+    /** Reverse-geocodes to a city name; falls back to a generic label. */
+    private static String cityName(Context c, double lat, double lon) {
+        try {
+            if (android.location.Geocoder.isPresent()) {
+                java.util.List<android.location.Address> a =
+                        new android.location.Geocoder(c, java.util.Locale.getDefault()).getFromLocation(lat, lon, 1);
+                if (a != null && !a.isEmpty()) {
+                    String city = a.get(0).getLocality();
+                    if (city == null) city = a.get(0).getSubAdminArea();
+                    if (city == null) city = a.get(0).getAdminArea();
+                    if (city != null) return city;
+                }
+            }
+        } catch (Exception ignored) { }
+        return "Current location";
     }
 
     /** Looks up a city name; returns {lat, lon} and stores it as the manual location. */
@@ -93,7 +160,7 @@ final class Weather {
         JSONArray arr = res.optJSONArray("results");
         if (arr == null || arr.length() == 0) return null;
         JSONObject r = arr.getJSONObject(0);
-        String name = r.getString("name") + (r.has("country") ? ", " + r.getString("country") : "");
+        String name = r.getString("name");
         prefs(c).edit()
                 .putBoolean("use_city", true)
                 .putString("city_name", name)

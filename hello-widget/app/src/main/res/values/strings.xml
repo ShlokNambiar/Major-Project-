@@ -2,4 +2,10 @@
     <string name="app_name">Hello Widget</string>
     <string name="widget_name">hello</string>
     <string name="widget_desc">Date, time and live weather</string>
+    <string name="void_name">Void · Weather</string>
+    <string name="void_desc">Pixel clock with a 7-day weather strip</string>
+    <string name="calendar_name">Calendar</string>
+    <string name="calendar_desc">Big date with this month\'s calendar</string>
+    <string name="agenda_name">Calendar · Up next</string>
+    <string name="agenda_desc">Big date with your upcoming events</string>
 </resources>

@@ -1,5 +1,18 @@
 # Hello Widget (Android)
 
+Four home-screen widgets in one app:
+
+| Widget | What it shows |
+|---|---|
+| **hello** | *hello* · date pill · day / analog clock · time · live weather pill |
+| **Void · Weather** | Pixel clock, 7-day strip (3 past days, today with current weather, 3-day forecast high/low), condition + city |
+| **Calendar** | `2026.07`, big date, full date, day-of-year, month grid with today circled |
+| **Calendar · Up next** | Same date block plus your next 3 calendar events (colour bar, title, time) |
+
+Fonts: Inter (SemiBold/Bold), Departure Mono for the Void widget (OFL, see `licenses/`).
+
+## The hello widget
+
 An iOS-style "hello" home-screen widget for Android:
 
 > *hello* [● 09] Thu

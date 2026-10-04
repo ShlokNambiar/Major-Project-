@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.Switch;
@@ -21,13 +22,14 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
     private TextView status;
-    private android.widget.FrameLayout preview;
+    private static final int BG = 0xFF0E0E12;
+    private LinearLayout previews;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().setStatusBarColor(getColor(R.color.brand_blue));
-        getWindow().setNavigationBarColor(getColor(R.color.brand_blue));
+        getWindow().setStatusBarColor(BG);
+        getWindow().setNavigationBarColor(BG);
 
         LinearLayout col = new LinearLayout(this);
         col.setOrientation(LinearLayout.VERTICAL);
@@ -35,12 +37,15 @@ public class MainActivity extends Activity {
 
         TextView title = text("Hello Widget", 28);
         col.addView(title);
-        col.addView(text("Live preview", 14), lp(dp(24), 0));
+        col.addView(text("Live previews · tap Add to place one on your home screen", 14), lp(dp(8), 0));
 
-        preview = new android.widget.FrameLayout(this);
-        col.addView(preview, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(170)));
+        previews = new LinearLayout(this);
+        previews.setOrientation(LinearLayout.VERTICAL);
+        col.addView(previews, lp(dp(8), 0));
 
-        col.addView(button("Add widget to home screen", v -> pinWidget()), lp(dp(24), 0));
+        col.addView(text("Settings", 18), lp(dp(28), 0));
+        col.addView(button("Allow calendar access (for Up next)", v -> requestPermissions(
+                new String[]{Manifest.permission.READ_CALENDAR}, 2)), lp(dp(12), 0));
         col.addView(button("Use my location for weather", v -> useLocation()), lp(dp(10), 0));
         col.addView(button("Keep clock exact (disable battery optimisation)", v -> exemptBattery()), lp(dp(10), 0));
 
@@ -71,13 +76,14 @@ public class MainActivity extends Activity {
         status.setAlpha(0.85f);
         col.addView(status, lp(dp(16), 0));
 
-        TextView tips = text("Tips: tap the date to open your calendar, the clock to open alarms, "
-                + "the weather pill to refresh. Weather updates every 30 min (Open-Meteo).", 13);
+        TextView tips = text("Tips: on the hello widget tap the date for your calendar, the clock for alarms "
+                + "and the weather pill to refresh. Calendar widgets open your calendar. "
+                + "Weather updates every 30 min (Open-Meteo).", 13);
         tips.setAlpha(0.7f);
         col.addView(tips, lp(dp(16), 0));
 
         ScrollView scroll = new ScrollView(this);
-        scroll.setBackgroundColor(getColor(R.color.brand_blue));
+        scroll.setBackgroundColor(BG);
         scroll.addView(col);
         setContentView(scroll);
 
@@ -86,8 +92,15 @@ public class MainActivity extends Activity {
     }
 
     private void bindPreview() {
-        preview.removeAllViews();
-        preview.addView(HelloWidgetProvider.buildViews(this).apply(this, preview));
+        previews.removeAllViews();
+        android.widget.FrameLayout hello = new android.widget.FrameLayout(this);
+        hello.setBackground(new GradientDrawable(GradientDrawable.Orientation.TL_BR, new int[]{0xFF3338E6, 0xFF5B3FD6}));
+        ((GradientDrawable) hello.getBackground()).setCornerRadius(dp(30));
+        hello.addView(HelloWidgetProvider.buildViews(this).apply(this, hello));
+        addPreview("hello", hello, HelloWidgetProvider.class);
+        addCanvasPreview("Void · Weather", new VoidWidgetProvider());
+        addCanvasPreview("Calendar", new CalendarWidgetProvider());
+        addCanvasPreview("Calendar · Up next", new AgendaWidgetProvider());
         Weather.Cached w = Weather.cached(this);
         if (w != null) {
             status.setText("Weather for " + w.place + " · updated "
@@ -105,6 +118,7 @@ public class MainActivity extends Activity {
                 err = "Couldn't load weather: " + e.getMessage();
             }
             HelloWidgetProvider.updateAll(this);
+            CanvasWidget.updateAll(this, VoidWidgetProvider.class);
             final String msg = err;
             runOnUiThread(() -> {
                 bindPreview();
@@ -141,6 +155,11 @@ public class MainActivity extends Activity {
 
     @Override
     public void onRequestPermissionsResult(int code, String[] perms, int[] results) {
+        if (code == 2) {
+            CanvasWidget.updateAll(this, AgendaWidgetProvider.class);
+            bindPreview();
+            return;
+        }
         refresh();
     }
 
@@ -157,15 +176,38 @@ public class MainActivity extends Activity {
     @Override
     protected void onResume() {
         super.onResume();
-        HelloWidgetProvider.scheduleTick(this);
+        TickReceiver.schedule(this);
         HelloWidgetProvider.updateAll(this);
+        CanvasWidget.updateAll(this, VoidWidgetProvider.class);
+        CanvasWidget.updateAll(this, CalendarWidgetProvider.class);
+        CanvasWidget.updateAll(this, AgendaWidgetProvider.class);
         if (status != null) bindPreview();
     }
 
-    private void pinWidget() {
+    private void addCanvasPreview(String name, CanvasWidget widget) {
+        ImageView img = new ImageView(this);
+        img.setImageBitmap(widget.render(this, (int) CanvasWidget.DESIGN_W, (int) CanvasWidget.DESIGN_H));
+        img.setAdjustViewBounds(true);
+        addPreview(name, img, widget.getClass());
+    }
+
+    private void addPreview(String name, View view, Class<?> provider) {
+        LinearLayout head = new LinearLayout(this);
+        head.setGravity(Gravity.CENTER_VERTICAL);
+        TextView label = text(name, 15);
+        head.addView(label, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+        head.addView(button("Add", v -> pinWidget(provider)));
+        previews.addView(head, lp(dp(20), 0));
+        LinearLayout.LayoutParams p = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
+                view instanceof ImageView ? ViewGroup.LayoutParams.WRAP_CONTENT : dp(170));
+        p.topMargin = dp(8);
+        previews.addView(view, p);
+    }
+
+    private void pinWidget(Class<?> provider) {
         AppWidgetManager m = getSystemService(AppWidgetManager.class);
         if (m != null && m.isRequestPinAppWidgetSupported()) {
-            m.requestPinAppWidget(new ComponentName(this, HelloWidgetProvider.class), null, null);
+            m.requestPinAppWidget(new ComponentName(this, provider), null, null);
         } else {
             status.setText("Long-press your home screen → Widgets → Hello Widget");
         }
