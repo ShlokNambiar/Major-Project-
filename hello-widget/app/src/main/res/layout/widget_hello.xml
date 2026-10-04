@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!-- Text and pills are bitmaps drawn by WidgetArt (launchers ignore custom widget fonts). -->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@+id/root"
     android:layout_width="match_parent"
@@ -23,53 +24,17 @@
             android:scaleType="fitCenter"
             android:src="@drawable/hello_script" />
 
-        <LinearLayout
+        <ImageView
             android:id="@+id/date_pill"
             android:layout_width="wrap_content"
-            android:layout_height="30dp"
-            android:layout_marginStart="9dp"
-            android:background="@drawable/bg_pill_date"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="2.5dp"
-            android:paddingEnd="11dp">
+            android:layout_height="wrap_content"
+            android:layout_marginStart="9dp" />
 
-            <TextView
-                android:layout_width="25dp"
-                android:layout_height="25dp"
-                android:background="@drawable/bg_dot_red"
-                android:gravity="center"
-                android:includeFontPadding="false"
-                android:text="···"
-                android:textColor="#E6FFFFFF"
-                android:textSize="9sp"
-                android:textStyle="bold" />
-
-            <TextClock
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="7dp"
-                android:fontFamily="@font/inter_semibold"
-                android:format12Hour="dd"
-                android:format24Hour="dd"
-                android:includeFontPadding="false"
-                android:letterSpacing="-0.02"
-                android:textColor="@color/pill_text"
-                android:textSize="16sp" />
-        </LinearLayout>
-
-        <TextClock
+        <ImageView
             android:id="@+id/day"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="13dp"
-            android:fontFamily="@font/inter_semibold"
-            android:format12Hour="EEE"
-            android:format24Hour="EEE"
-            android:includeFontPadding="false"
-            android:letterSpacing="-0.02"
-            android:textColor="#FFFFFF"
-            android:textSize="17sp" />
+            android:layout_marginStart="12dp" />
     </LinearLayout>
 
     <!-- Row 2:  It's (clock) 6:15 PM ,  [22° ⛅] -->
@@ -80,69 +45,30 @@
         android:gravity="center_vertical"
         android:orientation="horizontal">
 
-        <TextView
+        <ImageView
+            android:id="@+id/its"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:fontFamily="@font/inter_semibold"
-            android:includeFontPadding="false"
-            android:letterSpacing="-0.02"
-            android:text="It's"
-            android:textColor="#FFFFFF"
-            android:textSize="17sp" />
+            android:layout_height="wrap_content" />
 
         <AnalogClock
             android:id="@+id/analog"
             android:layout_width="29dp"
             android:layout_height="29dp"
-            android:layout_marginStart="7dp"
+            android:layout_marginStart="6dp"
             android:dial="@drawable/clock_dial"
             android:hand_hour="@drawable/clock_hour"
             android:hand_minute="@drawable/clock_minute" />
 
-        <TextClock
+        <ImageView
             android:id="@+id/time"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="7dp"
-            android:fontFamily="@font/inter_semibold"
-            android:format12Hour="h:mm a ,"
-            android:format24Hour="HH:mm ,"
-            android:includeFontPadding="false"
-            android:letterSpacing="-0.02"
-            android:textAllCaps="true"
-            android:textColor="#FFFFFF"
-            android:textSize="17sp" />
+            android:layout_marginStart="6dp" />
 
-        <LinearLayout
+        <ImageView
             android:id="@+id/weather_pill"
             android:layout_width="wrap_content"
-            android:layout_height="32dp"
-            android:layout_marginStart="9dp"
-            android:background="@drawable/bg_pill_weather"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
-            android:paddingStart="12dp"
-            android:paddingEnd="10dp">
-
-            <TextView
-                android:id="@+id/temp"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter_semibold"
-                android:includeFontPadding="false"
-                android:letterSpacing="-0.02"
-                android:text="--°"
-                android:textColor="#FFFFFF"
-                android:textSize="16sp" />
-
-            <TextView
-                android:id="@+id/weather_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="4dp"
-                android:includeFontPadding="false"
-                android:text="⛅"
-                android:textSize="15sp" />
-        </LinearLayout>
+            android:layout_height="wrap_content"
+            android:layout_marginStart="8dp" />
     </LinearLayout>
 </LinearLayout>

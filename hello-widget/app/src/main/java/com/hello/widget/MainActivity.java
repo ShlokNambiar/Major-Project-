@@ -21,7 +21,7 @@ import android.widget.TextView;
 public class MainActivity extends Activity {
 
     private TextView status;
-    private View preview;
+    private android.widget.FrameLayout preview;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,11 +37,12 @@ public class MainActivity extends Activity {
         col.addView(title);
         col.addView(text("Live preview", 14), lp(dp(24), 0));
 
-        preview = getLayoutInflater().inflate(R.layout.widget_hello, col, false);
+        preview = new android.widget.FrameLayout(this);
         col.addView(preview, new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, dp(170)));
 
         col.addView(button("Add widget to home screen", v -> pinWidget()), lp(dp(24), 0));
         col.addView(button("Use my location for weather", v -> useLocation()), lp(dp(10), 0));
+        col.addView(button("Keep clock exact (disable battery optimisation)", v -> exemptBattery()), lp(dp(10), 0));
 
         LinearLayout cityRow = new LinearLayout(this);
         cityRow.setGravity(Gravity.CENTER_VERTICAL);
@@ -85,9 +86,9 @@ public class MainActivity extends Activity {
     }
 
     private void bindPreview() {
+        preview.removeAllViews();
+        preview.addView(HelloWidgetProvider.buildViews(this).apply(this, preview));
         Weather.Cached w = Weather.cached(this);
-        ((TextView) preview.findViewById(R.id.temp)).setText(w == null ? "--°" : w.temp + "°");
-        ((TextView) preview.findViewById(R.id.weather_icon)).setText(w == null ? "⛅" : w.icon);
         if (w != null) {
             status.setText("Weather for " + w.place + " · updated "
                     + DateFormat.getTimeFormat(this).format(w.time));
@@ -141,6 +142,24 @@ public class MainActivity extends Activity {
     @Override
     public void onRequestPermissionsResult(int code, String[] perms, int[] results) {
         refresh();
+    }
+
+    private void exemptBattery() {
+        android.os.PowerManager pm = getSystemService(android.os.PowerManager.class);
+        if (pm.isIgnoringBatteryOptimizations(getPackageName())) {
+            status.setText("Battery optimisation is already off for Hello Widget ✓");
+            return;
+        }
+        startActivity(new android.content.Intent(android.provider.Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS,
+                android.net.Uri.parse("package:" + getPackageName())));
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        HelloWidgetProvider.scheduleTick(this);
+        HelloWidgetProvider.updateAll(this);
+        if (status != null) bindPreview();
     }
 
     private void pinWidget() {
