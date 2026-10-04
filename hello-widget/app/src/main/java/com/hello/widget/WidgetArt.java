@@ -56,7 +56,7 @@ final class WidgetArt {
         return b;
     }
 
-    /** [● 09] — lavender glass pill with the coral dot. */
+    /** [● 09] — frosted white pill (the wallpaper tints it, e.g. lavender on blue) with the coral dot. */
     Bitmap datePill(String day) {
         float h = 30 * dp, r = h / 2, dot = 24 * dp, inset = (h - dot) / 2;
         Paint num = textPaint(16, 0xFF29235F);
@@ -66,9 +66,9 @@ final class WidgetArt {
         RectF box = new RectF(0.5f * dp, 0.5f * dp, w - 0.5f * dp, h - 0.5f * dp);
 
         Paint fill = new Paint(Paint.ANTI_ALIAS_FLAG);
-        fill.setShader(new LinearGradient(0, 0, 0, h, 0xE6CFCBFF, 0xD9AEA6F7, Shader.TileMode.CLAMP));
+        fill.setShader(new LinearGradient(0, 0, 0, h, 0x9EFFFFFF, 0x85FFFFFF, Shader.TileMode.CLAMP));
         cv.drawRoundRect(box, r, r, fill);
-        rim(cv, box, r, 1 * dp, 0x8CFFFFFF, 0x26FFFFFF);
+        rim(cv, box, r, 1 * dp, 0x99FFFFFF, 0x26FFFFFF);
 
         float cx = inset + dot / 2, cy = h / 2;
         Paint red = new Paint(Paint.ANTI_ALIAS_FLAG);
@@ -83,7 +83,7 @@ final class WidgetArt {
         return b;
     }
 
-    /** [22° ⛅] — brighter glass pill with a thick soft rim. */
+    /** [22° ⛅] — frosted white pill with a thick soft rim. */
     Bitmap weatherPill(String temp, String icon) {
         float h = 32 * dp, r = h / 2;
         Paint t = textPaint(16, Color.WHITE);
@@ -96,9 +96,9 @@ final class WidgetArt {
         RectF box = new RectF(dp, dp, w - dp, h - dp);
 
         Paint fill = new Paint(Paint.ANTI_ALIAS_FLAG);
-        fill.setShader(new LinearGradient(0, 0, 0, h, 0xD9B9B1FF, 0xCC9A8FF2, Shader.TileMode.CLAMP));
+        fill.setShader(new LinearGradient(0, 0, 0, h, 0x8CFFFFFF, 0x6BFFFFFF, Shader.TileMode.CLAMP));
         cv.drawRoundRect(box, r, r, fill);
-        rim(cv, box, r, 1.8f * dp, 0xD9F1EFFF, 0x73E2DEFF);
+        rim(cv, box, r, 1.8f * dp, 0xD9FFFFFF, 0x66FFFFFF);
 
         float x = drawCentered(cv, temp, t, 13 * dp, h) + gap;
         drawCentered(cv, icon, icon, e, x, h);

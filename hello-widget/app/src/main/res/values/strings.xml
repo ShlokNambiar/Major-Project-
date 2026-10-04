@@ -8,4 +8,6 @@
     <string name="calendar_desc">Big date with this month\'s calendar</string>
     <string name="agenda_name">Calendar · Up next</string>
     <string name="agenda_desc">Big date with your upcoming events</string>
+    <string name="icon_name">App icon</string>
+    <string name="icon_desc">Custom app icon that opens the real app</string>
 </resources>

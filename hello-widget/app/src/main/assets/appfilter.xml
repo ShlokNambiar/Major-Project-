@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Icon-pack mapping for launchers that support icon packs (Nova, Lawnchair, Niagara, …). -->
+<resources>
+    <item component="ComponentInfo{com.spotify.music/com.spotify.music.MainActivity}" drawable="icon_spotify_disco_full" />
+</resources>

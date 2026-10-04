@@ -9,6 +9,10 @@ Four home-screen widgets in one app:
 | **Calendar** | `2026.07`, big date, full date, day-of-year, month grid with today circled |
 | **Calendar · Up next** | Same date block plus your next 3 calendar events (colour bar, title, time) |
 
+| **App icon** (Icons tab) | Custom icon (e.g. disco-ball Spotify) as a 1×1 icon widget, pinned shortcut, or icon pack entry, that opens the real app |
+
+The app is organised into **Widgets** (by category), **Icons** and **Settings** tabs.
+
 Fonts: Inter (SemiBold/Bold), Departure Mono for the Void widget (OFL, see `licenses/`).
 
 ## The hello widget
