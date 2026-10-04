@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Bitmap drawn by AlarmWidgetProvider; weights match its row bands (24/28/1/13/2/16/16). -->
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/canvas"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="@null"
+        android:scaleType="fitXY" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="24">
+            <FrameLayout android:id="@+id/zone_title" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="3" />
+            <FrameLayout android:id="@+id/zone_add" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" />
+        </LinearLayout>
+
+        <LinearLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="28">
+            <FrameLayout android:id="@+id/zone_time" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="3" />
+            <FrameLayout android:id="@+id/zone_toggle" android:layout_width="0dp" android:layout_height="match_parent" android:layout_weight="1" />
+        </LinearLayout>
+
+        <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="1" />
+        <FrameLayout android:id="@+id/zone_skip" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="13" />
+        <FrameLayout android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="2" />
+        <FrameLayout android:id="@+id/zone_vibrate" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="16" />
+        <FrameLayout android:id="@+id/zone_snooze" android:layout_width="match_parent" android:layout_height="0dp" android:layout_weight="16" />
+    </LinearLayout>
+</FrameLayout>

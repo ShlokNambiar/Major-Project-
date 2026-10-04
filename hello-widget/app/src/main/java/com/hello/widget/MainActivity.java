@@ -97,6 +97,10 @@ public class MainActivity extends Activity {
         CanvasWidget.updateAll(this, VoidWidgetProvider.class);
         CanvasWidget.updateAll(this, CalendarWidgetProvider.class);
         CanvasWidget.updateAll(this, AgendaWidgetProvider.class);
+        CanvasWidget.updateAll(this, SkyWidgetProvider.class);
+        CanvasWidget.updateAll(this, RecorderWidgetProvider.class);
+        CanvasWidget.updateAll(this, AlarmWidgetProvider.class);
+        Alarms.schedule(this);
     }
 
     // ---------------------------------------------------------------- tabs
@@ -129,10 +133,17 @@ public class MainActivity extends Activity {
         hello.addView(HelloWidgetProvider.buildViews(this).apply(this, hello));
         widgetCard("hello", "Greeting, date, time and live weather", hello, dp(170), HelloWidgetProvider.class);
         canvasCard("Void · Weather", "Pixel clock with a 7-day weather strip", new VoidWidgetProvider());
+        canvasCard("Sky", "Sun and moon follow your real sunrise and sunset", new SkyWidgetProvider());
 
         category("Calendar");
         canvasCard("Calendar", "Big date and this month at a glance", new CalendarWidgetProvider());
         canvasCard("Calendar · Up next", "Big date with your next events", new AgendaWidgetProvider());
+
+        category("Tools");
+        canvasCard("Recorder", "Record voice notes right from your home screen", new RecorderWidgetProvider(),
+                "Recordings", RecordingsActivity.class);
+        canvasCard("Alarm", "Your next alarm with quick on/off, skip, vibration and snooze", new AlarmWidgetProvider(),
+                "Alarms", AlarmsActivity.class);
     }
 
     private void buildIcons() {
@@ -229,13 +240,31 @@ public class MainActivity extends Activity {
     }
 
     private void canvasCard(String name, String desc, CanvasWidget widget) {
+        canvasCard(name, desc, widget, null, null);
+    }
+
+    /** Preview at the widget's design size; square widgets are shown narrower like on a home screen. */
+    private void canvasCard(String name, String desc, CanvasWidget widget, String openLabel, Class<?> open) {
         ImageView img = new ImageView(this);
-        img.setImageBitmap(widget.render(this, (int) CanvasWidget.DESIGN_W, (int) CanvasWidget.DESIGN_H));
+        img.setImageBitmap(widget.render(this, (int) widget.designW(), (int) widget.designH()));
         img.setAdjustViewBounds(true);
-        widgetCard(name, desc, img, ViewGroup.LayoutParams.WRAP_CONTENT, widget.getClass());
+        View preview = img;
+        int height = ViewGroup.LayoutParams.WRAP_CONTENT;
+        if (widget.designW() < CanvasWidget.DESIGN_W) {
+            FrameLayout box = new FrameLayout(this);
+            int side = dp((int) (widget.designW() >= 250 ? 240 : 170));
+            box.addView(img, new FrameLayout.LayoutParams(side, ViewGroup.LayoutParams.WRAP_CONTENT, Gravity.START));
+            preview = box;
+        }
+        widgetCard(name, desc, preview, height, widget.getClass(), openLabel, open);
     }
 
     private void widgetCard(String name, String desc, View preview, int previewHeight, Class<?> provider) {
+        widgetCard(name, desc, preview, previewHeight, provider, null, null);
+    }
+
+    private void widgetCard(String name, String desc, View preview, int previewHeight, Class<?> provider,
+                            String openLabel, Class<?> open) {
         LinearLayout head = new LinearLayout(this);
         head.setGravity(Gravity.CENTER_VERTICAL);
         LinearLayout titles = new LinearLayout(this);
@@ -243,6 +272,14 @@ public class MainActivity extends Activity {
         titles.addView(text(name, 16, Color.WHITE, bold));
         titles.addView(text(desc, 12.5f, 0x8CFFFFFF, medium));
         head.addView(titles, new LinearLayout.LayoutParams(0, ViewGroup.LayoutParams.WRAP_CONTENT, 1));
+        if (open != null) {
+            TextView o = pill(openLabel, v -> startActivity(new Intent(this, open)));
+            o.setBackground(round(SURFACE, dp(18)));
+            o.setTextColor(Color.WHITE);
+            head.addView(o);
+            View gap = new View(this);
+            head.addView(gap, new LinearLayout.LayoutParams(dp(8), 1));
+        }
         head.addView(pill("Add", v -> pinWidget(provider, null)));
         content.addView(head, lp(dp(12)));
 
@@ -325,6 +362,7 @@ public class MainActivity extends Activity {
             }
             HelloWidgetProvider.updateAll(this);
             CanvasWidget.updateAll(this, VoidWidgetProvider.class);
+            CanvasWidget.updateAll(this, SkyWidgetProvider.class);
             final String msg = err;
             runOnUiThread(() -> {
                 if (msg != null) status.setText(msg);

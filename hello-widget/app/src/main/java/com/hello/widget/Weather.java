@@ -50,7 +50,7 @@ final class Weather {
         String unit = fahrenheit(c) ? "fahrenheit" : "celsius";
         JSONObject res = new JSONObject(get("https://api.open-meteo.com/v1/forecast?latitude=" + loc[0]
                 + "&longitude=" + loc[1] + "&current=temperature_2m,weather_code,is_day"
-                + "&daily=weather_code,temperature_2m_max,temperature_2m_min"
+                + "&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset"
                 + "&past_days=3&forecast_days=4&timezone=auto"
                 + "&temperature_unit=" + unit));
         JSONObject cur = res.getJSONObject("current");
@@ -68,8 +68,11 @@ final class Weather {
 
     /** One day of the 7-day strip (3 past days, today, 3 ahead). */
     static final class Day {
-        final String date; final long max, min; final int code;
-        Day(String date, long max, long min, int code) { this.date = date; this.max = max; this.min = min; this.code = code; }
+        final String date, sunrise, sunset; final long max, min; final int code;
+        Day(String date, long max, long min, int code, String sunrise, String sunset) {
+            this.date = date; this.max = max; this.min = min; this.code = code;
+            this.sunrise = sunrise; this.sunset = sunset;
+        }
     }
 
     /** Daily forecast keyed by ISO date (yyyy-MM-dd), or empty if not fetched yet. */
@@ -79,9 +82,11 @@ final class Weather {
             JSONObject d = new JSONObject(prefs(c).getString("daily", "{}"));
             JSONArray t = d.getJSONArray("time"), mx = d.getJSONArray("temperature_2m_max"),
                     mn = d.getJSONArray("temperature_2m_min"), wc = d.getJSONArray("weather_code");
+            JSONArray sr = d.optJSONArray("sunrise"), ss = d.optJSONArray("sunset");
             for (int i = 0; i < t.length(); i++) {
                 out.put(t.getString(i), new Day(t.getString(i), Math.round(mx.optDouble(i)),
-                        Math.round(mn.optDouble(i)), wc.optInt(i)));
+                        Math.round(mn.optDouble(i)), wc.optInt(i),
+                        sr == null ? null : sr.optString(i, null), ss == null ? null : ss.optString(i, null)));
             }
         } catch (Exception ignored) { }
         return out;

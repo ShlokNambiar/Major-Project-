@@ -22,6 +22,22 @@ public abstract class CanvasWidget extends AppWidgetProvider {
     static final float DESIGN_W = 340, DESIGN_H = 168;
     private static final int MAX_PIXELS = 1_600_000;
 
+    /** Design box for this widget (dp); override for non-4×2 widgets. */
+    float designW() { return DESIGN_W; }
+    float designH() { return DESIGN_H; }
+
+    /** Layout holding the R.id.canvas ImageView (plus any tap-zone overlay views). */
+    int layoutId() { return R.layout.widget_canvas; }
+
+    /** Wire taps. Default: the whole widget opens {@link #clickIntent}. */
+    void bindClicks(Context c, RemoteViews v, int widgetId) {
+        Intent click = clickIntent(c);
+        if (click != null) {
+            v.setOnClickPendingIntent(R.id.canvas, PendingIntent.getActivity(c, getClass().hashCode(), click,
+                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
+        }
+    }
+
     /** Draw the widget. The canvas is already scaled so 1 unit = 1 design dp; w/h are in units. */
     abstract void draw(Context c, Canvas canvas, float w, float h);
 
@@ -61,16 +77,26 @@ public abstract class CanvasWidget extends AppWidgetProvider {
         boolean landscape = c.getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE;
         int wDp = o.getInt(landscape ? AppWidgetManager.OPTION_APPWIDGET_MAX_WIDTH : AppWidgetManager.OPTION_APPWIDGET_MIN_WIDTH);
         int hDp = o.getInt(landscape ? AppWidgetManager.OPTION_APPWIDGET_MIN_HEIGHT : AppWidgetManager.OPTION_APPWIDGET_MAX_HEIGHT);
-        if (wDp <= 0 || hDp <= 0) { wDp = (int) DESIGN_W; hDp = (int) DESIGN_H; }
+        if (wDp <= 0 || hDp <= 0) { wDp = (int) designW(); hDp = (int) designH(); }
 
-        RemoteViews v = new RemoteViews(c.getPackageName(), R.layout.widget_canvas);
+        RemoteViews v = new RemoteViews(c.getPackageName(), layoutId());
         v.setImageViewBitmap(R.id.canvas, render(c, wDp, hDp));
-        Intent click = clickIntent(c);
-        if (click != null) {
-            v.setOnClickPendingIntent(R.id.canvas, PendingIntent.getActivity(c, getClass().hashCode(), click,
-                    PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE));
-        }
+        bindClicks(c, v, id);
         return v;
+    }
+
+    /** PendingIntent helpers for tap zones. */
+    static PendingIntent activityPi(Context c, int code, Intent i) {
+        return PendingIntent.getActivity(c, code, i.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK),
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+    }
+
+    static PendingIntent broadcastPi(Context c, int code, Intent i) {
+        return PendingIntent.getBroadcast(c, code, i, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
+    }
+
+    static PendingIntent servicePi(Context c, int code, Intent i) {
+        return PendingIntent.getService(c, code, i, PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_IMMUTABLE);
     }
 
     /** Renders at the given size in dp (also used for the in-app preview). */
@@ -82,7 +108,7 @@ public abstract class CanvasWidget extends AppWidgetProvider {
         Canvas canvas = new Canvas(b);
 
         // Fit the design box inside the widget, keeping proportions; the card fills the full widget.
-        float s = Math.min(wDp / DESIGN_W, hDp / DESIGN_H) * px;
+        float s = Math.min(wDp / designW(), hDp / designH()) * px;
         float w = b.getWidth() / s, h = b.getHeight() / s;
         canvas.scale(s, s);
         draw(c, canvas, w, h);

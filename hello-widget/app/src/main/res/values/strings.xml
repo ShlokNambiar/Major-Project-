@@ -10,4 +10,10 @@
     <string name="agenda_desc">Big date with your upcoming events</string>
     <string name="icon_name">App icon</string>
     <string name="icon_desc">Custom app icon that opens the real app</string>
+    <string name="sky_name">Sky</string>
+    <string name="sky_desc">Sun and moon moving across a live sky</string>
+    <string name="recorder_name">Recorder</string>
+    <string name="recorder_desc">Record voice notes from your home screen</string>
+    <string name="alarm_name">Alarm</string>
+    <string name="alarm_desc">Upcoming alarm with quick toggles</string>
 </resources>

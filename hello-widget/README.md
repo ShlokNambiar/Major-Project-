@@ -9,6 +9,9 @@ Four home-screen widgets in one app:
 | **Calendar** | `2026.07`, big date, full date, day-of-year, month grid with today circled |
 | **Calendar · Up next** | Same date block plus your next 3 calendar events (colour bar, title, time) |
 
+| **Sky** | Night / Dawn / Day / Dusk gradient with the sun or moon moving along an arc using real sunrise/sunset, moon phase, temperature |
+| **Recorder** (2×2) | Real voice recorder: live waveform + timer, record / pause / resume / stop; saves to Recordings/HelloWidget |
+| **Alarm** (3×3) | Built-in alarm clock: upcoming alarm toggle, "turn off this time", vibration and snooze switches, full-screen ringing |
 | **App icon** (Icons tab) | Custom icon (e.g. disco-ball Spotify) as a 1×1 icon widget, pinned shortcut, or icon pack entry, that opens the real app |
 
 The app is organised into **Widgets** (by category), **Icons** and **Settings** tabs.

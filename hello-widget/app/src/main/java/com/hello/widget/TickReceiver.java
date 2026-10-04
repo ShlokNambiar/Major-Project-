@@ -22,8 +22,9 @@ public class TickReceiver extends BroadcastReceiver {
 
     @Override
     public void onReceive(Context context, Intent intent) {
-        if (!anyWidgets(context)) return;
         boolean tick = ACTION_TICK.equals(intent.getAction());
+        if (!tick) Alarms.schedule(context);   // reboot / clock change: re-arm alarms regardless of widgets
+        if (!anyWidgets(context)) return;
         int minute = Calendar.getInstance().get(Calendar.MINUTE);
 
         HelloWidgetProvider.updateAll(context);
@@ -31,6 +32,8 @@ public class TickReceiver extends BroadcastReceiver {
         if (!tick || minute % 5 == 0) {
             CanvasWidget.updateAll(context, CalendarWidgetProvider.class);
             CanvasWidget.updateAll(context, AgendaWidgetProvider.class);
+            CanvasWidget.updateAll(context, SkyWidgetProvider.class);
+            CanvasWidget.updateAll(context, AlarmWidgetProvider.class);
         }
         schedule(context);
 
@@ -51,6 +54,7 @@ public class TickReceiver extends BroadcastReceiver {
             } finally {
                 HelloWidgetProvider.updateAll(app);
                 CanvasWidget.updateAll(app, VoidWidgetProvider.class);
+                CanvasWidget.updateAll(app, SkyWidgetProvider.class);
                 if (pending != null) pending.finish();
             }
         }).start();
@@ -80,7 +84,8 @@ public class TickReceiver extends BroadcastReceiver {
     static boolean anyWidgets(Context c) {
         AppWidgetManager m = AppWidgetManager.getInstance(c);
         for (Class<?> cls : new Class<?>[]{HelloWidgetProvider.class, VoidWidgetProvider.class,
-                CalendarWidgetProvider.class, AgendaWidgetProvider.class}) {
+                CalendarWidgetProvider.class, AgendaWidgetProvider.class, SkyWidgetProvider.class,
+                AlarmWidgetProvider.class}) {
             if (m.getAppWidgetIds(new ComponentName(c, cls)).length > 0) return true;
         }
         return false;
