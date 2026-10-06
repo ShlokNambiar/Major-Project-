@@ -1,0 +1,8 @@
+\begin{table}[t]\centering\caption{VeReMi Extension (RandomPos, ConstSpeed; 14:00--16:00 subsets). F1 / AUC (mean$\pm$std over 3 seeds). Train: first hour; test: later hour, receiver-disjoint split.}\label{tab:main}\small
+\resizebox{\columnwidth}{!}{\begin{tabular}{lcccccc}\toprule
+Model & \multicolumn{2}{c}{RandomPos} & \multicolumn{2}{c}{ConstSpeed} & \multicolumn{2}{c}{Overall} \\
+ & F1 & AUC & F1 & AUC & F1 & AUC \\\midrule
+Per-sender & 0.970$\pm$0.001 & 0.997$\pm$0.000 & 0.960$\pm$0.001 & 0.995$\pm$0.001 & 0.973$\pm$0.000 & 0.996$\pm$0.000 \\
+Ours w/o spatial interaction & 0.983$\pm$0.001 & 0.998$\pm$0.000 & 0.947$\pm$0.004 & 0.993$\pm$0.001 & 0.982$\pm$0.001 & 0.997$\pm$0.000 \\
+Ours (neighbourhood-aware) & 0.987$\pm$0.000 & 0.998$\pm$0.000 & 0.948$\pm$0.003 & 0.993$\pm$0.000 & 0.982$\pm$0.001 & 0.997$\pm$0.000 \\
+\bottomrule\end{tabular}}\end{table}

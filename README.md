@@ -11,7 +11,7 @@ nambd/model.py   factorised temporal/spatial transformer, spatial-off ablation, 
 nambd/train.py   training, threshold selection, per-attack F1/AUC
 run_experiments.py   reproduces all results -> results/results.json
 make_tables.py       results -> paper/tables.tex + figure
-paper/main.tex       conference paper (IEEEtran)
+paper/            tables.tex + fig_perattack.pdf generated from the real-data results (main.tex not in this repo)
 ```
 
 Run: `pip install -r requirements.txt && python run_experiments.py && python make_tables.py`
