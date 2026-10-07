@@ -68,9 +68,10 @@ def load_veremi(trace_dir, gt_file=None, T=10, K=16, comm_range=300.0, stride=3,
     for fp in glob.glob(os.path.join(trace_dir, "traceJSON-*.json")):
         p = os.path.basename(fp).split("-")
         gt[int(p[1])] = int(p[3][1:])
-    X, M, Y, SID = [], [], [], []
+    X, M, Y, SID, TE, RID = [], [], [], [], [], []
     files = sorted(glob.glob(os.path.join(trace_dir, "traceJSON-*.json")))[:max_receivers]
     for fp in files:
+        rid = int(os.path.basename(fp).split('-')[1])
         own, bsm = {}, {}
         with open(fp) as f:
             for line in f:
@@ -95,5 +96,6 @@ def load_veremi(trace_dir, gt_file=None, T=10, K=16, comm_range=300.0, stride=3,
                         p, spd, hed = bsm[t][s]; rel[a] = (p - ctr) / comm_range; sp[a] = spd; hd[a] = hed; v[a] = True
                 xs[j] = _features(rel[None], sp[None], hd[None], v[None])[0]; ms[j] = v
                 ys[j] = gt.get(s, 0); sid[j] = s
-            X.append(xs); M.append(ms); Y.append(ys); SID.append(sid)
-    return dict(X=np.stack(X), M=np.stack(M), y=np.stack(Y), sid=np.stack(SID))
+            X.append(xs); M.append(ms); Y.append(ys); SID.append(sid); TE.append(te); RID.append(rid)
+    return dict(X=np.stack(X), M=np.stack(M), y=np.stack(Y), sid=np.stack(SID),
+                te=np.array(TE), rid=np.array(RID))
