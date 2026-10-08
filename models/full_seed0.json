@@ -1,0 +1,10 @@
+{
+ "mode": "full",
+ "seed": 0,
+ "epochs": 5,
+ "threshold": 0.9,
+ "T": 10,
+ "K": 16,
+ "comm_range": 300.0,
+ "data": "VeReMi Extension RandomPos_1416 + ConstSpeed_1416, train slice 50400-54000 s"
+}

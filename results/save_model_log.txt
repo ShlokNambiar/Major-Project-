@@ -1,1 +1,6 @@
   [full] epoch 1/5 loss 0.2652
+  [full] epoch 2/5 loss 0.1158
+  [full] epoch 3/5 loss 0.0860
+  [full] epoch 4/5 loss 0.0658
+  [full] epoch 5/5 loss 0.0520
+saved, threshold 0.9
