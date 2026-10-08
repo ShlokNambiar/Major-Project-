@@ -19,7 +19,7 @@ Run: `pip install -r requirements.txt && python run_experiments.py && python mak
 
 ## Status note
 `nambd/sim.py` results (results/results.json) come from the included simulator. `data.load_veremi` has now been
-validated on the real **VeReMi Extension** archives (Zenodo 20090854; RandomPos_1416 and ConstSpeed_1416 only).
+validated on the public **VeReMi Extension** benchmark archives (simulated traffic, not field recordings) (Zenodo 20090854; RandomPos_1416 and ConstSpeed_1416 only).
 `run_real.py` trains on the 50400-54000 s slices and tests on the later 54000-57600 s slices
 (receiver-disjoint val/test blocks), 3 seeds; output in results/results_real.json and results/real_log.txt.
 Original VeReMi, NextGen and the other Extension attacks have not been run yet.
