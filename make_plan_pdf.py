@@ -41,7 +41,7 @@ S += [Paragraph("2. Hypothesis formulation", H),
 
 rows = [["Item", "Choice"],
  ["Dataset", "VeReMi Extension (public benchmark, simulated traffic and attackers; F2MD / VEINS / SUMO, Luxembourg LuST scenario, 30% attackers). "
-             "Done: RandomPos and ConstSpeed (14:00-16:00). Planned: the other ~18 attack types, the 07:00-09:00 dense subsets, MixAll_0024 (full day, all attacks), "
+             "Done: RandomPos and ConstSpeed (14:00-16:00). Planned: the other 17 attack types, the 07:00-09:00 dense subsets, MixAll_0024 (full day, all attacks), "
              "then VeReMi NextGen / original VeReMi as external checks."],
  ["Input / windows", "Receiver-centric windows: K = 16 nearest senders x T = 10 one-second steps; 8 features per step (relative position, speed, heading, motion deltas, validity). "
              "Preliminary split: 61,708 train, 11,251 validation, 26,255 test windows."],
@@ -78,7 +78,7 @@ S += bl(["<b>Detection quality:</b> the neighbour-aware model is expected to bea
          "<b>Honest expectation of limits:</b> some attacks may not benefit. ConstSpeed was slightly worse with neighbours in the preliminary run (0.948 vs 0.960), "
          "so H0 is expected to be rejected overall and for RandomPos, but not necessarily for every attack type.",
          "<b>Computational cost:</b> a small model (about 0.6 MB of weights) trained in roughly 10 minutes on CPU, suitable for on-board evaluation; to be measured as inference time per window."]) 
-S += [Spacer(1, 6), Paragraph("<i>Scope: the benchmark is simulated, attackers act independently, and only 2 of about 20 attack types have been run so far. Collusion and crash intent are not modelled.</i>", B)]
+S += [Spacer(1, 6), Paragraph("<i>Scope: the benchmark is simulated, attackers act independently, and only 2 of 19 attack types have been run so far. Collusion and crash intent are not modelled.</i>", B)]
 
 SimpleDocTemplate("docs/research_plan.pdf", pagesize=A4, leftMargin=2.2*cm, rightMargin=2.2*cm, topMargin=1.5*cm, bottomMargin=1.5*cm,
                   title="Research plan: neighbourhood-aware misbehavior detection for V2X").build(S)
