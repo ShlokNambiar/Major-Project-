@@ -20,8 +20,8 @@ def item(label, text=None):
 def bullets(items): return [Paragraph(i, BUL, bulletText="•") for i in items]
 
 S = [Paragraph("AI/ML RESEARCH METHODOLOGY BLUEPRINT", TITLE)]
-hdr = Table([[Paragraph("<b>Student Name:</b> Shlok, Jiya, Caleb (team)", HDR), Paragraph("<b>Branch:</b> BTech AI ML", HDR)],
-             [Paragraph("<b>Roll No:</b> Shlok - UAI05BTA2317, Jiya - UAI05BTA2313, Caleb - UAI05BTA2323", HDR), ""],
+hdr = Table([[Paragraph("<b>Student Name:</b> Shlok, Jiya, Caleb", HDR), Paragraph("<b>Branch:</b> BTech AI ML", HDR)],
+             [Paragraph("<b>Roll No:</b> UAI05BTA2317, UAI05BTA2313, UAI05BTA2319", HDR), ""],
              [Paragraph("<b>Project Title / Topic:</b> Neighbourhood-aware misbehavior detection for V2X networks (VeReMi Extension benchmark)", HDR), ""]],
             colWidths=[11.4*cm, 5.0*cm])
 hdr.setStyle(TableStyle([("SPAN", (0,1), (1,1)), ("SPAN", (0,2), (1,2)), ("VALIGN", (0,0), (-1,-1), "TOP"), ("LEFTPADDING", (0,0), (-1,-1), 0), ("TOPPADDING", (0,0), (-1,-1), 1), ("BOTTOMPADDING", (0,0), (-1,-1), 1)]))
