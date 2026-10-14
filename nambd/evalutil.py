@@ -3,6 +3,13 @@ import numpy as np
 from scipy.stats import binomtest
 from sklearn.metrics import roc_auc_score
 
+def attack_mask(D, a):
+    """valid slots in windows from the simulation subset that contains attack `a` (benign senders of the same run + attackers of type a)."""
+    y = D["y"]; g = np.bincount(D["grp"][(y == a).any(1)]).argmax() if "grp" in D else None
+    inrun = (D["grp"] == g)[:, None] if g is not None else np.ones((len(y), 1), bool)
+    return (y >= 0) & inrun & ((y == 0) | (y == a))
+
+
 def prf(tp, fp, fn):
     p = tp / max(tp + fp, 1); r = tp / max(tp + fn, 1); return p, r, 2 * p * r / max(p + r, 1e-12)
 def metrics(S, thr, D, names):
@@ -11,9 +18,9 @@ def metrics(S, thr, D, names):
     p, r, f1 = prf(tp, fp, fn)
     out = dict(precision=p, recall=r, f1=f1, fpr=(f & ~y).sum() / max((~y).sum(), 1), auc=roc_auc_score(y, s))
     for a in sorted(set(D["y"][v].tolist()) - {0}):
-        sel = (D["y"][v] == 0) | (D["y"][v] == a); ya = D["y"][v][sel] == a; fa = f[sel]
+        sm = attack_mask(D, a); fa = (S > thr)[sm]; ya = (D["y"][sm] == a); sa = S[sm]
         tpa, fpa, fna = (fa & ya).sum(), (fa & ~ya).sum(), (~fa & ya).sum()
-        out[names.get(a, f"A{a}")] = dict(f1=prf(tpa, fpa, fna)[2], recall=prf(tpa, fpa, fna)[1], auc=roc_auc_score(ya, s[sel]))
+        out[names.get(a, f"A{a}")] = dict(f1=prf(tpa, fpa, fna)[2], recall=prf(tpa, fpa, fna)[1], auc=roc_auc_score(ya, sa))
     return {k: (float(x) if not isinstance(x, dict) else {kk: float(vv) for kk, vv in x.items()}) for k, x in out.items()}
 def latency(D, flag):
     first, alarm = {}, {}
@@ -26,7 +33,7 @@ def latency(D, flag):
 def counts_by_receiver(flagA, D, pos_label=None):
     """per-receiver TP/FP/FN (binary or one attack vs benign)."""
     y = D["y"]; v = y >= 0
-    sel = v if pos_label is None else v & ((y == 0) | (y == pos_label))
+    sel = v if pos_label is None else attack_mask(D, pos_label)
     pos = (y > 0) if pos_label is None else (y == pos_label)
     key = D["grp"].astype(np.int64)[:, None] * 10**7 + D["rid"].astype(np.int64)[:, None] + np.zeros_like(y, np.int64)
     k = key[sel]; uk, inv = np.unique(k, return_inverse=True)

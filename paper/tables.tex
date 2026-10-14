@@ -11,14 +11,14 @@ Speed check (VeReMi) & 1.000 & 0.560 & 0.718 & 0.000 & 0.697 & -- & -- \\
 \begin{table}[t]\centering\caption{Per-attack F1 (mean over seeds), and F1 gain of the neighbourhood-aware model over the same model without neighbour attention, with 95\% paired-bootstrap CI (receivers resampled) and Holm-corrected $p$.}\label{tab:perattack}\small
 \resizebox{\columnwidth}{!}{\begin{tabular}{lccccccc}\toprule
 Attack & Per-sender (baseline) & No spatial interaction & Neighbourhood-aware (ours) & Speed check & $\Delta$F1 vs nonbr & 95\% CI & $p_{Holm}$ \\\midrule
-ConstPos & 0.738 & 0.895 & 0.913 & 0.833 & +0.018 & [0.008, 0.028] & 0.004 \\
-ConstPosOffset & 0.043 & 0.713 & 0.774 & 0.000 & +0.061 & [0.043, 0.081] & <0.001 \\
-RandomPos & 0.809 & 0.900 & 0.920 & 0.979 & +0.020 & [0.011, 0.029] & <0.001 \\
-RandomPosOffset & 0.808 & 0.881 & 0.902 & 0.977 & +0.020 & [0.012, 0.029] & <0.001 \\
-ConstSpeed & 0.811 & 0.878 & 0.898 & 0.958 & +0.020 & [0.011, 0.030] & 0.002 \\
-EventualStop & 0.360 & 0.592 & 0.679 & 0.000 & +0.087 & [0.069, 0.106] & <0.001 \\
-DataReplay & 0.783 & 0.854 & 0.872 & 0.940 & +0.018 & [0.010, 0.028] & 0.002 \\
-DelayedMessages & 0.593 & 0.835 & 0.867 & 0.095 & +0.032 & [0.022, 0.042] & <0.001 \\
+ConstPos & 0.884 & 0.977 & 0.979 & 0.833 & +0.002 & [-0.003, 0.007] & 0.452 \\
+ConstPosOffset & 0.057 & 0.790 & 0.831 & 0.000 & +0.041 & [0.024, 0.058] & <0.001 \\
+RandomPos & 0.955 & 0.982 & 0.990 & 0.979 & +0.008 & [0.005, 0.012] & <0.001 \\
+RandomPosOffset & 0.951 & 0.964 & 0.971 & 0.977 & +0.007 & [0.004, 0.010] & <0.001 \\
+ConstSpeed & 0.958 & 0.960 & 0.965 & 0.958 & +0.005 & [0.001, 0.009] & 0.272 \\
+EventualStop & 0.455 & 0.664 & 0.732 & 0.000 & +0.067 & [0.049, 0.087] & <0.001 \\
+DataReplay & 0.925 & 0.936 & 0.941 & 0.940 & +0.005 & [0.001, 0.008] & 0.053 \\
+DelayedMessages & 0.725 & 0.917 & 0.930 & 0.095 & +0.013 & [0.006, 0.020] & <0.001 \\
 \bottomrule\end{tabular}}\end{table}
 \begin{table}[t]\centering\caption{Transfer to dense rush-hour traffic (07:00--09:00; ConstSpeed and RandomPos only): models trained on 14:00--16:00 traffic, threshold from low-density validation; mean over 2 seeds.}\label{tab:dense}\small
 \begin{tabular}{lcccc}\toprule

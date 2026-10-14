@@ -29,7 +29,7 @@ dense-traffic transfer in `run_dense.py`; tables/figure from `make_tables.py`. R
 | VeReMi speed check (rule) / range check (rule) | 1.000 / 0.649 | 0.560 / 0.474 | 0.718 / 0.548 | 0.0% / 11.5% |
 
 - Most of the gain over the per-sender model comes from the receiver-relative position features (+0.113 F1, 95% CI [0.10, 0.13]).
-- Neighbour attention adds a smaller but consistent gain on top (+0.015, CI [0.011, 0.018]; positive on all 8 attacks, Holm-corrected p < 0.004), largest on EventualStop (+0.087) and ConstPosOffset (+0.061).
+- Neighbour attention adds a smaller gain on top (+0.015 overall F1, CI [0.011, 0.018]). Per attack (each attack scored against the benign senders of its own simulation run), the gain is significant after Holm correction for ConstPosOffset (+0.041), RandomPos, RandomPosOffset, EventualStop (+0.067) and DelayedMessages, but not for ConstPos, ConstSpeed or DataReplay.
 - The simple speed-consistency rule beats the learned models on RandomPos, RandomPosOffset, ConstSpeed and DataReplay, but scores 0 on ConstPosOffset and EventualStop.
 - Dense 07:00-09:00 traffic (RandomPos, ConstSpeed only): full 0.963 F1 vs no-neighbour 0.956 vs per-sender 0.922 (speed-check rule 0.954).
 - Earlier two-attack results (`results/results_real*.json`) are superseded; there, neighbour attention added nothing.
