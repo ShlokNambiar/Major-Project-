@@ -17,3 +17,13 @@
 [  3235s]   [nonbr] epoch 1/5 loss 0.4355
 [  3455s]   [nonbr] epoch 2/5 loss 0.2991
 [  3684s]   [nonbr] epoch 3/5 loss 0.2390
+[  3917s]   [nonbr] epoch 4/5 loss 0.2056
+[  4143s]   [nonbr] epoch 5/5 loss 0.1833
+[  4210s] saved results/preds14/nonbr_1.npz thr 0.65
+[  4437s]   [full] epoch 1/5 loss 0.3703
+[  4663s]   [full] epoch 2/5 loss 0.2057
+[  4887s]   [full] epoch 3/5 loss 0.1621
+[  5117s]   [full] epoch 4/5 loss 0.1339
+[  5352s]   [full] epoch 5/5 loss 0.1141
+[  5420s] saved results/preds14/full_1.npz thr 0.75
+[  5420s] done

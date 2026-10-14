@@ -17,24 +17,29 @@ paper/            tables.tex + fig_perattack.pdf generated from the real-data re
 Run: `pip install -r requirements.txt && python run_experiments.py && python make_tables.py`
 (`--quick` for a smoke test).
 
-## Results (VeReMi Extension, 8 attack types, 14:00-16:00; 2 seeds)
-Trained on the first hour (`run_full.py`), tested on the later hour with receiver-disjoint validation/test blocks; analysis in `run_analysis.py`,
-dense-traffic transfer in `run_dense.py`; tables/figure from `make_tables.py`. Raw outputs: `results/results_full.json`, `results/results_dense.json`.
+## Results (VeReMi Extension, 14 attack types, 14:00-16:00; 2 seeds)
+Pipeline: `run_full.py` (RATE=1: 9th feature = message rate, so DoS floods are visible; MODES=nonbr,full; outputs to `results/preds14`, `results/models14`),
+`run_analysis.py` (PREDS=results/preds14 -> `results/results_full14.json`), `make_tables.py` (-> `paper/tables.tex`, `paper/fig_perattack.pdf`).
+Trained on the first hour of each attack subset, tested on the later hour (receiver-disjoint val/test blocks, 68,971 test windows).
+Per-attack F1 scores each attack against the benign senders of its own simulation run.
 
-| Model | Precision | Recall | F1 | FPR |
-|---|---|---|---|---|
-| Per-sender, no position features | 0.931 | 0.695 | 0.795 | 2.3% |
-| No neighbour attention, all features (`nonbr`) | 0.970 | 0.853 | 0.908 | 1.2% |
-| Neighbourhood-aware (full) | 0.977 | 0.874 | 0.923 | 0.9% |
-| VeReMi speed check (rule) / range check (rule) | 1.000 / 0.649 | 0.560 / 0.474 | 0.718 / 0.548 | 0.0% / 11.5% |
+| Model | Precision | Recall | F1 | FPR | AUC |
+|---|---|---|---|---|---|
+| VeReMi range check (rule) | 0.416 | 0.674 | 0.514 | 43.7% | 0.690 |
+| VeReMi speed check (rule) | 0.956 | 0.672 | 0.789 | 1.4% | 0.778 |
+| No neighbour attention (all features) | 0.968 | 0.905 | 0.935 | 1.4% | 0.979 |
+| Neighbourhood-aware (full) | 0.984 | 0.916 | 0.949 | 0.7% | 0.990 |
 
-- Most of the gain over the per-sender model comes from the receiver-relative position features (+0.113 F1, 95% CI [0.10, 0.13]).
-- Neighbour attention adds a smaller gain on top (+0.015 overall F1, CI [0.011, 0.018]). Per attack (each attack scored against the benign senders of its own simulation run), the gain is significant after Holm correction for ConstPosOffset (+0.041), RandomPos, RandomPosOffset, EventualStop (+0.067) and DelayedMessages, but not for ConstPos, ConstSpeed or DataReplay.
-- The simple speed-consistency rule beats the learned models on RandomPos, RandomPosOffset, ConstSpeed and DataReplay, but scores 0 on ConstPosOffset and EventualStop.
-- Dense 07:00-09:00 traffic (RandomPos, ConstSpeed only): full 0.963 F1 vs no-neighbour 0.956 vs per-sender 0.922 (speed-check rule 0.954).
-- Earlier two-attack results (`results/results_real*.json`) are superseded; there, neighbour attention added nothing.
+- Neighbour attention adds +0.014 overall F1 (paired bootstrap 95% CI [0.012, 0.016] in both seeds), halves the false-positive rate, and is significant after Holm correction
+  on 12 of 14 attacks (not ConstPos, p = 0.22, nor ConstSpeedOffset, p = 0.085). Largest gains: EventualStop (+0.072) and ConstPosOffset (+0.042).
+- Hardest attacks remain EventualStop (F1 0.74) and ConstPosOffset (0.79); all others are above 0.93.
+- The speed-check rule fails on ConstPosOffset, EventualStop, DelayedMessages and DoS (F1 below 0.1) but is competitive on the content-falsification attacks.
+- Dense 07:00-09:00 traffic (RandomPos, ConstSpeed only): F1 0.972 (full) vs 0.968 (no neighbour attention).
+- Mean time to first alarm about 1.4 s (median 0; counted from the first window containing the sender); 93% of attacker-receiver pairs eventually flagged.
+- Earlier 8-attack run (`results/results_full.json`, with a per-sender model that also lacks position features): position features were worth +0.113 F1, neighbour attention a further +0.015.
+  The two-attack results in `results/results_real*.json` are superseded.
 
 ## Limitations
-Simulated benchmark; 8 of 19 attack types (Sybil attacks and RandomSpeed/ConstSpeedOffset/DoS variants not run; the RandomSpeedOffset archive is mislabeled and was excluded);
-2 seeds; independent (non-colluding) attackers; dense-traffic transfer on 2 attacks only; no comparison against published learned detectors.
-`results/preds/` (large per-window predictions) is git-ignored; rerun `run_full.py` to regenerate.
+Simulated benchmark; 14 of 19 attack types (the four Sybil attacks are not run, and the RandomSpeedOffset archive is mislabeled and excluded);
+2 seeds; independent (non-colluding) attackers; dense-traffic transfer on 2 attacks only; no VeReMi NextGen / original VeReMi / MixAll evaluation;
+no comparison against published learned detectors. `results/preds*/` (large per-window predictions) are git-ignored; rerun `run_full.py` to regenerate.
