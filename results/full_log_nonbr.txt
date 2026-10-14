@@ -1,3 +1,10 @@
 [     0s] train subsets 8 late 8 dense 0
 [    43s] train (72344, 16, 10, 8) attack ids [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(9), np.int64(11), np.int64(12)]
 [    74s] val (20216, 16, 10, 8) test (47192, 16, 10, 8)
+[  1144s]   [nonbr] epoch 1/5 loss 0.5047
+[  2183s]   [nonbr] epoch 2/5 loss 0.3472
+[  3244s]   [nonbr] epoch 3/5 loss 0.3047
+[  4291s]   [nonbr] epoch 4/5 loss 0.2705
+[  5331s]   [nonbr] epoch 5/5 loss 0.2477
+[  5442s] saved results/preds/nonbr_0.npz thr 0.75
+[  6471s]   [nonbr] epoch 1/5 loss 0.4938
