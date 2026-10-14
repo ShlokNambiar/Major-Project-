@@ -6,7 +6,7 @@ import glob, json, os, re, sys, time, numpy as np
 from nambd.data import load_veremi
 from nambd.train import fit, scores, best_thr
 
-ROOT = "data"; MAXR = int(os.environ.get("MAXR", 250)); SEEDS = int(os.environ.get("SEEDS", 3))
+RATE = os.environ.get("RATE", "0") == "1"; ROOT = "data"; MAXR = int(os.environ.get("MAXR", 250)); SEEDS = int(os.environ.get("SEEDS", 3))
 MODES = os.environ.get("MODES", "persender,full").split(","); EPOCHS = int(os.environ.get("EPOCHS", 5))
 PREDS = os.environ.get("PREDS", "results/preds"); os.makedirs(PREDS, exist_ok=True)
 t0 = time.time()
@@ -17,7 +17,7 @@ EXCLUDE = os.environ.get("EXCLUDE", "RandomSpeedOffset").split(",")   # RandomSp
 all_dirs = lambda tag: sorted({os.path.dirname(p) for p in glob.glob(f"{ROOT}/**/traceJSON-*.json", recursive=True)
                                if tag in os.path.dirname(p) and not any(x and x in p for x in EXCLUDE)})
 def load_checked(d, lo, hi):          # skip slices that do not START inside [lo, hi] (catches duplicated / mislabeled archives)
-    p = load_veremi(d, max_receivers=MAXR)
+    p = load_veremi(d, max_receivers=MAXR, rate=RATE)
     if len(p["te"]) == 0 or not (lo <= p["te"].min() <= hi):
         log("SKIP mislabeled/empty slice", d); return None
     return p
@@ -57,5 +57,5 @@ for sd in range(SEEDS):
         out = dict(thr=thr, test=full_scores(m, te, mode))
         if dense is not None: out["dense"] = full_scores(m, dense, mode)
         np.savez_compressed(f, **out); log("saved", f, "thr", thr)
-        import torch; os.makedirs("results/models", exist_ok=True); torch.save(m.state_dict(), f"results/models/{mode}_{sd}.pt")
+        import torch; MD = os.environ.get("MODELS", "results/models"); os.makedirs(MD, exist_ok=True); torch.save(m.state_dict(), f"{MD}/{mode}_{sd}.pt")
 log("done")

@@ -24,7 +24,7 @@ def full_scores(m, mode):
 flags = {}
 for f in sorted(glob.glob("results/models/*.pt")):
     mode, sd = os.path.basename(f)[:-3].rsplit("_", 1)
-    m = Detector(spatial=MODES[mode]["spatial"]); m.load_state_dict(torch.load(f)); m.eval()
+    m = Detector(fin=D["X"].shape[-1], spatial=MODES[mode]["spatial"]); m.load_state_dict(torch.load(f)); m.eval()
     thr = float(np.load(f"results/preds/{mode}_{sd}.npz")["thr"]); S = full_scores(m, mode)
     r = metrics(S, thr, D, names); r["latency"] = latency(D, S > thr); res["models"].setdefault(mode, []).append(r); flags[(mode, int(sd))] = np.nan_to_num(S > thr).astype(bool)
     print(mode, sd, "dense F1 %.3f recall %.3f fpr %.4f" % (r["f1"], r["recall"], r["fpr"]), flush=True)

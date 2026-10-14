@@ -55,7 +55,7 @@ def build(cfg: SimConfig, seeds, id_base=0, **kw):
 
 
 # ---------------------------------------------------------------- real VeReMi logs
-def load_veremi(trace_dir, gt_file=None, T=10, K=16, comm_range=300.0, stride=3, max_receivers=None):
+def load_veremi(trace_dir, gt_file=None, T=10, K=16, comm_range=300.0, stride=3, max_receivers=None, rate=False):
     """Load a VeReMi Extension simulation folder (validated against the real Zenodo archives).
 
     trace_dir: folder with traceJSON-<vehId>-<pseudo>-A<attackType>-<start>-<run>.json, one log per
@@ -63,6 +63,8 @@ def load_veremi(trace_dir, gt_file=None, T=10, K=16, comm_range=300.0, stride=3,
         `rcvTime`, pos, spd, hed). The attack type of vehicle <vehId> is encoded in its filename
         (A0 = benign); sender ids in BSMs are vehicle ids, so labels are looked up from filenames.
         Messages are binned to 1 s. gt_file is unused (kept for API compatibility).
+        rate=True appends a 9th feature, log(1 + messages heard from the sender in that second) / 3, so that
+        flooding (DoS) attacks are visible; default False keeps the original 8 features.
     """
     gt = {}
     for fp in glob.glob(os.path.join(trace_dir, "traceJSON-*.json")):
@@ -74,7 +76,7 @@ def load_veremi(trace_dir, gt_file=None, T=10, K=16, comm_range=300.0, stride=3,
         files = [files[i] for i in np.linspace(0, len(files) - 1, max_receivers).astype(int)]
     for fp in files:
         rid = int(os.path.basename(fp).split('-')[1])
-        own, bsm = {}, {}
+        own, bsm, cnt = {}, {}, {}
         with open(fp) as f:
             for line in f:
                 r = json.loads(line)
@@ -82,6 +84,7 @@ def load_veremi(trace_dir, gt_file=None, T=10, K=16, comm_range=300.0, stride=3,
                 if r["type"] == 2:
                     own[t] = np.array(r["pos"][:2])
                 else:
+                    cnt[(t, r["sender"])] = cnt.get((t, r["sender"]), 0) + 1
                     bsm.setdefault(t, {})[r["sender"]] = (np.array(r["pos"][:2]), float(np.linalg.norm(r["spd"][:2])),
                                                            float(np.arctan2(r["hed"][1], r["hed"][0])))
         for te in range(min(own) + T - 1, max(own) + 1, stride):
@@ -89,14 +92,15 @@ def load_veremi(trace_dir, gt_file=None, T=10, K=16, comm_range=300.0, stride=3,
                 continue
             ctr = own[te]
             senders = sorted(bsm[te], key=lambda s: np.linalg.norm(bsm[te][s][0] - ctr))[:K]
-            xs = np.zeros((K, T, F), np.float32); ms = np.zeros((K, T), bool); ys = -np.ones(K, np.int64)
+            xs = np.zeros((K, T, F + int(rate)), np.float32); ms = np.zeros((K, T), bool); ys = -np.ones(K, np.int64)
             sid = -np.ones(K, np.int64)
             for j, s in enumerate(senders):
-                rel = np.zeros((T, 2)); sp = np.zeros(T); hd = np.zeros(T); v = np.zeros(T, bool)
+                rel = np.zeros((T, 2)); sp = np.zeros(T); hd = np.zeros(T); v = np.zeros(T, bool); rt = np.zeros(T)
                 for a, t in enumerate(range(te - T + 1, te + 1)):
                     if t in bsm and s in bsm[t]:
-                        p, spd, hed = bsm[t][s]; rel[a] = (p - ctr) / comm_range; sp[a] = spd; hd[a] = hed; v[a] = True
-                xs[j] = _features(rel[None], sp[None], hd[None], v[None])[0]; ms[j] = v
+                        p, spd, hed = bsm[t][s]; rel[a] = (p - ctr) / comm_range; sp[a] = spd; hd[a] = hed; v[a] = True; rt[a] = np.log1p(cnt[(t, s)]) / 3.0
+                xs[j, :, :F] = _features(rel[None], sp[None], hd[None], v[None])[0]; ms[j] = v
+                if rate: xs[j, :, F] = rt
                 ys[j] = gt.get(s, 0); sid[j] = s
             X.append(xs); M.append(ms); Y.append(ys); SID.append(sid); TE.append(te); RID.append(rid)
     return dict(X=np.stack(X), M=np.stack(M), y=np.stack(Y), sid=np.stack(SID),

@@ -20,7 +20,7 @@ def batches(n, bs, shuffle, rng):
 
 def fit(mode, src, tgt=None, epochs=8, bs=128, lr=2e-3, seed=0, dann=0.0, log=print):
     torch.manual_seed(seed); rng = np.random.default_rng(seed)
-    m = Detector(spatial=MODES[mode]["spatial"])
+    m = Detector(fin=src["X"].shape[-1], spatial=MODES[mode]["spatial"])
     opt = torch.optim.AdamW(m.parameters(), lr=lr, weight_decay=1e-2)
     X, M, Y = tens(src, mode)
     if tgt is not None and dann > 0: Xt, Mt, _ = tens(tgt, mode)
