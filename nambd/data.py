@@ -69,7 +69,9 @@ def load_veremi(trace_dir, gt_file=None, T=10, K=16, comm_range=300.0, stride=3,
         p = os.path.basename(fp).split("-")
         gt[int(p[1])] = int(p[3][1:])
     X, M, Y, SID, TE, RID = [], [], [], [], [], []
-    files = sorted(glob.glob(os.path.join(trace_dir, "traceJSON-*.json")))[:max_receivers]
+    files = sorted(glob.glob(os.path.join(trace_dir, "traceJSON-*.json")))
+    if max_receivers and len(files) > max_receivers:      # evenly spaced subsample over receivers
+        files = [files[i] for i in np.linspace(0, len(files) - 1, max_receivers).astype(int)]
     for fp in files:
         rid = int(os.path.basename(fp).split('-')[1])
         own, bsm = {}, {}
