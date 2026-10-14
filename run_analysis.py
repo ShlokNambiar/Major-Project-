@@ -22,22 +22,23 @@ for m in modes:
         z = loaded[(m, s)]; thr = float(z["thr"]); runs.append(metrics(z["test"], thr, te)); lats.append(latency(te, z["test"] > thr))
         if "dense" in z.files and dense is not None: dr.append(metrics(z["dense"], thr, dense))
     res["models"][m] = dict(runs=runs, latency=lats); res["dense"][m] = dr
-# significance: baseline persender vs each other model, per seed, overall and per attack (Holm across attacks)
-if "persender" in modes:
-    for m in modes:
-        if m == "persender": continue
-        per_seed = []
-        for s in seeds:
-            if ("persender", s) not in loaded or (m, s) not in loaded: continue
-            zA, zB = loaded[("persender", s)], loaded[(m, s)]; fA, fB = zA["test"] > float(zA["thr"]), zB["test"] > float(zB["thr"])
-            fA, fB = np.nan_to_num(fA), np.nan_to_num(fB); fA, fB = fA.astype(bool), fB.astype(bool)
-            ov = boot_diff(counts_by_receiver(fA, te), counts_by_receiver(fB, te)); ents = {"overall": dict(delta_f1=ov[0], ci95=ov[1], p_boot=ov[2], mcnemar=mcnemar(fA, fB, te))}
-            ids = sorted(set(te["y"][te["y"] > 0].tolist())); pv = []
-            for a in ids:
-                d = boot_diff(counts_by_receiver(fA, te, a), counts_by_receiver(fB, te, a)); ents[names.get(a, f"A{a}")] = dict(delta_f1=d[0], ci95=d[1], p_boot=d[2]); pv.append(d[2])
-            for a, pa in zip(ids, holm(np.array(pv))): ents[names.get(a, f"A{a}")]["p_holm"] = float(pa)
-            per_seed.append(ents)
-        res["significance"][m + "_vs_persender"] = per_seed
+# significance: every ordered pair persender < nonbr < full, per seed, overall and per attack (Holm across attacks)
+ORDER = [m for m in ("persender", "nonbr", "full") if m in modes]
+def sig_pair(base, m):
+    per_seed = []
+    for s in seeds:
+        if (base, s) not in loaded or (m, s) not in loaded: continue
+        zA, zB = loaded[(base, s)], loaded[(m, s)]
+        fA = np.nan_to_num(zA["test"] > float(zA["thr"])).astype(bool); fB = np.nan_to_num(zB["test"] > float(zB["thr"])).astype(bool)
+        ov = boot_diff(counts_by_receiver(fA, te), counts_by_receiver(fB, te)); ents = {"overall": dict(delta_f1=ov[0], ci95=ov[1], p_boot=ov[2], mcnemar=mcnemar(fA, fB, te))}
+        ids = sorted(set(te["y"][te["y"] > 0].tolist())); pv = []
+        for a in ids:
+            d = boot_diff(counts_by_receiver(fA, te, a), counts_by_receiver(fB, te, a)); ents[names.get(a, f"A{a}")] = dict(delta_f1=d[0], ci95=d[1], p_boot=d[2]); pv.append(d[2])
+        for a, pa in zip(ids, holm(np.array(pv))): ents[names.get(a, f"A{a}")]["p_holm"] = float(pa)
+        per_seed.append(ents)
+    return per_seed
+for i, base in enumerate(ORDER):
+    for m in ORDER[i + 1:]: res["significance"][f"{m}_vs_{base}"] = sig_pair(base, m)
 # rule-based baselines from the original VeReMi paper, on the same windows
 rv, rt = rule_scores(va), rule_scores(te)
 for k in rv:
