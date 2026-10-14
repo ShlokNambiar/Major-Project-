@@ -6,3 +6,4 @@
 [   561s]   [persender] epoch 3/5 loss 0.4998
 [   706s]   [persender] epoch 4/5 loss 0.4834
 [   854s]   [persender] epoch 5/5 loss 0.4707
+[   895s] saved results/preds/persender_0.npz thr 0.5499999999999999
