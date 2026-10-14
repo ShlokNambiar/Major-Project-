@@ -14,3 +14,6 @@
 [  2711s]   [full] epoch 4/5 loss 0.1321
 [  2937s]   [full] epoch 5/5 loss 0.1119
 [  3003s] saved results/preds14/full_0.npz thr 0.85
+[  3235s]   [nonbr] epoch 1/5 loss 0.4355
+[  3455s]   [nonbr] epoch 2/5 loss 0.2991
+[  3684s]   [nonbr] epoch 3/5 loss 0.2390
