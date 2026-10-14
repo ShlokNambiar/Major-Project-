@@ -21,3 +21,7 @@
 [  6702s] saved results/preds/persender_1.npz thr 0.6
 [  7743s]   [full] epoch 1/5 loss 0.4390
 [  8777s]   [full] epoch 2/5 loss 0.2612
+[  9831s]   [full] epoch 3/5 loss 0.2213
+[ 10904s]   [full] epoch 4/5 loss 0.1904
+[ 11936s]   [full] epoch 5/5 loss 0.1666
+[ 12054s] saved results/preds/full_1.npz thr 0.7999999999999999

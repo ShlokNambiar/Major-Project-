@@ -28,10 +28,11 @@ for f in sorted(glob.glob("results/models/*.pt")):
     thr = float(np.load(f"results/preds/{mode}_{sd}.npz")["thr"]); S = full_scores(m, mode)
     r = metrics(S, thr, D, names); r["latency"] = latency(D, S > thr); res["models"].setdefault(mode, []).append(r); flags[(mode, int(sd))] = np.nan_to_num(S > thr).astype(bool)
     print(mode, sd, "dense F1 %.3f recall %.3f fpr %.4f" % (r["f1"], r["recall"], r["fpr"]), flush=True)
-for (mode, sd), fl in flags.items():
-    if mode != "persender" and ("persender", sd) in flags:
-        d = boot_diff(counts_by_receiver(flags[("persender", sd)], D), counts_by_receiver(fl, D), rng)
-        res.setdefault("delta_f1_vs_persender", {}).setdefault(mode, []).append(dict(delta_f1=d[0], ci95=d[1], p_boot=d[2]))
+for base, mode in (("persender", "nonbr"), ("nonbr", "full"), ("persender", "full")):
+    for sd in sorted({k[1] for k in flags}):
+        if (base, sd) in flags and (mode, sd) in flags:
+            d = boot_diff(counts_by_receiver(flags[(base, sd)], D), counts_by_receiver(flags[(mode, sd)], D), rng)
+            res.setdefault("delta_f1", {}).setdefault(f"{mode}_vs_{base}", []).append(dict(delta_f1=d[0], ci95=d[1], p_boot=d[2]))
 rv, rt = rule_scores(V), rule_scores(D)
 for k in rv:
     v = V["y"] >= 0; ts = np.quantile(rv[k][v], np.linspace(0.05, 0.99, 60)); f1s = []

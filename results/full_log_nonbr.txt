@@ -8,3 +8,8 @@
 [  5331s]   [nonbr] epoch 5/5 loss 0.2477
 [  5442s] saved results/preds/nonbr_0.npz thr 0.75
 [  6471s]   [nonbr] epoch 1/5 loss 0.4938
+[  7522s]   [nonbr] epoch 2/5 loss 0.3449
+[  8588s]   [nonbr] epoch 3/5 loss 0.3066
+[  9636s]   [nonbr] epoch 4/5 loss 0.2743
+[ 10671s]   [nonbr] epoch 5/5 loss 0.2518
+[ 10782s] saved results/preds/nonbr_1.npz thr 0.75

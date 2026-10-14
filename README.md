@@ -17,9 +17,24 @@ paper/            tables.tex + fig_perattack.pdf generated from the real-data re
 Run: `pip install -r requirements.txt && python run_experiments.py && python make_tables.py`
 (`--quick` for a smoke test).
 
-## Status note
-`nambd/sim.py` results (results/results.json) come from the included simulator. `data.load_veremi` has now been
-validated on the public **VeReMi Extension** benchmark archives (simulated traffic, not field recordings) (Zenodo 20090854; RandomPos_1416 and ConstSpeed_1416 only).
-`run_real.py` trains on the 50400-54000 s slices and tests on the later 54000-57600 s slices
-(receiver-disjoint val/test blocks), 3 seeds; output in results/results_real.json and results/real_log.txt.
-Original VeReMi, NextGen and the other Extension attacks have not been run yet.
+## Results (VeReMi Extension, 8 attack types, 14:00-16:00; 2 seeds)
+Trained on the first hour (`run_full.py`), tested on the later hour with receiver-disjoint validation/test blocks; analysis in `run_analysis.py`,
+dense-traffic transfer in `run_dense.py`; tables/figure from `make_tables.py`. Raw outputs: `results/results_full.json`, `results/results_dense.json`.
+
+| Model | Precision | Recall | F1 | FPR |
+|---|---|---|---|---|
+| Per-sender, no position features | 0.931 | 0.695 | 0.795 | 2.3% |
+| No neighbour attention, all features (`nonbr`) | 0.970 | 0.853 | 0.908 | 1.2% |
+| Neighbourhood-aware (full) | 0.977 | 0.874 | 0.923 | 0.9% |
+| VeReMi speed check (rule) / range check (rule) | 1.000 / 0.649 | 0.560 / 0.474 | 0.718 / 0.548 | 0.0% / 11.5% |
+
+- Most of the gain over the per-sender model comes from the receiver-relative position features (+0.113 F1, 95% CI [0.10, 0.13]).
+- Neighbour attention adds a smaller but consistent gain on top (+0.015, CI [0.011, 0.018]; positive on all 8 attacks, Holm-corrected p < 0.004), largest on EventualStop (+0.087) and ConstPosOffset (+0.061).
+- The simple speed-consistency rule beats the learned models on RandomPos, RandomPosOffset, ConstSpeed and DataReplay, but scores 0 on ConstPosOffset and EventualStop.
+- Dense 07:00-09:00 traffic (RandomPos, ConstSpeed only): full 0.963 F1 vs no-neighbour 0.956 vs per-sender 0.922 (speed-check rule 0.954).
+- Earlier two-attack results (`results/results_real*.json`) are superseded; there, neighbour attention added nothing.
+
+## Limitations
+Simulated benchmark; 8 of 19 attack types (Sybil attacks and RandomSpeed/ConstSpeedOffset/DoS variants not run; the RandomSpeedOffset archive is mislabeled and was excluded);
+2 seeds; independent (non-colluding) attackers; dense-traffic transfer on 2 attacks only; no comparison against published learned detectors.
+`results/preds/` (large per-window predictions) is git-ignored; rerun `run_full.py` to regenerate.
