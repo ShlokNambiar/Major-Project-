@@ -1,3 +1,8 @@
 [     0s] train subsets 8 late 8 dense 0
 [    42s] train (72344, 16, 10, 8) attack ids [np.int64(0), np.int64(1), np.int64(2), np.int64(3), np.int64(4), np.int64(5), np.int64(9), np.int64(11), np.int64(12)]
 [    95s] val (20216, 16, 10, 8) test (47192, 16, 10, 8)
+[   261s]   [persender] epoch 1/5 loss 0.6324
+[   412s]   [persender] epoch 2/5 loss 0.5225
+[   561s]   [persender] epoch 3/5 loss 0.4998
+[   706s]   [persender] epoch 4/5 loss 0.4834
+[   854s]   [persender] epoch 5/5 loss 0.4707
