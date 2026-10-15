@@ -6,3 +6,5 @@ matplotlib
 # only for the document generators (make_*_pdf.py, literature table):
 reportlab
 python-docx
+# tests (python -m pytest tests -q):
+pytest

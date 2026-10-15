@@ -1,0 +1,3248 @@
+{
+ "thr_fpr1": {
+  "full_0": 0.998329246044159,
+  "full_1": 0.9983172559738159,
+  "nonbr_0": 0.9982459759712219,
+  "nonbr_1": 0.9983021748065949
+ },
+ "natural": {
+  "bins": [
+   "0-20%",
+   "20-40%",
+   "40-60%",
+   "60-100%"
+  ],
+  "n_windows": [
+   22310,
+   22583,
+   15161,
+   8917
+  ],
+  "full_0": [
+   {
+    "recall": 0.9402767662053897,
+    "fpr": 0.009376387039502885
+   },
+   {
+    "recall": 0.924935161170804,
+    "fpr": 0.003873852525731241
+   },
+   {
+    "recall": 0.9128651973347002,
+    "fpr": 0.003732878725530539
+   },
+   {
+    "recall": 0.8739148128052089,
+    "fpr": 0.0
+   }
+  ],
+  "full_1": [
+   {
+    "recall": 0.945375091041515,
+    "fpr": 0.014388223109927505
+   },
+   {
+    "recall": 0.9325676176361616,
+    "fpr": 0.006377432748477761
+   },
+   {
+    "recall": 0.9204852212540577,
+    "fpr": 0.005819763682323203
+   },
+   {
+    "recall": 0.8796120455778622,
+    "fpr": 0.0024193548387096775
+   }
+  ],
+  "nonbr_0": [
+   {
+    "recall": 0.9071376547705754,
+    "fpr": 0.015072495931350792
+   },
+   {
+    "recall": 0.9099913548227738,
+    "fpr": 0.01660811242414564
+   },
+   {
+    "recall": 0.9048351272851529,
+    "fpr": 0.013226735641643643
+   },
+   {
+    "recall": 0.9008410200759631,
+    "fpr": 0.006182795698924731
+   }
+  ],
+  "nonbr_1": [
+   {
+    "recall": 0.9020393299344501,
+    "fpr": 0.012205947625388371
+   },
+   {
+    "recall": 0.9064591824132394,
+    "fpr": 0.01285789348966114
+   },
+   {
+    "recall": 0.9024090210148642,
+    "fpr": 0.013079771912292046
+   },
+   {
+    "recall": 0.8987384698860553,
+    "fpr": 0.008333333333333333
+   }
+  ]
+ },
+ "injected": {
+  "offset_coordinated": {
+   "1": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.04425363276089828,
+      "honest_fpr": 0.008135644768856448,
+      "real_attacker_recall": 0.9384023099133783,
+      "colluder_recall_fpr1": 0.011889035667107,
+      "honest_fpr_fpr1": 0.0002281021897810219
+     },
+     "clean": {
+      "colluder_recall": 0.008586525759577279,
+      "honest_fpr": 0.007527372262773723,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0002281021897810219
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.05416116248348745,
+      "honest_fpr": 0.009428223844282239,
+      "real_attacker_recall": 0.9449791466153352,
+      "colluder_recall_fpr1": 0.012549537648612946,
+      "honest_fpr_fpr1": 0.00030413625304136254
+     },
+     "clean": {
+      "colluder_recall": 0.011889035667107,
+      "honest_fpr": 0.009884428223844282,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0019815059445178335,
+      "honest_fpr_fpr1": 0.0006082725060827251
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.21268163804491413,
+      "honest_fpr": 0.026992092457420926,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.012549537648612946,
+      "honest_fpr_fpr1": 7.603406326034063e-05
+     },
+     "clean": {
+      "colluder_recall": 0.027080581241743725,
+      "honest_fpr": 0.026992092457420926,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 7.603406326034063e-05
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.19881109643328929,
+      "honest_fpr": 0.023190389294403892,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.019815059445178335,
+      "honest_fpr": 0.023190389294403892,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "2": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.04260237780713342,
+      "honest_fpr": 0.007905138339920948,
+      "real_attacker_recall": 0.9385627205646455,
+      "colluder_recall_fpr1": 0.007926023778071334,
+      "honest_fpr_fpr1": 0.00017185083347654237
+     },
+     "clean": {
+      "colluder_recall": 0.009247027741083224,
+      "honest_fpr": 0.007217735006014779,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00033025099075297226,
+      "honest_fpr_fpr1": 0.00017185083347654237
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.04986789960369881,
+      "honest_fpr": 0.009022168757518474,
+      "real_attacker_recall": 0.9446583253128008,
+      "colluder_recall_fpr1": 0.01023778071334214,
+      "honest_fpr_fpr1": 0.0004296270836913559
+     },
+     "clean": {
+      "colluder_recall": 0.012549537648612946,
+      "honest_fpr": 0.00945179584120983,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0016512549537648614,
+      "honest_fpr_fpr1": 0.0005155525004296271
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.21532364597093792,
+      "honest_fpr": 0.027152431689293693,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.006274768824306473,
+      "honest_fpr_fpr1": 8.592541673827119e-05
+     },
+     "clean": {
+      "colluder_recall": 0.026420079260237782,
+      "honest_fpr": 0.027152431689293693,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 8.592541673827119e-05
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.20376486129458388,
+      "honest_fpr": 0.022684310018903593,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02344782034346103,
+      "honest_fpr": 0.022684310018903593,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "4": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.0392998678996037,
+      "honest_fpr": 0.009407665505226481,
+      "real_attacker_recall": 0.9380814886108437,
+      "colluder_recall_fpr1": 0.011393659180977542,
+      "honest_fpr_fpr1": 0.0003484320557491289
+     },
+     "clean": {
+      "colluder_recall": 0.007595772787318362,
+      "honest_fpr": 0.007665505226480836,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00016512549537648613,
+      "honest_fpr_fpr1": 0.00023228803716608595
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.045739762219286655,
+      "honest_fpr": 0.008013937282229966,
+      "real_attacker_recall": 0.9436958614051973,
+      "colluder_recall_fpr1": 0.01106340819022457,
+      "honest_fpr_fpr1": 0.0003484320557491289
+     },
+     "clean": {
+      "colluder_recall": 0.010733157199471599,
+      "honest_fpr": 0.009639953542392566,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.001155878467635403,
+      "honest_fpr_fpr1": 0.0004645760743321719
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.22671730515191546,
+      "honest_fpr": 0.026016260162601626,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.01023778071334214,
+      "honest_fpr_fpr1": 0.00011614401858304297
+     },
+     "clean": {
+      "colluder_recall": 0.028401585204755615,
+      "honest_fpr": 0.026016260162601626,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00011614401858304297
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.21466314398943198,
+      "honest_fpr": 0.023228803716608595,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.022291941875825626,
+      "honest_fpr": 0.023228803716608595,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "6": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.036217525319242626,
+      "honest_fpr": 0.010569688283769259,
+      "real_attacker_recall": 0.9390439525184472,
+      "colluder_recall_fpr1": 0.009136944077498899,
+      "honest_fpr_fpr1": 0.0005374417771408098
+     },
+     "clean": {
+      "colluder_recall": 0.00781594011448701,
+      "honest_fpr": 0.0073450376209244,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00033025099075297226,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.040620871862615586,
+      "honest_fpr": 0.01361519168756718,
+      "real_attacker_recall": 0.9440166827077318,
+      "colluder_recall_fpr1": 0.009136944077498899,
+      "honest_fpr_fpr1": 0.0007165890361877463
+     },
+     "clean": {
+      "colluder_recall": 0.009247027741083224,
+      "honest_fpr": 0.01146542457900394,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0007705856450902686,
+      "honest_fpr_fpr1": 0.0007165890361877463
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.21411272567151035,
+      "honest_fpr": 0.025618058043711932,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.007705856450902686,
+      "honest_fpr_fpr1": 0.00017914725904693657
+     },
+     "clean": {
+      "colluder_recall": 0.027851166886833995,
+      "honest_fpr": 0.025618058043711932,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00017914725904693657
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.19892118009687362,
+      "honest_fpr": 0.022214260121820137,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.00022016732716864817,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02322765301629238,
+      "honest_fpr": 0.022214260121820137,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "8": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.028896961690885074,
+      "honest_fpr": 0.012137823022709476,
+      "real_attacker_recall": 0.9366377927494386,
+      "colluder_recall_fpr1": 0.004953764861294584,
+      "honest_fpr_fpr1": 0.0007830853563038371
+     },
+     "clean": {
+      "colluder_recall": 0.007348084544253633,
+      "honest_fpr": 0.009005481597494126,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00016512549537648613,
+      "honest_fpr_fpr1": 0.00039154267815191856
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.03294253632760898,
+      "honest_fpr": 0.012920908379013312,
+      "real_attacker_recall": 0.9424125761950594,
+      "colluder_recall_fpr1": 0.004953764861294584,
+      "honest_fpr_fpr1": 0.00039154267815191856
+     },
+     "clean": {
+      "colluder_recall": 0.010320343461030383,
+      "honest_fpr": 0.009005481597494126,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0009081902245706737,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.22646961690885073,
+      "honest_fpr": 0.023492560689115115,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.010155217965653896,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02774108322324967,
+      "honest_fpr": 0.023492560689115115,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 8.256274768824307e-05,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.2147457067371202,
+      "honest_fpr": 0.018794048551292093,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 8.256274768824307e-05,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02369550858652576,
+      "honest_fpr": 0.018794048551292093,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   }
+  },
+  "offset_independent": {
+   "1": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.04425363276089828,
+      "honest_fpr": 0.008135644768856448,
+      "real_attacker_recall": 0.9384023099133783,
+      "colluder_recall_fpr1": 0.011889035667107,
+      "honest_fpr_fpr1": 0.0002281021897810219
+     },
+     "clean": {
+      "colluder_recall": 0.008586525759577279,
+      "honest_fpr": 0.007527372262773723,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0002281021897810219
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.05416116248348745,
+      "honest_fpr": 0.009428223844282239,
+      "real_attacker_recall": 0.9449791466153352,
+      "colluder_recall_fpr1": 0.012549537648612946,
+      "honest_fpr_fpr1": 0.00030413625304136254
+     },
+     "clean": {
+      "colluder_recall": 0.011889035667107,
+      "honest_fpr": 0.009884428223844282,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0019815059445178335,
+      "honest_fpr_fpr1": 0.0006082725060827251
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.21268163804491413,
+      "honest_fpr": 0.026992092457420926,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.012549537648612946,
+      "honest_fpr_fpr1": 7.603406326034063e-05
+     },
+     "clean": {
+      "colluder_recall": 0.027080581241743725,
+      "honest_fpr": 0.026992092457420926,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 7.603406326034063e-05
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.19881109643328929,
+      "honest_fpr": 0.023190389294403892,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.019815059445178335,
+      "honest_fpr": 0.023190389294403892,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "2": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.04788639365918098,
+      "honest_fpr": 0.007389585839491322,
+      "real_attacker_recall": 0.9384023099133783,
+      "colluder_recall_fpr1": 0.013210039630118891,
+      "honest_fpr_fpr1": 0.00034370166695308474
+     },
+     "clean": {
+      "colluder_recall": 0.009247027741083224,
+      "honest_fpr": 0.007217735006014779,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00033025099075297226,
+      "honest_fpr_fpr1": 0.00017185083347654237
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.06142668428005284,
+      "honest_fpr": 0.009279945007733287,
+      "real_attacker_recall": 0.9443375040102663,
+      "colluder_recall_fpr1": 0.014200792602377808,
+      "honest_fpr_fpr1": 0.0004296270836913559
+     },
+     "clean": {
+      "colluder_recall": 0.012549537648612946,
+      "honest_fpr": 0.00945179584120983,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0016512549537648614,
+      "honest_fpr_fpr1": 0.0005155525004296271
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.23249669749009247,
+      "honest_fpr": 0.027152431689293693,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.009247027741083224,
+      "honest_fpr_fpr1": 8.592541673827119e-05
+     },
+     "clean": {
+      "colluder_recall": 0.026420079260237782,
+      "honest_fpr": 0.027152431689293693,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 8.592541673827119e-05
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.21003963011889035,
+      "honest_fpr": 0.022684310018903593,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02344782034346103,
+      "honest_fpr": 0.022684310018903593,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "4": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.04673051519154557,
+      "honest_fpr": 0.009175377468060394,
+      "real_attacker_recall": 0.9356753288418351,
+      "colluder_recall_fpr1": 0.01618229854689564,
+      "honest_fpr_fpr1": 0.0003484320557491289
+     },
+     "clean": {
+      "colluder_recall": 0.007595772787318362,
+      "honest_fpr": 0.007665505226480836,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00016512549537648613,
+      "honest_fpr_fpr1": 0.00023228803716608595
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.06010568031704095,
+      "honest_fpr": 0.008013937282229966,
+      "real_attacker_recall": 0.9440166827077318,
+      "colluder_recall_fpr1": 0.016347424042272126,
+      "honest_fpr_fpr1": 0.00023228803716608595
+     },
+     "clean": {
+      "colluder_recall": 0.010733157199471599,
+      "honest_fpr": 0.009639953542392566,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.001155878467635403,
+      "honest_fpr_fpr1": 0.0004645760743321719
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.226221928665786,
+      "honest_fpr": 0.026016260162601626,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.011889035667107,
+      "honest_fpr_fpr1": 0.00011614401858304297
+     },
+     "clean": {
+      "colluder_recall": 0.028401585204755615,
+      "honest_fpr": 0.026016260162601626,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00011614401858304297
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.21251651254953766,
+      "honest_fpr": 0.023228803716608595,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.022291941875825626,
+      "honest_fpr": 0.023228803716608595,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "6": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.04942756494936151,
+      "honest_fpr": 0.008778215693299892,
+      "real_attacker_recall": 0.9340712223291626,
+      "colluder_recall_fpr1": 0.0150814619110524,
+      "honest_fpr_fpr1": 0.00035829451809387314
+     },
+     "clean": {
+      "colluder_recall": 0.00781594011448701,
+      "honest_fpr": 0.0073450376209244,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00033025099075297226,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.055812417437252314,
+      "honest_fpr": 0.00949480472948764,
+      "real_attacker_recall": 0.9406480590311197,
+      "colluder_recall_fpr1": 0.012769704975781594,
+      "honest_fpr_fpr1": 0.00035829451809387314
+     },
+     "clean": {
+      "colluder_recall": 0.009247027741083224,
+      "honest_fpr": 0.01146542457900394,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0007705856450902686,
+      "honest_fpr_fpr1": 0.0007165890361877463
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.22380008806693086,
+      "honest_fpr": 0.025618058043711932,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.010347864376926464,
+      "honest_fpr_fpr1": 0.00017914725904693657
+     },
+     "clean": {
+      "colluder_recall": 0.027851166886833995,
+      "honest_fpr": 0.025618058043711932,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00017914725904693657
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.2116908850726552,
+      "honest_fpr": 0.022214260121820137,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02322765301629238,
+      "honest_fpr": 0.022214260121820137,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "8": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.048381770145310435,
+      "honest_fpr": 0.011746280344557557,
+      "real_attacker_recall": 0.9343920436316971,
+      "colluder_recall_fpr1": 0.01510898282694848,
+      "honest_fpr_fpr1": 0.0015661707126076742
+     },
+     "clean": {
+      "colluder_recall": 0.007348084544253633,
+      "honest_fpr": 0.009005481597494126,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00016512549537648613,
+      "honest_fpr_fpr1": 0.00039154267815191856
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.057215984147952446,
+      "honest_fpr": 0.007047768206734534,
+      "real_attacker_recall": 0.9416105229387232,
+      "colluder_recall_fpr1": 0.013375165125495376,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.010320343461030383,
+      "honest_fpr": 0.009005481597494126,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0009081902245706737,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.22655217965653898,
+      "honest_fpr": 0.023492560689115115,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.009824966974900925,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02774108322324967,
+      "honest_fpr": 0.023492560689115115,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 8.256274768824307e-05,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.21136063408190225,
+      "honest_fpr": 0.018794048551292093,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 8.256274768824307e-05,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02369550858652576,
+      "honest_fpr": 0.018794048551292093,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   }
+  },
+  "stop_coordinated": {
+   "1": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.1406869220607662,
+      "honest_fpr": 0.006690997566909975,
+      "real_attacker_recall": 0.9358357394931024,
+      "colluder_recall_fpr1": 0.04425363276089828,
+      "honest_fpr_fpr1": 0.00015206812652068127
+     },
+     "clean": {
+      "colluder_recall": 0.008586525759577279,
+      "honest_fpr": 0.007527372262773723,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0002281021897810219
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.11492734478203434,
+      "honest_fpr": 0.008895985401459854,
+      "real_attacker_recall": 0.9436958614051973,
+      "colluder_recall_fpr1": 0.03632760898282695,
+      "honest_fpr_fpr1": 0.0005322384428223844
+     },
+     "clean": {
+      "colluder_recall": 0.011889035667107,
+      "honest_fpr": 0.009884428223844282,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0019815059445178335,
+      "honest_fpr_fpr1": 0.0006082725060827251
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.18758256274768825,
+      "honest_fpr": 0.026992092457420926,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.011228533685601057,
+      "honest_fpr_fpr1": 7.603406326034063e-05
+     },
+     "clean": {
+      "colluder_recall": 0.027080581241743725,
+      "honest_fpr": 0.026992092457420926,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 7.603406326034063e-05
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.41149273447820345,
+      "honest_fpr": 0.023190389294403892,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.03896961690885073,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.019815059445178335,
+      "honest_fpr": 0.023190389294403892,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "2": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.14233817701453105,
+      "honest_fpr": 0.0057570029214641695,
+      "real_attacker_recall": 0.9324671158164902,
+      "colluder_recall_fpr1": 0.04557463672391017,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.009247027741083224,
+      "honest_fpr": 0.007217735006014779,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00033025099075297226,
+      "honest_fpr_fpr1": 0.00017185083347654237
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.10865257595772787,
+      "honest_fpr": 0.007819212923182677,
+      "real_attacker_recall": 0.9417709335899904,
+      "colluder_recall_fpr1": 0.030052840158520475,
+      "honest_fpr_fpr1": 0.0005155525004296271
+     },
+     "clean": {
+      "colluder_recall": 0.012549537648612946,
+      "honest_fpr": 0.00945179584120983,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0016512549537648614,
+      "honest_fpr_fpr1": 0.0005155525004296271
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.19881109643328929,
+      "honest_fpr": 0.027152431689293693,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.013540290620871863,
+      "honest_fpr_fpr1": 8.592541673827119e-05
+     },
+     "clean": {
+      "colluder_recall": 0.026420079260237782,
+      "honest_fpr": 0.027152431689293693,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 8.592541673827119e-05
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.4309775429326288,
+      "honest_fpr": 0.022684310018903593,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.042932628797886396,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02344782034346103,
+      "honest_fpr": 0.022684310018903593,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "4": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.1334214002642008,
+      "honest_fpr": 0.00545876887340302,
+      "real_attacker_recall": 0.9278152069297402,
+      "colluder_recall_fpr1": 0.03797886393659181,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.007595772787318362,
+      "honest_fpr": 0.007665505226480836,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00016512549537648613,
+      "honest_fpr_fpr1": 0.00023228803716608595
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.09214002642007926,
+      "honest_fpr": 0.0062717770034843206,
+      "real_attacker_recall": 0.938241899262111,
+      "colluder_recall_fpr1": 0.02097093791281374,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.010733157199471599,
+      "honest_fpr": 0.009639953542392566,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.001155878467635403,
+      "honest_fpr_fpr1": 0.0004645760743321719
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.20029722589167767,
+      "honest_fpr": 0.026016260162601626,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.012879788639365918,
+      "honest_fpr_fpr1": 0.00011614401858304297
+     },
+     "clean": {
+      "colluder_recall": 0.028401585204755615,
+      "honest_fpr": 0.026016260162601626,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00011614401858304297
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.42602377807133424,
+      "honest_fpr": 0.023228803716608595,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.03963011889035667,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.022291941875825626,
+      "honest_fpr": 0.023228803716608595,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "6": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.12296345222369,
+      "honest_fpr": 0.004657828735220351,
+      "real_attacker_recall": 0.9223612447866538,
+      "colluder_recall_fpr1": 0.031373844121532365,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.00781594011448701,
+      "honest_fpr": 0.0073450376209244,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00033025099075297226,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.08256274768824307,
+      "honest_fpr": 0.006449301325689717,
+      "real_attacker_recall": 0.9348732755854989,
+      "colluder_recall_fpr1": 0.013760457948040511,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.009247027741083224,
+      "honest_fpr": 0.01146542457900394,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0007705856450902686,
+      "honest_fpr_fpr1": 0.0007165890361877463
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.20233377366798766,
+      "honest_fpr": 0.025618058043711932,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.012879788639365918,
+      "honest_fpr_fpr1": 0.00017914725904693657
+     },
+     "clean": {
+      "colluder_recall": 0.027851166886833995,
+      "honest_fpr": 0.025618058043711932,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00017914725904693657
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.43086745926904446,
+      "honest_fpr": 0.022214260121820137,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.036217525319242626,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02322765301629238,
+      "honest_fpr": 0.022214260121820137,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "8": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.1150099075297226,
+      "honest_fpr": 0.004698512137823023,
+      "real_attacker_recall": 0.9177093358999038,
+      "colluder_recall_fpr1": 0.024933949801849407,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.007348084544253633,
+      "honest_fpr": 0.009005481597494126,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00016512549537648613,
+      "honest_fpr_fpr1": 0.00039154267815191856
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.06993064729194187,
+      "honest_fpr": 0.003915426781519186,
+      "real_attacker_recall": 0.9313442412576195,
+      "colluder_recall_fpr1": 0.012219286657859974,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.010320343461030383,
+      "honest_fpr": 0.009005481597494126,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0009081902245706737,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.2017007926023778,
+      "honest_fpr": 0.023492560689115115,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.012549537648612946,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02774108322324967,
+      "honest_fpr": 0.023492560689115115,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 8.256274768824307e-05,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.4331241743725231,
+      "honest_fpr": 0.018794048551292093,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.04012549537648613,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02369550858652576,
+      "honest_fpr": 0.018794048551292093,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   }
+  },
+  "stop_independent": {
+   "1": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.1499339498018494,
+      "honest_fpr": 0.006614963503649635,
+      "real_attacker_recall": 0.9359961501443695,
+      "colluder_recall_fpr1": 0.04095112285336856,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.008586525759577279,
+      "honest_fpr": 0.007527372262773723,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0002281021897810219
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.10700132100396301,
+      "honest_fpr": 0.008819951338199513,
+      "real_attacker_recall": 0.9435354507539301,
+      "colluder_recall_fpr1": 0.02509907529722589,
+      "honest_fpr_fpr1": 0.0005322384428223844
+     },
+     "clean": {
+      "colluder_recall": 0.011889035667107,
+      "honest_fpr": 0.009884428223844282,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0019815059445178335,
+      "honest_fpr_fpr1": 0.0006082725060827251
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.21862615587846765,
+      "honest_fpr": 0.026992092457420926,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0416116248348745,
+      "honest_fpr_fpr1": 7.603406326034063e-05
+     },
+     "clean": {
+      "colluder_recall": 0.027080581241743725,
+      "honest_fpr": 0.026992092457420926,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 7.603406326034063e-05
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.31968295904887717,
+      "honest_fpr": 0.023190389294403892,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.013210039630118891,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.019815059445178335,
+      "honest_fpr": 0.023190389294403892,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "2": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.15653896961690886,
+      "honest_fpr": 0.005671077504725898,
+      "real_attacker_recall": 0.9308630093038178,
+      "colluder_recall_fpr1": 0.04194187582562748,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.009247027741083224,
+      "honest_fpr": 0.007217735006014779,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00033025099075297226,
+      "honest_fpr_fpr1": 0.00017185083347654237
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.10898282694848084,
+      "honest_fpr": 0.0077332875064444065,
+      "real_attacker_recall": 0.9425729868463266,
+      "colluder_recall_fpr1": 0.02774108322324967,
+      "honest_fpr_fpr1": 0.0005155525004296271
+     },
+     "clean": {
+      "colluder_recall": 0.012549537648612946,
+      "honest_fpr": 0.00945179584120983,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0016512549537648614,
+      "honest_fpr_fpr1": 0.0005155525004296271
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.22688243064729194,
+      "honest_fpr": 0.027152431689293693,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0392998678996037,
+      "honest_fpr_fpr1": 8.592541673827119e-05
+     },
+     "clean": {
+      "colluder_recall": 0.026420079260237782,
+      "honest_fpr": 0.027152431689293693,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 8.592541673827119e-05
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.3345442536327609,
+      "honest_fpr": 0.022684310018903593,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.011228533685601057,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02344782034346103,
+      "honest_fpr": 0.022684310018903593,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "4": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.14283355350066052,
+      "honest_fpr": 0.005110336817653891,
+      "real_attacker_recall": 0.9271735643246711,
+      "colluder_recall_fpr1": 0.034676354029062086,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.007595772787318362,
+      "honest_fpr": 0.007665505226480836,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00016512549537648613,
+      "honest_fpr_fpr1": 0.00023228803716608595
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.08735138705416116,
+      "honest_fpr": 0.006387921022067364,
+      "real_attacker_recall": 0.9390439525184472,
+      "colluder_recall_fpr1": 0.018989431968295906,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.010733157199471599,
+      "honest_fpr": 0.009639953542392566,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.001155878467635403,
+      "honest_fpr_fpr1": 0.0004645760743321719
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.2247357992073976,
+      "honest_fpr": 0.026016260162601626,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.039464993394980184,
+      "honest_fpr_fpr1": 0.00011614401858304297
+     },
+     "clean": {
+      "colluder_recall": 0.028401585204755615,
+      "honest_fpr": 0.026016260162601626,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00011614401858304297
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.3130779392338177,
+      "honest_fpr": 0.023228803716608595,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.011228533685601057,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.022291941875825626,
+      "honest_fpr": 0.023228803716608595,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "6": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.12824746807573756,
+      "honest_fpr": 0.004836975994267288,
+      "real_attacker_recall": 0.92316329804299,
+      "colluder_recall_fpr1": 0.030273007485689125,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.00781594011448701,
+      "honest_fpr": 0.0073450376209244,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00033025099075297226,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.07562747688243064,
+      "honest_fpr": 0.0066284485847366535,
+      "real_attacker_recall": 0.9356753288418351,
+      "colluder_recall_fpr1": 0.015741963892558344,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.009247027741083224,
+      "honest_fpr": 0.01146542457900394,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0007705856450902686,
+      "honest_fpr_fpr1": 0.0007165890361877463
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.22732276530162923,
+      "honest_fpr": 0.025618058043711932,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.03830911492734478,
+      "honest_fpr_fpr1": 0.00017914725904693657
+     },
+     "clean": {
+      "colluder_recall": 0.027851166886833995,
+      "honest_fpr": 0.025618058043711932,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00017914725904693657
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.31781153676794366,
+      "honest_fpr": 0.022214260121820137,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.011668868339938352,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02322765301629238,
+      "honest_fpr": 0.022214260121820137,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "8": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.1254128137384412,
+      "honest_fpr": 0.00548159749412686,
+      "real_attacker_recall": 0.9183509785049727,
+      "colluder_recall_fpr1": 0.029970277410832233,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.007348084544253633,
+      "honest_fpr": 0.009005481597494126,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00016512549537648613,
+      "honest_fpr_fpr1": 0.00039154267815191856
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.06943527080581242,
+      "honest_fpr": 0.005090054815974941,
+      "real_attacker_recall": 0.9308630093038178,
+      "colluder_recall_fpr1": 0.014943857331571995,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.010320343461030383,
+      "honest_fpr": 0.009005481597494126,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0009081902245706737,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.23266182298546895,
+      "honest_fpr": 0.023492560689115115,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.04260237780713342,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02774108322324967,
+      "honest_fpr": 0.023492560689115115,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 8.256274768824307e-05,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.3222424042272127,
+      "honest_fpr": 0.018794048551292093,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.01023778071334214,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02369550858652576,
+      "honest_fpr": 0.018794048551292093,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   }
+  },
+  "approach_coordinated": {
+   "1": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.010568031704095112,
+      "honest_fpr": 0.007527372262773723,
+      "real_attacker_recall": 0.9396855951235162,
+      "colluder_recall_fpr1": 0.0006605019815059445,
+      "honest_fpr_fpr1": 0.0003801703163017032
+     },
+     "clean": {
+      "colluder_recall": 0.008586525759577279,
+      "honest_fpr": 0.007527372262773723,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0002281021897810219
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.0059445178335535,
+      "honest_fpr": 0.01072080291970803,
+      "real_attacker_recall": 0.9444979146615335,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0006082725060827251
+     },
+     "clean": {
+      "colluder_recall": 0.011889035667107,
+      "honest_fpr": 0.009884428223844282,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0019815059445178335,
+      "honest_fpr_fpr1": 0.0006082725060827251
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.021796565389696168,
+      "honest_fpr": 0.026992092457420926,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 7.603406326034063e-05
+     },
+     "clean": {
+      "colluder_recall": 0.027080581241743725,
+      "honest_fpr": 0.026992092457420926,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 7.603406326034063e-05
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.0,
+      "honest_fpr": 0.023190389294403892,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.019815059445178335,
+      "honest_fpr": 0.023190389294403892,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "2": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.010568031704095112,
+      "honest_fpr": 0.009022168757518474,
+      "real_attacker_recall": 0.9390439525184472,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0004296270836913559
+     },
+     "clean": {
+      "colluder_recall": 0.009247027741083224,
+      "honest_fpr": 0.007217735006014779,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00033025099075297226,
+      "honest_fpr_fpr1": 0.00017185083347654237
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.002642007926023778,
+      "honest_fpr": 0.01237326001031105,
+      "real_attacker_recall": 0.945460378569137,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0008592541673827118
+     },
+     "clean": {
+      "colluder_recall": 0.012549537648612946,
+      "honest_fpr": 0.00945179584120983,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0016512549537648614,
+      "honest_fpr_fpr1": 0.0005155525004296271
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.02212681638044914,
+      "honest_fpr": 0.027152431689293693,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 8.592541673827119e-05
+     },
+     "clean": {
+      "colluder_recall": 0.026420079260237782,
+      "honest_fpr": 0.027152431689293693,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 8.592541673827119e-05
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.0019815059445178335,
+      "honest_fpr": 0.022684310018903593,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02344782034346103,
+      "honest_fpr": 0.022684310018903593,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "4": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.0059445178335535,
+      "honest_fpr": 0.013821138211382113,
+      "real_attacker_recall": 0.9412897016361886,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0003484320557491289
+     },
+     "clean": {
+      "colluder_recall": 0.007595772787318362,
+      "honest_fpr": 0.007665505226480836,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00016512549537648613,
+      "honest_fpr_fpr1": 0.00023228803716608595
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.003797886393659181,
+      "honest_fpr": 0.016144018583042975,
+      "real_attacker_recall": 0.9443375040102663,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0008130081300813008
+     },
+     "clean": {
+      "colluder_recall": 0.010733157199471599,
+      "honest_fpr": 0.009639953542392566,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.001155878467635403,
+      "honest_fpr_fpr1": 0.0004645760743321719
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.018494055482166448,
+      "honest_fpr": 0.026016260162601626,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00011614401858304297
+     },
+     "clean": {
+      "colluder_recall": 0.028401585204755615,
+      "honest_fpr": 0.026016260162601626,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00011614401858304297
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.0,
+      "honest_fpr": 0.023228803716608595,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.022291941875825626,
+      "honest_fpr": 0.023228803716608595,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "6": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.004073095552619991,
+      "honest_fpr": 0.0200644930132569,
+      "real_attacker_recall": 0.9345524542829644,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00035829451809387314
+     },
+     "clean": {
+      "colluder_recall": 0.00781594011448701,
+      "honest_fpr": 0.0073450376209244,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00033025099075297226,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.0012109202994275649,
+      "honest_fpr": 0.024901469007524185,
+      "real_attacker_recall": 0.9435354507539301,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0017914725904693658
+     },
+     "clean": {
+      "colluder_recall": 0.009247027741083224,
+      "honest_fpr": 0.01146542457900394,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0007705856450902686,
+      "honest_fpr_fpr1": 0.0007165890361877463
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.016622633201232938,
+      "honest_fpr": 0.025618058043711932,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00017914725904693657
+     },
+     "clean": {
+      "colluder_recall": 0.027851166886833995,
+      "honest_fpr": 0.025618058043711932,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00017914725904693657
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.00044033465433729633,
+      "honest_fpr": 0.022214260121820137,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02322765301629238,
+      "honest_fpr": 0.022214260121820137,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "8": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.002724570673712021,
+      "honest_fpr": 0.025450274079874706,
+      "real_attacker_recall": 0.9302213666987488,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0031323414252153485
+     },
+     "clean": {
+      "colluder_recall": 0.007348084544253633,
+      "honest_fpr": 0.009005481597494126,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00016512549537648613,
+      "honest_fpr_fpr1": 0.00039154267815191856
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.002064068692206077,
+      "honest_fpr": 0.034064212999216914,
+      "real_attacker_recall": 0.9363169714469041,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.001957713390759593
+     },
+     "clean": {
+      "colluder_recall": 0.010320343461030383,
+      "honest_fpr": 0.009005481597494126,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0009081902245706737,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.016595112285336857,
+      "honest_fpr": 0.023492560689115115,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02774108322324967,
+      "honest_fpr": 0.023492560689115115,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 8.256274768824307e-05,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.0007430647291941875,
+      "honest_fpr": 0.018794048551292093,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02369550858652576,
+      "honest_fpr": 0.018794048551292093,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   }
+  },
+  "approach_independent": {
+   "1": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.011228533685601057,
+      "honest_fpr": 0.007907542579075427,
+      "real_attacker_recall": 0.9396855951235162,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0006082725060827251
+     },
+     "clean": {
+      "colluder_recall": 0.008586525759577279,
+      "honest_fpr": 0.007527372262773723,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0002281021897810219
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.002642007926023778,
+      "honest_fpr": 0.011633211678832116,
+      "real_attacker_recall": 0.9452999679178697,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0005322384428223844
+     },
+     "clean": {
+      "colluder_recall": 0.011889035667107,
+      "honest_fpr": 0.009884428223844282,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0019815059445178335,
+      "honest_fpr_fpr1": 0.0006082725060827251
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.016512549537648614,
+      "honest_fpr": 0.026992092457420926,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 7.603406326034063e-05
+     },
+     "clean": {
+      "colluder_recall": 0.027080581241743725,
+      "honest_fpr": 0.026992092457420926,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 7.603406326034063e-05
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.001321003963011889,
+      "honest_fpr": 0.023190389294403892,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.019815059445178335,
+      "honest_fpr": 0.023190389294403892,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "2": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.013540290620871863,
+      "honest_fpr": 0.008506616257088847,
+      "real_attacker_recall": 0.9393647738209817,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00034370166695308474
+     },
+     "clean": {
+      "colluder_recall": 0.009247027741083224,
+      "honest_fpr": 0.007217735006014779,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00033025099075297226,
+      "honest_fpr_fpr1": 0.00017185083347654237
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.003632760898282695,
+      "honest_fpr": 0.012716961677264134,
+      "real_attacker_recall": 0.9472248957330767,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0007733287506444406
+     },
+     "clean": {
+      "colluder_recall": 0.012549537648612946,
+      "honest_fpr": 0.00945179584120983,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0016512549537648614,
+      "honest_fpr_fpr1": 0.0005155525004296271
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.022787318361955085,
+      "honest_fpr": 0.027152431689293693,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 8.592541673827119e-05
+     },
+     "clean": {
+      "colluder_recall": 0.026420079260237782,
+      "honest_fpr": 0.027152431689293693,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 8.592541673827119e-05
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.00033025099075297226,
+      "honest_fpr": 0.022684310018903593,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02344782034346103,
+      "honest_fpr": 0.022684310018903593,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "4": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.011723910171730516,
+      "honest_fpr": 0.011149825783972125,
+      "real_attacker_recall": 0.9400064164260507,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0008130081300813008
+     },
+     "clean": {
+      "colluder_recall": 0.007595772787318362,
+      "honest_fpr": 0.007665505226480836,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00016512549537648613,
+      "honest_fpr_fpr1": 0.00023228803716608595
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.0057793923381770146,
+      "honest_fpr": 0.01602787456445993,
+      "real_attacker_recall": 0.9465832531280077,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0006968641114982578
+     },
+     "clean": {
+      "colluder_recall": 0.010733157199471599,
+      "honest_fpr": 0.009639953542392566,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.001155878467635403,
+      "honest_fpr_fpr1": 0.0004645760743321719
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.019815059445178335,
+      "honest_fpr": 0.026016260162601626,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00011614401858304297
+     },
+     "clean": {
+      "colluder_recall": 0.028401585204755615,
+      "honest_fpr": 0.026016260162601626,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00011614401858304297
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.0004953764861294584,
+      "honest_fpr": 0.023228803716608595,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.022291941875825626,
+      "honest_fpr": 0.023228803716608595,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "6": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.00726552179656539,
+      "honest_fpr": 0.014331780723754926,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0007165890361877463
+     },
+     "clean": {
+      "colluder_recall": 0.00781594011448701,
+      "honest_fpr": 0.0073450376209244,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00033025099075297226,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.0035226772346983706,
+      "honest_fpr": 0.025080616266571123,
+      "real_attacker_recall": 0.9449791466153352,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00035829451809387314
+     },
+     "clean": {
+      "colluder_recall": 0.009247027741083224,
+      "honest_fpr": 0.01146542457900394,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0007705856450902686,
+      "honest_fpr_fpr1": 0.0007165890361877463
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.02135623073535887,
+      "honest_fpr": 0.025618058043711932,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00017914725904693657
+     },
+     "clean": {
+      "colluder_recall": 0.027851166886833995,
+      "honest_fpr": 0.025618058043711932,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00017914725904693657
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.0005504183179216205,
+      "honest_fpr": 0.022214260121820137,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02322765301629238,
+      "honest_fpr": 0.022214260121820137,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   },
+   "8": {
+    "full_0": {
+     "injected": {
+      "colluder_recall": 0.005531704095112285,
+      "honest_fpr": 0.021143304620203602,
+      "real_attacker_recall": 0.9380814886108437,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.001957713390759593
+     },
+     "clean": {
+      "colluder_recall": 0.007348084544253633,
+      "honest_fpr": 0.009005481597494126,
+      "real_attacker_recall": 0.939525184472249,
+      "colluder_recall_fpr1": 0.00016512549537648613,
+      "honest_fpr_fpr1": 0.00039154267815191856
+     }
+    },
+    "full_1": {
+     "injected": {
+      "colluder_recall": 0.00404557463672391,
+      "honest_fpr": 0.030148786217697728,
+      "real_attacker_recall": 0.9419313442412576,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.00274079874706343
+     },
+     "clean": {
+      "colluder_recall": 0.010320343461030383,
+      "honest_fpr": 0.009005481597494126,
+      "real_attacker_recall": 0.9451395572666025,
+      "colluder_recall_fpr1": 0.0009081902245706737,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "nonbr_0": {
+     "injected": {
+      "colluder_recall": 0.019980184940554823,
+      "honest_fpr": 0.023492560689115115,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02774108322324967,
+      "honest_fpr": 0.023492560689115115,
+      "real_attacker_recall": 0.9218800128328521,
+      "colluder_recall_fpr1": 8.256274768824307e-05,
+      "honest_fpr_fpr1": 0.0
+     }
+    },
+    "nonbr_1": {
+     "injected": {
+      "colluder_recall": 0.0005779392338177015,
+      "honest_fpr": 0.018794048551292093,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     },
+     "clean": {
+      "colluder_recall": 0.02369550858652576,
+      "honest_fpr": 0.018794048551292093,
+      "real_attacker_recall": 0.9180301572024382,
+      "colluder_recall_fpr1": 0.0,
+      "honest_fpr_fpr1": 0.0
+     }
+    }
+   }
+  }
+ },
+ "rules": {
+  "offset_coordinated": {
+   "1": {
+    "ART_range_check": {
+     "colluder_recall": 0.560105680317041,
+     "honest_fpr": 0.5358120437956204,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.01915455746367239,
+     "honest_fpr": 0.02136557177615572,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "2": {
+    "ART_range_check": {
+     "colluder_recall": 0.5634081902245707,
+     "honest_fpr": 0.5360886750300738,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.021796565389696168,
+     "honest_fpr": 0.020708025433923354,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "4": {
+    "ART_range_check": {
+     "colluder_recall": 0.5741413474240423,
+     "honest_fpr": 0.5333333333333333,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.018163804491413475,
+     "honest_fpr": 0.022067363530778164,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "6": {
+    "ART_range_check": {
+     "colluder_recall": 0.5724350506384852,
+     "honest_fpr": 0.533679684700824,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.019484808454425365,
+     "honest_fpr": 0.0220351128627732,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "8": {
+    "ART_range_check": {
+     "colluder_recall": 0.5670409511228534,
+     "honest_fpr": 0.5395458104933438,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.019237120211360634,
+     "honest_fpr": 0.025450274079874706,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   }
+  },
+  "offset_independent": {
+   "1": {
+    "ART_range_check": {
+     "colluder_recall": 0.560105680317041,
+     "honest_fpr": 0.5358120437956204,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.01915455746367239,
+     "honest_fpr": 0.02136557177615572,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "2": {
+    "ART_range_check": {
+     "colluder_recall": 0.5657199471598415,
+     "honest_fpr": 0.5360886750300738,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.021796565389696168,
+     "honest_fpr": 0.020708025433923354,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "4": {
+    "ART_range_check": {
+     "colluder_recall": 0.5817371202113606,
+     "honest_fpr": 0.5333333333333333,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.018163804491413475,
+     "honest_fpr": 0.022067363530778164,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "6": {
+    "ART_range_check": {
+     "colluder_recall": 0.5726552179656539,
+     "honest_fpr": 0.533679684700824,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.019484808454425365,
+     "honest_fpr": 0.0220351128627732,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "8": {
+    "ART_range_check": {
+     "colluder_recall": 0.5710865257595773,
+     "honest_fpr": 0.5395458104933438,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.019237120211360634,
+     "honest_fpr": 0.025450274079874706,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   }
+  },
+  "stop_coordinated": {
+   "1": {
+    "ART_range_check": {
+     "colluder_recall": 0.5237780713342141,
+     "honest_fpr": 0.5358120437956204,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.5204755614266843,
+     "honest_fpr": 0.02136557177615572,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "2": {
+    "ART_range_check": {
+     "colluder_recall": 0.5211360634081902,
+     "honest_fpr": 0.5360886750300738,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.5300528401585205,
+     "honest_fpr": 0.020708025433923354,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "4": {
+    "ART_range_check": {
+     "colluder_recall": 0.5359973579920739,
+     "honest_fpr": 0.5333333333333333,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.5293923381770145,
+     "honest_fpr": 0.022067363530778164,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "6": {
+    "ART_range_check": {
+     "colluder_recall": 0.5286217525319242,
+     "honest_fpr": 0.533679684700824,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.5362175253192426,
+     "honest_fpr": 0.0220351128627732,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "8": {
+    "ART_range_check": {
+     "colluder_recall": 0.5292272126816381,
+     "honest_fpr": 0.5395458104933438,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.5397126816380449,
+     "honest_fpr": 0.025450274079874706,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   }
+  },
+  "stop_independent": {
+   "1": {
+    "ART_range_check": {
+     "colluder_recall": 0.5138705416116248,
+     "honest_fpr": 0.5358120437956204,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.49273447820343463,
+     "honest_fpr": 0.02136557177615572,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "2": {
+    "ART_range_check": {
+     "colluder_recall": 0.523447820343461,
+     "honest_fpr": 0.5360886750300738,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.5128797886393659,
+     "honest_fpr": 0.020708025433923354,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "4": {
+    "ART_range_check": {
+     "colluder_recall": 0.5361624834874504,
+     "honest_fpr": 0.5333333333333333,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.5080911492734478,
+     "honest_fpr": 0.022067363530778164,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "6": {
+    "ART_range_check": {
+     "colluder_recall": 0.5303830911492734,
+     "honest_fpr": 0.533679684700824,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.5143108762659622,
+     "honest_fpr": 0.0220351128627732,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "8": {
+    "ART_range_check": {
+     "colluder_recall": 0.5314564068692206,
+     "honest_fpr": 0.5395458104933438,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.514613606340819,
+     "honest_fpr": 0.025450274079874706,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   }
+  },
+  "approach_coordinated": {
+   "1": {
+    "ART_range_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.5358120437956204,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.02136557177615572,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "2": {
+    "ART_range_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.5360886750300738,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.020708025433923354,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "4": {
+    "ART_range_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.5333333333333333,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.022067363530778164,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "6": {
+    "ART_range_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.533679684700824,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.0220351128627732,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "8": {
+    "ART_range_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.5395458104933438,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.025450274079874706,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   }
+  },
+  "approach_independent": {
+   "1": {
+    "ART_range_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.5358120437956204,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.02136557177615572,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "2": {
+    "ART_range_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.5360886750300738,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.020708025433923354,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "4": {
+    "ART_range_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.5333333333333333,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.022067363530778164,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "6": {
+    "ART_range_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.533679684700824,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.0220351128627732,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   },
+   "8": {
+    "ART_range_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.5395458104933438,
+     "real_attacker_recall": 0.7149502726981072
+    },
+    "SSC_speed_check": {
+     "colluder_recall": 0.0,
+     "honest_fpr": 0.025450274079874706,
+     "real_attacker_recall": 0.6799807507218479
+    }
+   }
+  }
+ },
+ "setup": {
+  "n_windows": 4000,
+  "m": [
+   1,
+   2,
+   4,
+   6,
+   8
+  ],
+  "scenarios": [
+   "offset",
+   "stop",
+   "approach"
+  ],
+  "runs": [
+   "full_0",
+   "full_1",
+   "nonbr_0",
+   "nonbr_1"
+  ],
+  "windows_used": 1514
+ },
+ "magnitude": {
+  "offset_coordinated": {
+   "25": {
+    "full_0": {
+     "colluder_recall": 0.012219286657859974,
+     "honest_fpr": 0.00824622531939605,
+     "real_attacker_recall": 0.9388835418671799,
+     "colluder_recall_fpr1": 0.0006605019815059445,
+     "honest_fpr_fpr1": 0.0004645760743321719
+    },
+    "full_1": {
+     "colluder_recall": 0.017007926023778073,
+     "honest_fpr": 0.011382113821138212,
+     "real_attacker_recall": 0.9448187359640681,
+     "colluder_recall_fpr1": 0.001321003963011889,
+     "honest_fpr_fpr1": 0.0005807200929152149
+    },
+    "nonbr_0": {
+     "colluder_recall": 0.05449141347424042,
+     "honest_fpr": 0.027642276422764227,
+     "real_attacker_recall": 0.9218800128328521,
+     "colluder_recall_fpr1": 0.001155878467635403,
+     "honest_fpr_fpr1": 0.0
+    },
+    "nonbr_1": {
+     "colluder_recall": 0.05267503302509908,
+     "honest_fpr": 0.023228803716608595,
+     "real_attacker_recall": 0.9180301572024382,
+     "colluder_recall_fpr1": 0.0,
+     "honest_fpr_fpr1": 0.0
+    }
+   },
+   "50": {
+    "full_0": {
+     "colluder_recall": 0.045904887714663146,
+     "honest_fpr": 0.009523809523809525,
+     "real_attacker_recall": 0.937600256657042,
+     "colluder_recall_fpr1": 0.013375165125495376,
+     "honest_fpr_fpr1": 0.0006968641114982578
+    },
+    "full_1": {
+     "colluder_recall": 0.04937252311756935,
+     "honest_fpr": 0.011382113821138212,
+     "real_attacker_recall": 0.9443375040102663,
+     "colluder_recall_fpr1": 0.011723910171730516,
+     "honest_fpr_fpr1": 0.0005807200929152149
+    },
+    "nonbr_0": {
+     "colluder_recall": 0.24834874504623514,
+     "honest_fpr": 0.027642276422764227,
+     "real_attacker_recall": 0.9218800128328521,
+     "colluder_recall_fpr1": 0.010402906208718626,
+     "honest_fpr_fpr1": 0.0
+    },
+    "nonbr_1": {
+     "colluder_recall": 0.23381770145310435,
+     "honest_fpr": 0.023228803716608595,
+     "real_attacker_recall": 0.9180301572024382,
+     "colluder_recall_fpr1": 0.0,
+     "honest_fpr_fpr1": 0.0
+    }
+   },
+   "100": {
+    "full_0": {
+     "colluder_recall": 0.10138705416116249,
+     "honest_fpr": 0.01207897793263647,
+     "real_attacker_recall": 0.9326275264677575,
+     "colluder_recall_fpr1": 0.04392338177014531,
+     "honest_fpr_fpr1": 0.0009291521486643438
+    },
+    "full_1": {
+     "colluder_recall": 0.11872523117569353,
+     "honest_fpr": 0.011382113821138212,
+     "real_attacker_recall": 0.9385627205646455,
+     "colluder_recall_fpr1": 0.04474900924702774,
+     "honest_fpr_fpr1": 0.0006968641114982578
+    },
+    "nonbr_0": {
+     "colluder_recall": 0.40373183619550856,
+     "honest_fpr": 0.027642276422764227,
+     "real_attacker_recall": 0.9218800128328521,
+     "colluder_recall_fpr1": 0.056638044914134746,
+     "honest_fpr_fpr1": 0.0
+    },
+    "nonbr_1": {
+     "colluder_recall": 0.3903566710700132,
+     "honest_fpr": 0.023228803716608595,
+     "real_attacker_recall": 0.9180301572024382,
+     "colluder_recall_fpr1": 0.018659180977542933,
+     "honest_fpr_fpr1": 0.0
+    }
+   },
+   "200": {
+    "full_0": {
+     "colluder_recall": 0.226221928665786,
+     "honest_fpr": 0.009872241579558653,
+     "real_attacker_recall": 0.9234841193455245,
+     "colluder_recall_fpr1": 0.10749669749009247,
+     "honest_fpr_fpr1": 0.0005807200929152149
+    },
+    "full_1": {
+     "colluder_recall": 0.2343130779392338,
+     "honest_fpr": 0.013588850174216028,
+     "real_attacker_recall": 0.9337504010266282,
+     "colluder_recall_fpr1": 0.10518494055482167,
+     "honest_fpr_fpr1": 0.0009291521486643438
+    },
+    "nonbr_0": {
+     "colluder_recall": 0.5150264200792602,
+     "honest_fpr": 0.027642276422764227,
+     "real_attacker_recall": 0.9218800128328521,
+     "colluder_recall_fpr1": 0.13375165125495375,
+     "honest_fpr_fpr1": 0.0
+    },
+    "nonbr_1": {
+     "colluder_recall": 0.5120541611624835,
+     "honest_fpr": 0.023228803716608595,
+     "real_attacker_recall": 0.9180301572024382,
+     "colluder_recall_fpr1": 0.06043593130779392,
+     "honest_fpr_fpr1": 0.0
+    }
+   },
+   "400": {
+    "full_0": {
+     "colluder_recall": 0.6378797886393659,
+     "honest_fpr": 0.005110336817653891,
+     "real_attacker_recall": 0.9085659287776708,
+     "colluder_recall_fpr1": 0.4080250990752972,
+     "honest_fpr_fpr1": 0.00011614401858304297
+    },
+    "full_1": {
+     "colluder_recall": 0.6760237780713342,
+     "honest_fpr": 0.010452961672473868,
+     "real_attacker_recall": 0.9175489252486365,
+     "colluder_recall_fpr1": 0.37929326287978865,
+     "honest_fpr_fpr1": 0.0006968641114982578
+    },
+    "nonbr_0": {
+     "colluder_recall": 0.8158850726552179,
+     "honest_fpr": 0.027642276422764227,
+     "real_attacker_recall": 0.9218800128328521,
+     "colluder_recall_fpr1": 0.464663143989432,
+     "honest_fpr_fpr1": 0.0
+    },
+    "nonbr_1": {
+     "colluder_recall": 0.8076287978863936,
+     "honest_fpr": 0.023228803716608595,
+     "real_attacker_recall": 0.9180301572024382,
+     "colluder_recall_fpr1": 0.39068692206076616,
+     "honest_fpr_fpr1": 0.0
+    }
+   }
+  },
+  "offset_independent": {
+   "25": {
+    "full_0": {
+     "colluder_recall": 0.015852047556142668,
+     "honest_fpr": 0.007897793263646922,
+     "real_attacker_recall": 0.939525184472249,
+     "colluder_recall_fpr1": 0.0008256274768824307,
+     "honest_fpr_fpr1": 0.00023228803716608595
+    },
+    "full_1": {
+     "colluder_recall": 0.018494055482166448,
+     "honest_fpr": 0.010801393728222997,
+     "real_attacker_recall": 0.9449791466153352,
+     "colluder_recall_fpr1": 0.0009907529722589167,
+     "honest_fpr_fpr1": 0.0006968641114982578
+    },
+    "nonbr_0": {
+     "colluder_recall": 0.05465653896961691,
+     "honest_fpr": 0.027642276422764227,
+     "real_attacker_recall": 0.9218800128328521,
+     "colluder_recall_fpr1": 0.001155878467635403,
+     "honest_fpr_fpr1": 0.0
+    },
+    "nonbr_1": {
+     "colluder_recall": 0.05052840158520475,
+     "honest_fpr": 0.023228803716608595,
+     "real_attacker_recall": 0.9180301572024382,
+     "colluder_recall_fpr1": 0.0,
+     "honest_fpr_fpr1": 0.0
+    }
+   },
+   "50": {
+    "full_0": {
+     "colluder_recall": 0.047556142668428,
+     "honest_fpr": 0.008130081300813009,
+     "real_attacker_recall": 0.9351940968880333,
+     "colluder_recall_fpr1": 0.015026420079260238,
+     "honest_fpr_fpr1": 0.0008130081300813008
+    },
+    "full_1": {
+     "colluder_recall": 0.05795904887714663,
+     "honest_fpr": 0.009872241579558653,
+     "real_attacker_recall": 0.9435354507539301,
+     "colluder_recall_fpr1": 0.011723910171730516,
+     "honest_fpr_fpr1": 0.0003484320557491289
+    },
+    "nonbr_0": {
+     "colluder_recall": 0.22671730515191546,
+     "honest_fpr": 0.027642276422764227,
+     "real_attacker_recall": 0.9218800128328521,
+     "colluder_recall_fpr1": 0.007760898282694848,
+     "honest_fpr_fpr1": 0.0
+    },
+    "nonbr_1": {
+     "colluder_recall": 0.21367239101717306,
+     "honest_fpr": 0.023228803716608595,
+     "real_attacker_recall": 0.9180301572024382,
+     "colluder_recall_fpr1": 0.0,
+     "honest_fpr_fpr1": 0.0
+    }
+   },
+   "100": {
+    "full_0": {
+     "colluder_recall": 0.11377146631439894,
+     "honest_fpr": 0.009407665505226481,
+     "real_attacker_recall": 0.9307025986525506,
+     "colluder_recall_fpr1": 0.04673051519154557,
+     "honest_fpr_fpr1": 0.0012775842044134727
+    },
+    "full_1": {
+     "colluder_recall": 0.13061426684280053,
+     "honest_fpr": 0.00894308943089431,
+     "real_attacker_recall": 0.9390439525184472,
+     "colluder_recall_fpr1": 0.04953764861294584,
+     "honest_fpr_fpr1": 0.00011614401858304297
+    },
+    "nonbr_0": {
+     "colluder_recall": 0.38606340819022456,
+     "honest_fpr": 0.027642276422764227,
+     "real_attacker_recall": 0.9218800128328521,
+     "colluder_recall_fpr1": 0.04953764861294584,
+     "honest_fpr_fpr1": 0.0
+    },
+    "nonbr_1": {
+     "colluder_recall": 0.37533025099075296,
+     "honest_fpr": 0.023228803716608595,
+     "real_attacker_recall": 0.9180301572024382,
+     "colluder_recall_fpr1": 0.016017173051519156,
+     "honest_fpr_fpr1": 0.0
+    }
+   },
+   "200": {
+    "full_0": {
+     "colluder_recall": 0.24009247027741082,
+     "honest_fpr": 0.0067363530778164924,
+     "real_attacker_recall": 0.9225216554379211,
+     "colluder_recall_fpr1": 0.11344121532364597,
+     "honest_fpr_fpr1": 0.0004645760743321719
+    },
+    "full_1": {
+     "colluder_recall": 0.27080581241743723,
+     "honest_fpr": 0.00824622531939605,
+     "real_attacker_recall": 0.9329483477702919,
+     "colluder_recall_fpr1": 0.1106340819022457,
+     "honest_fpr_fpr1": 0.0004645760743321719
+    },
+    "nonbr_0": {
+     "colluder_recall": 0.5,
+     "honest_fpr": 0.027642276422764227,
+     "real_attacker_recall": 0.9218800128328521,
+     "colluder_recall_fpr1": 0.12169749009247027,
+     "honest_fpr_fpr1": 0.0
+    },
+    "nonbr_1": {
+     "colluder_recall": 0.49735799207397624,
+     "honest_fpr": 0.023228803716608595,
+     "real_attacker_recall": 0.9180301572024382,
+     "colluder_recall_fpr1": 0.057298546895640685,
+     "honest_fpr_fpr1": 0.0
+    }
+   },
+   "400": {
+    "full_0": {
+     "colluder_recall": 0.6730515191545574,
+     "honest_fpr": 0.0042973286875725904,
+     "real_attacker_recall": 0.8955726660250241,
+     "colluder_recall_fpr1": 0.44220607661822986,
+     "honest_fpr_fpr1": 0.00011614401858304297
+    },
+    "full_1": {
+     "colluder_recall": 0.7295244385733157,
+     "honest_fpr": 0.007549361207897794,
+     "real_attacker_recall": 0.9161052293872313,
+     "colluder_recall_fpr1": 0.4227212681638045,
+     "honest_fpr_fpr1": 0.0003484320557491289
+    },
+    "nonbr_0": {
+     "colluder_recall": 0.8203434610303831,
+     "honest_fpr": 0.027642276422764227,
+     "real_attacker_recall": 0.9218800128328521,
+     "colluder_recall_fpr1": 0.4441875825627477,
+     "honest_fpr_fpr1": 0.0
+    },
+    "nonbr_1": {
+     "colluder_recall": 0.8112615587846763,
+     "honest_fpr": 0.023228803716608595,
+     "real_attacker_recall": 0.9180301572024382,
+     "colluder_recall_fpr1": 0.36690885072655216,
+     "honest_fpr_fpr1": 0.0
+    }
+   }
+  },
+  "stop_coordinated": {
+   "2": {
+    "full_0": {
+     "colluder_recall": 0.17503302509907528,
+     "honest_fpr": 0.005110336817653891,
+     "real_attacker_recall": 0.9250882258581969,
+     "colluder_recall_fpr1": 0.04392338177014531,
+     "honest_fpr_fpr1": 0.0
+    },
+    "full_1": {
+     "colluder_recall": 0.05928005284015852,
+     "honest_fpr": 0.00743321718931475,
+     "real_attacker_recall": 0.9416105229387232,
+     "colluder_recall_fpr1": 0.011228533685601057,
+     "honest_fpr_fpr1": 0.00011614401858304297
+    },
+    "nonbr_0": {
+     "colluder_recall": 0.23860634081902246,
+     "honest_fpr": 0.027642276422764227,
+     "real_attacker_recall": 0.9218800128328521,
+     "colluder_recall_fpr1": 0.022787318361955085,
+     "honest_fpr_fpr1": 0.0
+    },
+    "nonbr_1": {
+     "colluder_recall": 0.47291941875825627,
+     "honest_fpr": 0.023228803716608595,
+     "real_attacker_recall": 0.9180301572024382,
+     "colluder_recall_fpr1": 0.002311756935270806,
+     "honest_fpr_fpr1": 0.0
+    }
+   },
+   "5": {
+    "full_0": {
+     "colluder_recall": 0.13523778071334214,
+     "honest_fpr": 0.005110336817653891,
+     "real_attacker_recall": 0.9258902791145333,
+     "colluder_recall_fpr1": 0.03830911492734478,
+     "honest_fpr_fpr1": 0.0
+    },
+    "full_1": {
+     "colluder_recall": 0.09808454425363276,
+     "honest_fpr": 0.007084785133565622,
+     "real_attacker_recall": 0.938241899262111,
+     "colluder_recall_fpr1": 0.02130118890356671,
+     "honest_fpr_fpr1": 0.00011614401858304297
+    },
+    "nonbr_0": {
+     "colluder_recall": 0.20508586525759578,
+     "honest_fpr": 0.027642276422764227,
+     "real_attacker_recall": 0.9218800128328521,
+     "colluder_recall_fpr1": 0.01618229854689564,
+     "honest_fpr_fpr1": 0.0
+    },
+    "nonbr_1": {
+     "colluder_recall": 0.42916116248348746,
+     "honest_fpr": 0.023228803716608595,
+     "real_attacker_recall": 0.9180301572024382,
+     "colluder_recall_fpr1": 0.03847424042272127,
+     "honest_fpr_fpr1": 0.0
+    }
+   },
+   "8": {
+    "full_0": {
+     "colluder_recall": 0.07331571994715984,
+     "honest_fpr": 0.005574912891986063,
+     "real_attacker_recall": 0.9315046519088868,
+     "colluder_recall_fpr1": 0.011723910171730516,
+     "honest_fpr_fpr1": 0.0
+    },
+    "full_1": {
+     "colluder_recall": 0.05861955085865258,
+     "honest_fpr": 0.007665505226480836,
+     "real_attacker_recall": 0.940808469682387,
+     "colluder_recall_fpr1": 0.00511889035667107,
+     "honest_fpr_fpr1": 0.00011614401858304297
+    },
+    "nonbr_0": {
+     "colluder_recall": 0.16099735799207399,
+     "honest_fpr": 0.027642276422764227,
+     "real_attacker_recall": 0.9218800128328521,
+     "colluder_recall_fpr1": 0.015191545574636724,
+     "honest_fpr_fpr1": 0.0
+    },
+    "nonbr_1": {
+     "colluder_recall": 0.08421400264200793,
+     "honest_fpr": 0.023228803716608595,
+     "real_attacker_recall": 0.9180301572024382,
+     "colluder_recall_fpr1": 0.002642007926023778,
+     "honest_fpr_fpr1": 0.0
+    }
+   }
+  }
+ },
+ "natural_by_attack": {
+  "ConstPos": {
+   "full_0": [
+    0.9851485148514851,
+    0.9882067291016302,
+    0.9810679611650486,
+    0.9642166344294004
+   ],
+   "full_1": [
+    0.9900990099009901,
+    0.991675338189386,
+    0.9844660194174757,
+    0.9613152804642167
+   ],
+   "nonbr_0": [
+    0.9900990099009901,
+    0.9902878945542838,
+    0.9839805825242719,
+    0.9806576402321083
+   ],
+   "nonbr_1": [
+    0.9851485148514851,
+    0.9913284772806105,
+    0.9878640776699029,
+    0.9854932301740812
+   ]
+  },
+  "ConstPosOffset": {
+   "full_0": [
+    null,
+    0.7721475353326439,
+    0.6597087378640777,
+    0.31721470019342357
+   ],
+   "full_1": [
+    null,
+    0.795243019648397,
+    0.7111650485436893,
+    0.3607350096711799
+   ],
+   "nonbr_0": [
+    null,
+    0.6763185108583247,
+    0.5951456310679611,
+    0.5328820116054158
+   ],
+   "nonbr_1": [
+    null,
+    0.6563254050327473,
+    0.5810679611650486,
+    0.5212765957446809
+   ]
+  },
+  "RandomPos": {
+   "full_0": [
+    0.9900990099009901,
+    0.9909816163718349,
+    0.9902912621359223,
+    0.9777562862669246
+   ],
+   "full_1": [
+    0.9900990099009901,
+    0.991675338189386,
+    0.9907766990291262,
+    0.9787234042553191
+   ],
+   "nonbr_0": [
+    0.9900990099009901,
+    0.9937565036420395,
+    0.9932038834951457,
+    0.9903288201160542
+   ],
+   "nonbr_1": [
+    0.9900990099009901,
+    0.9934096427332639,
+    0.9932038834951457,
+    0.9864603481624759
+   ]
+  },
+  "RandomPosOffset": {
+   "full_0": [
+    null,
+    0.965196416264645,
+    0.9563106796116505,
+    0.9303675048355899
+   ],
+   "full_1": [
+    null,
+    0.9658855961405927,
+    0.9567961165048544,
+    0.9313346228239845
+   ],
+   "nonbr_0": [
+    null,
+    0.9658855961405927,
+    0.9577669902912621,
+    0.9303675048355899
+   ],
+   "nonbr_1": [
+    null,
+    0.9658855961405927,
+    0.9577669902912621,
+    0.9342359767891683
+   ]
+  },
+  "ConstSpeed": {
+   "full_0": [
+    null,
+    0.972432804962095,
+    0.9466019417475728,
+    0.9400386847195358
+   ],
+   "full_1": [
+    null,
+    0.9782908339076499,
+    0.9538834951456311,
+    0.9429400386847195
+   ],
+   "nonbr_0": [
+    null,
+    0.9703652653342523,
+    0.9470873786407767,
+    0.9526112185686654
+   ],
+   "nonbr_1": [
+    null,
+    0.9700206753962785,
+    0.9529126213592233,
+    0.9574468085106383
+   ]
+  },
+  "ConstSpeedOffset": {
+   "full_0": [
+    null,
+    0.9035148173673329,
+    0.9063106796116505,
+    0.844294003868472
+   ],
+   "full_1": [
+    null,
+    0.9145416953824949,
+    0.9179611650485436,
+    0.8704061895551257
+   ],
+   "nonbr_0": [
+    null,
+    0.9083390764989663,
+    0.9160194174757281,
+    0.8839458413926499
+   ],
+   "nonbr_1": [
+    null,
+    0.9011026878015161,
+    0.9063106796116505,
+    0.8887814313346228
+   ]
+  },
+  "RandomSpeed": {
+   "full_0": [
+    null,
+    0.9948311509303929,
+    0.9936893203883496,
+    0.9864603481624759
+   ],
+   "full_1": [
+    null,
+    0.9948311509303929,
+    0.9951456310679612,
+    0.988394584139265
+   ],
+   "nonbr_0": [
+    null,
+    0.9951757408683667,
+    0.9941747572815534,
+    0.9912959381044487
+   ],
+   "nonbr_1": [
+    null,
+    0.9948311509303929,
+    0.9936893203883496,
+    0.9893617021276596
+   ]
+  },
+  "EventualStop": {
+   "full_0": [
+    0.7029702970297029,
+    0.6011099549080818,
+    0.5868932038834952,
+    0.6228239845261122
+   ],
+   "full_1": [
+    0.7524752475247525,
+    0.6368366285119667,
+    0.6174757281553398,
+    0.6421663442940039
+   ],
+   "nonbr_0": [
+    0.4752475247524752,
+    0.49011446409989595,
+    0.516504854368932,
+    0.6441005802707931
+   ],
+   "nonbr_1": [
+    0.47029702970297027,
+    0.48491155046826223,
+    0.5072815533980582,
+    0.6353965183752418
+   ]
+  },
+  "Disruptive": {
+   "full_0": [
+    null,
+    0.975474956822107,
+    0.970873786407767,
+    0.9497098646034816
+   ],
+   "full_1": [
+    null,
+    0.9761658031088083,
+    0.9713592233009709,
+    0.9468085106382979
+   ],
+   "nonbr_0": [
+    null,
+    0.9758203799654577,
+    0.9762135922330097,
+    0.9535783365570599
+   ],
+   "nonbr_1": [
+    null,
+    0.9751295336787564,
+    0.9752427184466019,
+    0.9545454545454546
+   ]
+  },
+  "DataReplay": {
+   "full_0": [
+    null,
+    0.9189934505342985,
+    0.9131067961165048,
+    0.8578336557059961
+   ],
+   "full_1": [
+    null,
+    0.9186487418131679,
+    0.9121359223300971,
+    0.8520309477756286
+   ],
+   "nonbr_0": [
+    null,
+    0.9255429162357808,
+    0.9160194174757281,
+    0.867504835589942
+   ],
+   "nonbr_1": [
+    null,
+    0.9172699069286453,
+    0.9116504854368932,
+    0.8646034816247582
+   ]
+  },
+  "DelayedMessages": {
+   "full_0": [
+    0.9356435643564357,
+    0.8959417273673257,
+    0.8990291262135922,
+    0.8800773694390716
+   ],
+   "full_1": [
+    0.9207920792079208,
+    0.9212625737079431,
+    0.9,
+    0.8762088974854932
+   ],
+   "nonbr_0": [
+    0.8267326732673267,
+    0.8789455428373222,
+    0.891747572815534,
+    0.9274661508704062
+   ],
+   "nonbr_1": [
+    0.8267326732673267,
+    0.8699271592091571,
+    0.8844660194174757,
+    0.9032882011605415
+   ]
+  },
+  "DoS": {
+   "full_0": [
+    null,
+    0.9822608695652174,
+    0.977747502270663,
+    0.9664014146772767
+   ],
+   "full_1": [
+    null,
+    0.9822608695652174,
+    0.9782016348773842,
+    0.964633068081344
+   ],
+   "nonbr_0": [
+    null,
+    0.9801739130434782,
+    0.977747502270663,
+    0.9628647214854111
+   ],
+   "nonbr_1": [
+    null,
+    0.9822608695652174,
+    0.9791099000908265,
+    0.9664014146772767
+   ]
+  },
+  "DoSRandom": {
+   "full_0": [
+    1.0,
+    0.9996519317786287,
+    0.9990925589836661,
+    0.9991103202846975
+   ],
+   "full_1": [
+    1.0,
+    1.0,
+    0.9990925589836661,
+    0.998220640569395
+   ],
+   "nonbr_0": [
+    1.0,
+    1.0,
+    0.9990925589836661,
+    0.9991103202846975
+   ],
+   "nonbr_1": [
+    1.0,
+    0.9996519317786287,
+    0.9990925589836661,
+    0.9991103202846975
+   ]
+  },
+  "DoSDisruptive": {
+   "full_0": [
+    null,
+    0.9882758620689656,
+    0.9840836743974534,
+    0.9713004484304932
+   ],
+   "full_1": [
+    null,
+    0.9886206896551725,
+    0.9845384265575261,
+    0.9748878923766816
+   ],
+   "nonbr_0": [
+    null,
+    0.9889655172413793,
+    0.9859026830377444,
+    0.9748878923766816
+   ],
+   "nonbr_1": [
+    null,
+    0.9882758620689656,
+    0.9863574351978172,
+    0.9748878923766816
+   ]
+  }
+ }
+}

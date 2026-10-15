@@ -1,0 +1,12 @@
+[     2s] train subsets 14 late 14 dense 0
+[   177s] train (109823, 16, 10, 9) attack ids [0, 1, 2, 3, 4, 5, 6, 7, 9, 10, 11, 12, 13, 14, 15]
+[   336s] val (29547, 16, 10, 9) test (68971, 16, 10, 9)
+[   340s] loaded results/models14/nonbr_0.pt
+[   372s] saved results/preds14/nonbr_0.npz thr 0.5499999999999999
+[   372s] loaded results/models14/full_0.pt
+[   402s] saved results/preds14/full_0.npz thr 0.85
+[   402s] loaded results/models14/nonbr_1.pt
+[   434s] saved results/preds14/nonbr_1.npz thr 0.65
+[   434s] loaded results/models14/full_1.pt
+[   469s] saved results/preds14/full_1.npz thr 0.75
+[   469s] done

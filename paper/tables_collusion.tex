@@ -1,0 +1,28 @@
+\begin{table}[t]\centering\caption{Real VeReMi Extension attackers: test windows grouped by the share of attackers among the senders in the window (mean over seeds, each model at its own validation threshold). Last row: recall gain of neighbour attention computed within each attack type, averaged over the attack types present in the bin.}\label{tab:share}\small
+\resizebox{\columnwidth}{!}{\begin{tabular}{lcccc}\toprule
+Attacker share & 0-20\% & 20-40\% & 40-60\% & 60-100\% \\
+Windows & 22310 & 22583 & 15161 & 8917 \\\midrule
+No neighbour attention recall & 0.905 & 0.908 & 0.904 & 0.900 \\
+No neighbour attention FPR (\%) & 1.36 & 1.47 & 1.32 & 0.73 \\
+Neighbourhood-aware (ours) recall & 0.943 & 0.929 & 0.917 & 0.877 \\
+Neighbourhood-aware (ours) FPR (\%) & 1.19 & 0.51 & 0.48 & 0.12 \\
+\midrule Within-attack recall gain (attack types) & +0.071 (5) & +0.021 (14) & +0.013 (14) & -0.023 (14) \\
+\bottomrule\end{tabular}}\end{table}
+\begin{table}[t]\centering\caption{Injected collusion: $m$ honest senders per test window falsify their messages, coordinated (one shared story) or independently; 1514 windows with at least 9 honest senders, mean over seeds. Colluder recall with both models at the same 1\% validation FPR, and honest-sender FPR (\%) at each model's own threshold, without injection in brackets.}\label{tab:collusion}\small
+\resizebox{\columnwidth}{!}{\begin{tabular}{llccccc}\toprule
+Scenario & Model & $m=1$ & $m=2$ & $m=4$ & $m=6$ & $m=8$ \\\midrule
+Position offset (50 m), coordinated & No neighbour attention & 0.006 / 2.51 (2.51) & 0.003 / 2.49 (2.49) & 0.005 / 2.46 (2.46) & 0.004 / 2.39 (2.39) & 0.005 / 2.11 (2.11) \\
+Position offset (50 m), coordinated & Neighbourhood-aware (ours) & 0.012 / 0.88 (0.87) & 0.009 / 0.85 (0.83) & 0.011 / 0.87 (0.87) & 0.009 / 1.21 (0.94) & 0.005 / 1.25 (0.90) \\
+Position offset (50 m), independent & No neighbour attention & 0.006 / 2.51 (2.51) & 0.005 / 2.49 (2.49) & 0.006 / 2.46 (2.46) & 0.005 / 2.39 (2.39) & 0.005 / 2.11 (2.11) \\
+Position offset (50 m), independent & Neighbourhood-aware (ours) & 0.012 / 0.88 (0.87) & 0.014 / 0.83 (0.83) & 0.016 / 0.86 (0.87) & 0.014 / 0.91 (0.94) & 0.014 / 0.94 (0.90) \\
+\midrule
+Fake stop / jam, coordinated & No neighbour attention & 0.025 / 2.51 (2.51) & 0.028 / 2.49 (2.49) & 0.026 / 2.46 (2.46) & 0.025 / 2.39 (2.39) & 0.026 / 2.11 (2.11) \\
+Fake stop / jam, coordinated & Neighbourhood-aware (ours) & 0.040 / 0.78 (0.87) & 0.038 / 0.68 (0.83) & 0.029 / 0.59 (0.87) & 0.023 / 0.56 (0.94) & 0.019 / 0.43 (0.90) \\
+Fake stop / jam, independent & No neighbour attention & 0.027 / 2.51 (2.51) & 0.025 / 2.49 (2.49) & 0.025 / 2.46 (2.46) & 0.025 / 2.39 (2.39) & 0.026 / 2.11 (2.11) \\
+Fake stop / jam, independent & Neighbourhood-aware (ours) & 0.033 / 0.77 (0.87) & 0.035 / 0.67 (0.83) & 0.027 / 0.57 (0.87) & 0.023 / 0.57 (0.94) & 0.022 / 0.53 (0.90) \\
+\midrule
+Spoofed approach convoy, coordinated & No neighbour attention & 0.000 / 2.51 (2.51) & 0.000 / 2.49 (2.49) & 0.000 / 2.46 (2.46) & 0.000 / 2.39 (2.39) & 0.000 / 2.11 (2.11) \\
+Spoofed approach convoy, coordinated & Neighbourhood-aware (ours) & 0.000 / 0.91 (0.87) & 0.000 / 1.07 (0.83) & 0.000 / 1.50 (0.87) & 0.000 / 2.25 (0.94) & 0.000 / 2.98 (0.90) \\
+Spoofed approach convoy, independent & No neighbour attention & 0.000 / 2.51 (2.51) & 0.000 / 2.49 (2.49) & 0.000 / 2.46 (2.46) & 0.000 / 2.39 (2.39) & 0.000 / 2.11 (2.11) \\
+Spoofed approach convoy, independent & Neighbourhood-aware (ours) & 0.000 / 0.98 (0.87) & 0.000 / 1.06 (0.83) & 0.000 / 1.36 (0.87) & 0.000 / 1.97 (0.94) & 0.000 / 2.56 (0.90) \\
+\bottomrule\end{tabular}}\end{table}

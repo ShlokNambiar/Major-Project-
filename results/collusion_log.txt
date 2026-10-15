@@ -1,0 +1,47 @@
+[     1s] runs ['full_0', 'full_1', 'nonbr_0', 'nonbr_1'] device cuda
+[    32s] thr at 1% val FPR {'full_0': 0.9983, 'full_1': 0.9983, 'nonbr_0': 0.9982, 'nonbr_1': 0.9983}
+[    33s] natural done [22310, 22583, 15161, 8917]
+[    38s] offset_coordinated m 1 windows 1514 {'full_0': 0.044, 'full_1': 0.054, 'nonbr_0': 0.213, 'nonbr_1': 0.199}
+[    41s] offset_coordinated m 2 windows 1514 {'full_0': 0.043, 'full_1': 0.05, 'nonbr_0': 0.215, 'nonbr_1': 0.204}
+[    44s] offset_coordinated m 4 windows 1514 {'full_0': 0.039, 'full_1': 0.046, 'nonbr_0': 0.227, 'nonbr_1': 0.215}
+[    48s] offset_coordinated m 6 windows 1514 {'full_0': 0.036, 'full_1': 0.041, 'nonbr_0': 0.214, 'nonbr_1': 0.199}
+[    51s] offset_coordinated m 8 windows 1514 {'full_0': 0.029, 'full_1': 0.033, 'nonbr_0': 0.226, 'nonbr_1': 0.215}
+[    55s] offset_independent m 1 windows 1514 {'full_0': 0.044, 'full_1': 0.054, 'nonbr_0': 0.213, 'nonbr_1': 0.199}
+[    59s] offset_independent m 2 windows 1514 {'full_0': 0.048, 'full_1': 0.061, 'nonbr_0': 0.232, 'nonbr_1': 0.21}
+[    62s] offset_independent m 4 windows 1514 {'full_0': 0.047, 'full_1': 0.06, 'nonbr_0': 0.226, 'nonbr_1': 0.213}
+[    66s] offset_independent m 6 windows 1514 {'full_0': 0.049, 'full_1': 0.056, 'nonbr_0': 0.224, 'nonbr_1': 0.212}
+[    70s] offset_independent m 8 windows 1514 {'full_0': 0.048, 'full_1': 0.057, 'nonbr_0': 0.227, 'nonbr_1': 0.211}
+[    74s] stop_coordinated m 1 windows 1514 {'full_0': 0.141, 'full_1': 0.115, 'nonbr_0': 0.188, 'nonbr_1': 0.411}
+[    78s] stop_coordinated m 2 windows 1514 {'full_0': 0.142, 'full_1': 0.109, 'nonbr_0': 0.199, 'nonbr_1': 0.431}
+[    82s] stop_coordinated m 4 windows 1514 {'full_0': 0.133, 'full_1': 0.092, 'nonbr_0': 0.2, 'nonbr_1': 0.426}
+[    86s] stop_coordinated m 6 windows 1514 {'full_0': 0.123, 'full_1': 0.083, 'nonbr_0': 0.202, 'nonbr_1': 0.431}
+[    90s] stop_coordinated m 8 windows 1514 {'full_0': 0.115, 'full_1': 0.07, 'nonbr_0': 0.202, 'nonbr_1': 0.433}
+[    94s] stop_independent m 1 windows 1514 {'full_0': 0.15, 'full_1': 0.107, 'nonbr_0': 0.219, 'nonbr_1': 0.32}
+[    97s] stop_independent m 2 windows 1514 {'full_0': 0.157, 'full_1': 0.109, 'nonbr_0': 0.227, 'nonbr_1': 0.335}
+[   101s] stop_independent m 4 windows 1514 {'full_0': 0.143, 'full_1': 0.087, 'nonbr_0': 0.225, 'nonbr_1': 0.313}
+[   105s] stop_independent m 6 windows 1514 {'full_0': 0.128, 'full_1': 0.076, 'nonbr_0': 0.227, 'nonbr_1': 0.318}
+[   109s] stop_independent m 8 windows 1514 {'full_0': 0.125, 'full_1': 0.069, 'nonbr_0': 0.233, 'nonbr_1': 0.322}
+[   113s] approach_coordinated m 1 windows 1514 {'full_0': 0.011, 'full_1': 0.006, 'nonbr_0': 0.022, 'nonbr_1': 0.0}
+[   118s] approach_coordinated m 2 windows 1514 {'full_0': 0.011, 'full_1': 0.003, 'nonbr_0': 0.022, 'nonbr_1': 0.002}
+[   121s] approach_coordinated m 4 windows 1514 {'full_0': 0.006, 'full_1': 0.004, 'nonbr_0': 0.018, 'nonbr_1': 0.0}
+[   125s] approach_coordinated m 6 windows 1514 {'full_0': 0.004, 'full_1': 0.001, 'nonbr_0': 0.017, 'nonbr_1': 0.0}
+[   129s] approach_coordinated m 8 windows 1514 {'full_0': 0.003, 'full_1': 0.002, 'nonbr_0': 0.017, 'nonbr_1': 0.001}
+[   133s] approach_independent m 1 windows 1514 {'full_0': 0.011, 'full_1': 0.003, 'nonbr_0': 0.017, 'nonbr_1': 0.001}
+[   136s] approach_independent m 2 windows 1514 {'full_0': 0.014, 'full_1': 0.004, 'nonbr_0': 0.023, 'nonbr_1': 0.0}
+[   140s] approach_independent m 4 windows 1514 {'full_0': 0.012, 'full_1': 0.006, 'nonbr_0': 0.02, 'nonbr_1': 0.0}
+[   145s] approach_independent m 6 windows 1514 {'full_0': 0.007, 'full_1': 0.004, 'nonbr_0': 0.021, 'nonbr_1': 0.001}
+[   149s] approach_independent m 8 windows 1514 {'full_0': 0.006, 'full_1': 0.004, 'nonbr_0': 0.02, 'nonbr_1': 0.001}
+[   151s] offset_coordinated off_m 25 {'full_0': 0.012, 'full_1': 0.017, 'nonbr_0': 0.054, 'nonbr_1': 0.053}
+[   152s] offset_coordinated off_m 50 {'full_0': 0.046, 'full_1': 0.049, 'nonbr_0': 0.248, 'nonbr_1': 0.234}
+[   154s] offset_coordinated off_m 100 {'full_0': 0.101, 'full_1': 0.119, 'nonbr_0': 0.404, 'nonbr_1': 0.39}
+[   156s] offset_coordinated off_m 200 {'full_0': 0.226, 'full_1': 0.234, 'nonbr_0': 0.515, 'nonbr_1': 0.512}
+[   159s] offset_coordinated off_m 400 {'full_0': 0.638, 'full_1': 0.676, 'nonbr_0': 0.816, 'nonbr_1': 0.808}
+[   160s] offset_independent off_m 25 {'full_0': 0.016, 'full_1': 0.018, 'nonbr_0': 0.055, 'nonbr_1': 0.051}
+[   162s] offset_independent off_m 50 {'full_0': 0.048, 'full_1': 0.058, 'nonbr_0': 0.227, 'nonbr_1': 0.214}
+[   165s] offset_independent off_m 100 {'full_0': 0.114, 'full_1': 0.131, 'nonbr_0': 0.386, 'nonbr_1': 0.375}
+[   167s] offset_independent off_m 200 {'full_0': 0.24, 'full_1': 0.271, 'nonbr_0': 0.5, 'nonbr_1': 0.497}
+[   169s] offset_independent off_m 400 {'full_0': 0.673, 'full_1': 0.73, 'nonbr_0': 0.82, 'nonbr_1': 0.811}
+[   172s] stop_coordinated stop_at 8 {'full_0': 0.175, 'full_1': 0.059, 'nonbr_0': 0.239, 'nonbr_1': 0.473}
+[   173s] stop_coordinated stop_at 5 {'full_0': 0.135, 'full_1': 0.098, 'nonbr_0': 0.205, 'nonbr_1': 0.429}
+[   175s] stop_coordinated stop_at 2 {'full_0': 0.073, 'full_1': 0.059, 'nonbr_0': 0.161, 'nonbr_1': 0.084}
+[   177s] saved results/results_collusion.json

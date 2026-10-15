@@ -32,7 +32,8 @@ and (2) analysis of behaviour when neighbouring vehicles are themselves maliciou
 | Progress deck (`presentation/progress_update.pptx`) | Done but **numbers are outdated**; human said "don't update the deck yet" |
 | Attacks covered | 14 of 19 |
 | Other datasets (original VeReMi, NextGen, MixAll_0024) | **Not run** |
-| Collusion / Sybil / crash-intent scenarios | **Not run, not modelled** |
+| Malicious-neighbour / collusion / crash-intent study (injected, on saved test windows) | **Done** (`results/results_collusion.json`, section 3b) |
+| Sybil attacks | **Not run** |
 
 ## 3. Final results (14 attacks; use these numbers)
 
@@ -56,6 +57,22 @@ receiver-disjoint 30/70 val/test blocks per subset, 68,971 test windows, **2 see
   (`MODES["persender"]` drops features 0,1), so "persender -> nonbr" (+0.113) measures position information, and "nonbr -> full" (+0.015) measures neighbour attention.
   Never present persender -> full as "the effect of neighbours".
 - Superseded: `results/results_real.json`, `results_real_extra.json` (2-attack runs; there neighbour attention added nothing) and `results/results.json` (our own highway simulator; not used for claims).
+
+## 3b. Malicious neighbours and collusion (professor's point 2; added 2026-10-15)
+
+Source: `results/results_collusion.json` (`run_collusion.py`, `nambd/collusion.py`, figure/tables via `make_collusion_fig.py`). Uses the saved 14-attack
+test windows and the committed models (`results/models14`); no retraining. `nonbr` cannot see other senders, so it is the control.
+- **Real attackers by attacker share in window** (0-20/20-40/40-60/>60%): `full` recall 0.943/0.929/0.917/0.877, `nonbr` flat ~0.90. Within-attack gain of
+  neighbour attention +0.021/+0.013/**-0.023** (14 attack types per bin; 0-20% bin has only 5). The neighbour benefit disappears once attackers are the majority.
+- **Injected physically consistent lies** (50 m offset, fake stop, spoofed approach convoy; m=1..8 colluders, coordinated or independent; 1,514 windows with >=9 honest senders):
+  recall <= 0.04 for **both** models at a matched 1% validation FPR. Offset size sweep (m=4): 100/200/400 m -> recall ~0.04/0.10/0.41, models equal.
+  Explanation (checked on feature statistics): real VeReMi attackers are caught through implausibility (claimed positions beyond radio range, speed vs displacement mismatch),
+  not through cross-checking neighbours. **Do not claim the model cross-validates neighbours or resists collusion.**
+- **Framing**: a coordinated spoofed convoy (m=8) raises `full`'s honest-sender FPR 0.90% -> 2.98% (independent 2.56%); `nonbr` unaffected.
+- Coordinated vs independent differs little (<=0.4 FPR points, <=0.01 recall).
+- At each model's own threshold `full` shows lower colluder recall than `nonbr`; that is only its stricter threshold (0.75-0.85 vs 0.55-0.65). Quote the matched-FPR numbers.
+- Limits: colluders are rewritten honest vehicles; window senders are not re-selected after the lie; models never trained on these scenarios. Stress test only.
+- The README line "Targets the constant-position-offset attack that per-sender detectors cannot see" was removed: a consistent 50 m offset is not detected.
 
 ## 4. How the system works (so you can modify it)
 
@@ -92,6 +109,10 @@ nambd/evalutil.py          shared metrics, latency, bootstrap, McNemar, Holm, ru
 nambd/sim.py               our own highway simulator (old, not used for claims)
 run_full.py                MAIN experiment: loads all subsets under data/, trains, saves per-window predictions + models (resumable; skips existing preds)
 run_analysis.py            analyses saved predictions -> results JSON (env: PREDS, OUT, BOOT)
+run_collusion.py           malicious-neighbour / collusion study on saved preds + models -> results/results_collusion.json (env: PREDS, MODELS, NWIN, MS, OUT)
+make_collusion_fig.py      -> paper/tables_collusion.tex + paper/fig_collusion.pdf
+nambd/collusion.py         collusion generator (offset / stop / approach; coordinated or independent)
+tests/test_collusion.py    python -m pytest tests -q (simulator windows; no data needed)
 run_dense.py               dense-traffic transfer for the 8-attack models (14-attack dense numbers are inside results_full14.json["res"]["dense"])
 make_tables.py             results JSON -> paper/tables.tex + paper/fig_perattack.pdf (defaults to results_full14.json if present)
 run_real.py, run_real_extra.py, save_model.py, run_experiments.py   older scripts (2-attack runs / simulator); superseded but kept
@@ -118,7 +139,10 @@ RATE=1 MAXR=250 MODES=nonbr,full SEEDS=2 PREDS=results/preds14 MODELS=results/mo
 PREDS=results/preds14 OUT=results/results_full14.json python3 run_analysis.py
 python3 make_tables.py
 ```
-Notes: `run_full.py` is resumable (it skips any `PREDS/<mode>_<seed>.npz` that exists) and **picks up every subset found under `data/`**; the 8-attack run was made before the six extra subsets were downloaded.
+Notes: `run_full.py` reuses a saved model `MODELS/<mode>_<seed>.pt` instead of retraining when it exists (`REUSE=0` forces training); this rebuilt
+`results/preds14` on 2026-10-15 and reproduced `results_full14.json` exactly (log: `results/rebuild14_log.txt`). Collusion study:
+`PREDS=results/preds14 MODELS=results/models14 python run_collusion.py && python make_collusion_fig.py`.
+`run_full.py` is resumable (it skips any `PREDS/<mode>_<seed>.npz` that exists) and **picks up every subset found under `data/`**; the 8-attack run was made before the six extra subsets were downloaded.
 To reproduce it, set `EXCLUDE=RandomSpeed,ConstSpeedOffset,Disruptive,DoS` and `RATE=0 MAXR=300 PREDS=results/preds MODES=persender,full` (then `MODES=nonbr`), then `python3 run_analysis.py` and `python3 run_dense.py`.
 `EXCLUDE` defaults to `RandomSpeedOffset` (see section 7). Env knobs: `MAXR` (receivers per slice), `SEEDS`, `MODES`, `EPOCHS`, `RATE`, `PREDS`, `MODELS`, `EXCLUDE`.
 
@@ -137,7 +161,8 @@ To reproduce it, set `EXCLUDE=RandomSpeed,ConstSpeedOffset,Disruptive,DoS` and `
 1. **Update the human-facing documents to the final numbers** (section 9). Highest value for the human's next presentation. The human said "don't update the deck yet": ask before touching the deck.
 2. **Write the paper**: IEEE-style `paper/main.tex` using `paper/tables.tex` and `paper/fig_perattack.pdf`. Sections: abstract, introduction, related work (from `docs/literature_review.docx`), method, setup, results, malicious-neighbour/robustness discussion, limitations, conclusion, references with full bibliographic details (several literature rows lack authors/venues; see section 10).
 3. **More evidence**: external check on VeReMi NextGen (needs loader work) and/or the original VeReMi; MixAll_0024; Sybil attacks; a 3rd seed; dense-traffic evaluation on more than 2 attacks.
-4. **Professor's point 2 properly**: current evidence is only "recall/FPR by share of malicious neighbours" in older runs (`results/results_real_extra.json`, 2 attacks) plus the fact that every window already contains many attacker neighbours (about 30% attackers). A real **collusion test** (attackers coordinating false reports) and a "spoofed approach / crash" attack generator are not built. Say so; do not claim robustness to collusion.
+4. **Professor's point 2**: done as a stress test (section 3b). Open follow-ups: train with injected consistent lies (does `full` then learn real cross-checking?); add a sender-vs-sender
+   consistency input (e.g. claimed inter-vehicle distances vs radio range); re-select window senders after injection; Sybil attacks.
 5. **A published-detector comparison** on the same split (we only compare to our own models and the two VeReMi rule checks). Possible leads: PAMPOS, AttentionGuard (see `docs/literature_review.docx`), but they use different data/splits.
 6. Possible model improvement: add an explicit speed-vs-displacement consistency input (the rule check beats the learned models on some attacks); more epochs; unsupervised variant for unseen attacks.
 7. Housekeeping: pin library versions; add a tiny test for `load_veremi`; consider committing a small sample of preds.
@@ -173,6 +198,8 @@ To reproduce it, set `EXCLUDE=RandomSpeed,ConstSpeedOffset,Disruptive,DoS` and `
 - GitHub is reached through the harness; the `gh` CLI is not available here.
 
 **Environment traps (cost real time)**
+- Since 2026-10-15 the work also runs on Shlok's Windows laptop (Git Bash + PowerShell, Python 3.12, torch with CUDA on an RTX 3050 Ti, 20 cores); `data/` is downloaded there
+  (14 x 1416 archives; no 0709 dense archives yet). The Linux-sandbox traps below may not apply there. Parallel per-archive downloads reach about 0.8 MB/s total.
 - **`pkill -f` / `pgrep -f` / `kill $(pgrep -f ...)` inside a Bash call kills your own shell** (the pattern matches the command line). Kill by explicit PID, or use `ps -eo pid,args | grep "[p]attern"`.
 - A built-in safety check **blocks any command that contains `rm`** (even inside scripts passed to `bash -c`); the whole command is refused. Avoid deletions; leave partial files and let `curl -C -` resume.
 - Foreground `sleep` is blocked: run long jobs with `setsid nohup python3 -u ... > log 2>&1 < /dev/null &`, then wait with a background `until ... ; do sleep 30; done` or the Monitor tool. A background command stops after its timeout (max 2 h); long waits need re-arming.
@@ -183,6 +210,7 @@ To reproduce it, set `EXCLUDE=RandomSpeed,ConstSpeedOffset,Disruptive,DoS` and `
 
 ## 11. Open questions for the human
 
+- The human decided (2026-10-15) to **finish the implementation before writing the paper**; scope chosen for that round: the collusion test only.
 - Is the next deadline the paper, the deck, or both? Should the deck be updated now (they previously said not yet)?
 - Do they want NextGen / original VeReMi added, or is 14 attacks on VeReMi Extension sufficient for the submission?
 - Roll-number mapping was confirmed: Shlok 2317, Jiya 2313, Caleb 2319.

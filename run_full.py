@@ -4,7 +4,8 @@ Train: 50400-54000 s slices of all 14:00-16:00 attack subsets found under data/.
 Saves per-window scores for every (model, seed) to results/preds/ for run_analysis.py. Resumable."""
 import glob, json, os, re, sys, time, numpy as np
 from nambd.data import load_veremi
-from nambd.train import fit, scores, best_thr
+from nambd.train import fit, scores, best_thr, MODES as MODE_CFG
+from nambd.model import Detector
 
 RATE = os.environ.get("RATE", "0") == "1"; ROOT = "data"; MAXR = int(os.environ.get("MAXR", 250)); SEEDS = int(os.environ.get("SEEDS", 3))
 MODES = os.environ.get("MODES", "persender,full").split(","); EPOCHS = int(os.environ.get("EPOCHS", 5))
@@ -52,10 +53,13 @@ for sd in range(SEEDS):
     for mode in MODES:
         f = f"{PREDS}/{mode}_{sd}.npz"
         if os.path.exists(f): continue
-        m = fit(mode, tr, epochs=EPOCHS, seed=sd, log=log)
+        import torch; MD = os.environ.get("MODELS", "results/models"); os.makedirs(MD, exist_ok=True); mp = f"{MD}/{mode}_{sd}.pt"
+        if os.path.exists(mp) and os.environ.get("REUSE", "1") == "1":   # rebuild predictions from a committed model instead of retraining
+            m = Detector(fin=tr["X"].shape[-1], spatial=MODE_CFG[mode]["spatial"]); m.load_state_dict(torch.load(mp, weights_only=True)); log("loaded", mp)
+        else:
+            m = fit(mode, tr, epochs=EPOCHS, seed=sd, log=log); torch.save(m.state_dict(), mp)
         thr = float(best_thr(*scores(m, va, mode)))
         out = dict(thr=thr, test=full_scores(m, te, mode))
         if dense is not None: out["dense"] = full_scores(m, dense, mode)
         np.savez_compressed(f, **out); log("saved", f, "thr", thr)
-        import torch; MD = os.environ.get("MODELS", "results/models"); os.makedirs(MD, exist_ok=True); torch.save(m.state_dict(), f"{MD}/{mode}_{sd}.pt")
 log("done")
