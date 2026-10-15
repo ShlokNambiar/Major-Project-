@@ -1,5 +1,7 @@
 # Neighbourhood-Aware Misbehavior Detection in V2X Networks
 
+> **Taking over this project? Read [`HANDOFF.md`](HANDOFF.md) first** (status, results, rules, open work, environment traps).
+
 Transformer encoder whose attention runs across **co-located senders at the same instant** (spatial axis)
 as well as across time, so a claimed position is judged against what surrounding vehicles claim.
 Targets the constant-position-offset attack that per-sender detectors cannot see.

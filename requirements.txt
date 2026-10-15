@@ -1,4 +1,8 @@
 numpy
 scikit-learn
+scipy
 torch
 matplotlib
+# only for the document generators (make_*_pdf.py, literature table):
+reportlab
+python-docx
