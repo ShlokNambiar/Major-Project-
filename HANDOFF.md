@@ -34,6 +34,7 @@ and (2) analysis of behaviour when neighbouring vehicles are themselves maliciou
 | Other datasets (original VeReMi, NextGen, MixAll_0024) | **Not run** |
 | Malicious-neighbour / collusion / crash-intent study (injected, on saved test windows) | **Done** (`results/results_collusion.json`, section 3b) |
 | Sybil attacks | **Not run** |
+| **v2 detector** (plausibility checks + road map + lie augmentation; message-level labels; receiver memory) | **Done** (`results/results_v2.json`, section 3c) |
 
 ## 3. Final results (14 attacks; use these numbers)
 
@@ -73,6 +74,23 @@ test windows and the committed models (`results/models14`); no retraining. `nonb
 - At each model's own threshold `full` shows lower colluder recall than `nonbr`; that is only its stricter threshold (0.75-0.85 vs 0.55-0.65). Quote the matched-FPR numbers.
 - Limits: colluders are rewritten honest vehicles; window senders are not re-selected after the lie; models never trained on these scenarios. Stress test only.
 - The README line "Targets the constant-position-offset attack that per-sender detectors cannot see" was removed: a consistent 50 m offset is not detected.
+
+## 3c. v2 detector (added 2026-10-16) — current best, use these numbers
+
+The human's target: beat the **97.37%** that the survey `Advancing Intrusion Detection in V2X Networks` (Abdel Hakeem & Kim, IEEE T-ITS 26(8), 2025; PDF in the
+human's Downloads) lists for VeReMi in Table XIII (accuracy/precision/recall/F1 lumped together, original VeReMi, no source cited), and solve the trajectory issue.
+- Code: `nambd/data.py:load_veremi_raw`, `nambd/features.py` (19 features; RoadMap), `nambd/collusion.py` (inject_raw, augment, on-road scenarios), `nambd/memory.py`,
+  `run_v2.py` (two phases: features to `data/cache_feat/*.npy`, then GPU training from memmaps), `label_active.py`, `run_analysis_v2.py`, `run_collusion_v2.py`, `make_v2_tables.py`.
+- Models `results/models_v2/{full,nonbr,full-noaug}_{0,1}.pt`; preds in `results/preds_v2/` (git-ignored, includes `test_raw.pkl`, `roadmap.pkl`).
+- Results (mean of 2 seeds), message labels: full P 98.65 R 97.12 F1 97.88 Acc 98.69; **full + receiver memory P 98.16 R 97.78 F1 97.97 Acc 98.74** (all above 97.37 in each seed).
+  Vehicle labels: full P 98.65 R 95.41 F1 97.01 Acc 98.14 (+memory R 96.09 F1 97.12): recall/F1 below 97.37 there. Say which labels every time.
+- Message labels exclude attacker windows without any falsified message (mostly EventualStop before its stop, 26% of its windows); ground truth from `traceGroundTruthJSON`
+  (honest claims match it exactly). Defensible, but it is a choice: state it.
+- The comparison is not like-for-like (different dataset, 14 vs 5 attacks, metric definitions unclear in the survey). Do not write "beats the state of the art".
+- Neighbour attention: +0.003 F1, significant (CIs exclude 0, both seeds/schemes), 8-10/14 attacks; FPR 0.60% vs 0.90%.
+- Trajectory: careful injected lies now caught (offset 50 m 0.84, fake stop 0.70, unseen convoy 0.88 at 1% FPR; before: <= 0.04). On-road map-aware lies remain hard
+  (along-road offset 0.25, on-road convoy 0.42; `results/results_collusion_v2_onroad.json`). Do not claim the trajectory problem is fully solved.
+- Memory: this laptop has 15.7 GB RAM with ~2-3 GB free; Claude Code kills background jobs under memory pressure. `run_v2.py` is written to stay low (memmaps); run analysis jobs one at a time.
 
 ## 4. How the system works (so you can modify it)
 
@@ -161,7 +179,7 @@ To reproduce it, set `EXCLUDE=RandomSpeed,ConstSpeedOffset,Disruptive,DoS` and `
 1. **Update the human-facing documents to the final numbers** (section 9). Highest value for the human's next presentation. The human said "don't update the deck yet": ask before touching the deck.
 2. **Write the paper**: IEEE-style `paper/main.tex` using `paper/tables.tex` and `paper/fig_perattack.pdf`. Sections: abstract, introduction, related work (from `docs/literature_review.docx`), method, setup, results, malicious-neighbour/robustness discussion, limitations, conclusion, references with full bibliographic details (several literature rows lack authors/venues; see section 10).
 3. **More evidence**: external check on VeReMi NextGen (needs loader work) and/or the original VeReMi; MixAll_0024; Sybil attacks; a 3rd seed; dense-traffic evaluation on more than 2 attacks.
-4. **Professor's point 2**: done as a stress test (section 3b). Open follow-ups: train with injected consistent lies (does `full` then learn real cross-checking?); add a sender-vs-sender
+4. **Professor's point 2**: done as a stress test (section 3b) and largely addressed by v2 (section 3c); open: on-road consistent lies, Sybil. Open follow-ups: train with injected consistent lies (does `full` then learn real cross-checking?); add a sender-vs-sender
    consistency input (e.g. claimed inter-vehicle distances vs radio range); re-select window senders after injection; Sybil attacks.
 5. **A published-detector comparison** on the same split (we only compare to our own models and the two VeReMi rule checks). Possible leads: PAMPOS, AttentionGuard (see `docs/literature_review.docx`), but they use different data/splits.
 6. Possible model improvement: add an explicit speed-vs-displacement consistency input (the rule check beats the learned models on some attacks); more epochs; unsupervised variant for unseen attacks.

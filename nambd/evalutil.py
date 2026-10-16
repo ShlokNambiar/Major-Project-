@@ -16,7 +16,7 @@ def metrics(S, thr, D, names):
     v = D["y"] >= 0; y = (D["y"] > 0)[v]; f = (S > thr)[v]; s = S[v]
     tp, fp, fn = (f & y).sum(), (f & ~y).sum(), (~f & y).sum()
     p, r, f1 = prf(tp, fp, fn)
-    out = dict(precision=p, recall=r, f1=f1, fpr=(f & ~y).sum() / max((~y).sum(), 1), auc=roc_auc_score(y, s))
+    out = dict(precision=p, recall=r, f1=f1, accuracy=(f == y).mean(), fpr=(f & ~y).sum() / max((~y).sum(), 1), auc=roc_auc_score(y, s))
     for a in sorted(set(D["y"][v].tolist()) - {0}):
         sm = attack_mask(D, a); fa = (S > thr)[sm]; ya = (D["y"][sm] == a); sa = S[sm]
         tpa, fpa, fna = (fa & ya).sum(), (fa & ~ya).sum(), (~fa & ya).sum()

@@ -1,0 +1,61 @@
+[    27s] train subsets 14 late 14
+[    29s] road map 675 x 667 cells
+[   203s] seed 0 train 109823 augmented 39691 liars 74109
+[   370s] seed 1 train 109823 augmented 39691 liars 74202
+[   484s] features written data/cache_feat
+[   556s]   [full] epoch 1/8 loss 0.2918
+[   643s]   [full] epoch 2/8 loss 0.1769
+[   739s]   [full] epoch 3/8 loss 0.1606
+[   836s]   [full] epoch 4/8 loss 0.1511
+[   933s]   [full] epoch 5/8 loss 0.1418
+[  1032s]   [full] epoch 6/8 loss 0.1323
+[  1136s]   [full] epoch 7/8 loss 0.1232
+[  1234s]   [full] epoch 8/8 loss 0.1171
+[  1262s] saved full_0 thr 0.96  P 0.9857 R 0.9543 F1 0.9698 Acc 0.9812
+[  1362s]   [nonbr] epoch 1/8 loss 0.2973
+[  1464s]   [nonbr] epoch 2/8 loss 0.2081
+[  1571s]   [nonbr] epoch 3/8 loss 0.1892
+[  1713s]   [nonbr] epoch 4/8 loss 0.1791
+[  1831s]   [nonbr] epoch 5/8 loss 0.1721
+[  1935s]   [nonbr] epoch 6/8 loss 0.1657
+[  2047s]   [nonbr] epoch 7/8 loss 0.1590
+[  2158s]   [nonbr] epoch 8/8 loss 0.1547
+[  2186s] saved nonbr_0 thr 0.96  P 0.9787 R 0.9543 F1 0.9663 Acc 0.9790
+[  2258s]   [full] epoch 1/8 loss 0.2194
+[  2330s]   [full] epoch 2/8 loss 0.0952
+[  2401s]   [full] epoch 3/8 loss 0.0853
+[  2473s]   [full] epoch 4/8 loss 0.0778
+[  2544s]   [full] epoch 5/8 loss 0.0708
+[  2615s]   [full] epoch 6/8 loss 0.0640
+[  2686s]   [full] epoch 7/8 loss 0.0567
+[  2756s]   [full] epoch 8/8 loss 0.0515
+[  2783s] saved full-noaug_0 thr 0.90  P 0.9875 R 0.9570 F1 0.9720 Acc 0.9826
+[  2882s]   [full] epoch 1/8 loss 0.2932
+[  2978s]   [full] epoch 2/8 loss 0.1847
+[  3073s]   [full] epoch 3/8 loss 0.1663
+[  3169s]   [full] epoch 4/8 loss 0.1547
+[  3264s]   [full] epoch 5/8 loss 0.1454
+[  3360s]   [full] epoch 6/8 loss 0.1364
+[  3454s]   [full] epoch 7/8 loss 0.1270
+[  3547s]   [full] epoch 8/8 loss 0.1207
+[  3573s] saved full_1 thr 0.96  P 0.9873 R 0.9539 F1 0.9703 Acc 0.9816
+[  3667s]   [nonbr] epoch 1/8 loss 0.2972
+[  3761s]   [nonbr] epoch 2/8 loss 0.2112
+[  3857s]   [nonbr] epoch 3/8 loss 0.1934
+[  3953s]   [nonbr] epoch 4/8 loss 0.1832
+[  4047s]   [nonbr] epoch 5/8 loss 0.1764
+[  4143s]   [nonbr] epoch 6/8 loss 0.1691
+[  4240s]   [nonbr] epoch 7/8 loss 0.1620
+[  4336s]   [nonbr] epoch 8/8 loss 0.1578
+[  4363s] saved nonbr_1 thr 0.92  P 0.9787 R 0.9553 F1 0.9668 Acc 0.9793
+[  4434s]   [full] epoch 1/8 loss 0.2071
+[  4504s]   [full] epoch 2/8 loss 0.0951
+[  4573s]   [full] epoch 3/8 loss 0.0846
+[  4644s]   [full] epoch 4/8 loss 0.0775
+[  4714s]   [full] epoch 5/8 loss 0.0704
+[  4784s]   [full] epoch 6/8 loss 0.0644
+[  4853s]   [full] epoch 7/8 loss 0.0569
+[  4925s]   [full] epoch 8/8 loss 0.0517
+[  4951s] saved full-noaug_1 thr 0.90  P 0.9876 R 0.9566 F1 0.9718 Acc 0.9825
+[  4952s] done
+EXIT 0

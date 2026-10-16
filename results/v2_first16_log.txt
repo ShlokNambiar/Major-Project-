@@ -1,0 +1,15 @@
+[    29s] train subsets 14 late 14
+[   146s] road map 675 x 667 cells
+[   152s] train (109823, 16, 10) val (29547, 16, 10) test (68971, 16, 10)
+[   211s] features (109823, 16, 10, 16)
+[   232s] seed 0 augmented windows 39691 liars 74176
+[   426s]   [full] epoch 1/8 loss 0.3053
+[   654s]   [full] epoch 2/8 loss 0.1932
+[   906s]   [full] epoch 3/8 loss 0.1753
+[  1086s]   [full] epoch 4/8 loss 0.1502
+[  1211s]   [full] epoch 5/8 loss 0.1362
+[  1337s]   [full] epoch 6/8 loss 0.1240
+[  1458s]   [full] epoch 7/8 loss 0.1133
+[  1582s]   [full] epoch 8/8 loss 0.1053
+[  1624s] saved full_0 thr 0.96  P 0.9869 R 0.9526 F1 0.9695 Acc 0.9810
+[  1624s] done

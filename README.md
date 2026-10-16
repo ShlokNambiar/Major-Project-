@@ -68,7 +68,46 @@ so it is the control: an effect that appears only in the neighbourhood-aware mod
 Limits of this study: colluders are rewritten honest vehicles of the trace (not a separate attack simulation), the 16 senders of a window are not re-selected after the
 claims change, and the models were never trained on these scenarios. It is a stress test, not a claim of robustness.
 
+## v2: plausibility checks + training on careful lies (`results/results_v2.json`, `results/results_collusion_v2.json`)
+Pipeline: `run_v2.py` (raw claims -> `nambd/features.py`, lie augmentation `nambd/collusion.augment`, GPU; features cached in `data/cache_feat`),
+`label_active.py` (message-level ground truth), `run_analysis_v2.py`, `run_collusion_v2.py`, `make_v2_tables.py` (-> `paper/tables_v2.tex`).
+Same receivers, windows and val/test split as the 14-attack run. New inputs per sender and step (19 in total): claimed acceleration and two
+kinematic consistency checks, heading vs direction of movement, a **road map** learned from receivers' own positions in the training hour
+(on-road density and road direction at the claimed position), distance to the nearest other claim, **exact repeat** of the sender's own earlier
+position, **copied trail** (exact match with another sender's earlier claim), and log-scaled movement. Training adds copies of windows where
+1-4 honest senders tell careful offset or stop lies (the spoofed-approach convoy is held out).
+
+Labels: *vehicle* = every window of an attacker vehicle is positive (as above); *message* = an attacker counts only in windows where it sent at least
+one falsified message (claim differs from `traceGroundTruthJSON` by > 1 m or > 0.5 m/s; honest claims match it exactly; DoS attackers always count).
+The difference is almost entirely EventualStop before its fake stop (26% of its windows contain only true messages and are excluded).
+Thresholds (and the memory decay) are always chosen on the validation block.
+
+| Model (mean of 2 seeds) | Labels | Precision | Recall | F1 | Accuracy | FPR |
+|---|---|---|---|---|---|---|
+| v2 full | message | 98.65 | 97.12 | 97.88 | 98.69 | 0.60% |
+| v2 full + receiver memory | message | **98.16** | **97.78** | **97.97** | **98.74** | |
+| v2 no neighbour attention | message | 97.99 | 97.11 | 97.54 | 98.48 | 0.90% |
+| v2 no lie augmentation | message | 98.75 | 97.39 | 98.07 | 98.80 | 0.56% |
+| v2 full | vehicle | 98.65 | 95.41 | 97.01 | 98.14 | 0.60% |
+| v2 full + receiver memory | vehicle | 98.16 | 96.09 | 97.12 | 98.20 | |
+| previous model (14-attack run above) | vehicle | 98.4 | 91.6 | 94.9 | 96.9 | 0.7% |
+
+- Reference: the survey of Abdel Hakeem and Kim (IEEE T-ITS 2025, Table XIII) lists 97.37% for VeReMi (accuracy/precision/recall/F1 lumped; original
+  VeReMi, 5 attacks; source not cited). With message labels and receiver memory, all four of our numbers are above it in both seeds.
+  With vehicle labels, precision and accuracy are above it, recall (96.1%) and F1 (97.1%) are not. Different dataset (VeReMi Extension, 14 attacks): not a like-for-like comparison.
+- Neighbour attention still helps: +0.003 F1 over the no-neighbour model (95% CI about [0.002, 0.004] in both seeds and both label schemes),
+  significant on 8-10 of 14 attacks, never significantly worse; FPR 0.60% vs 0.90-0.96%.
+- Lie augmentation costs 0.002 F1 on the real attacks but is what makes fake stops detectable (below).
+- ConstPosOffset recall 0.66 -> 0.97 (road map). Remaining weak spots: DelayedMessages (recall 0.87), DataReplay (0.93).
+- Latency: mean 0.9 s to first alarm (median 0), 96% of attacker-receiver pairs flagged.
+
+**Trajectory lies after v2** (colluder recall at a matched 1% FPR; before v2 at most 0.04): 50 m position offset 0.83-0.85; fake stop 0.69-0.72
+(0.01 without augmentation); spoofed convoy, never seen in training, 0.87-0.90. Offset size: 10 / 25 / 100 / 400 m -> 0.15 / 0.63 / 0.92 / 0.98.
+**Map-aware liars stay hard:** shifting 50 m *along the road* is caught 0.23-0.25, a convoy *along the receiver's road* 0.36-0.48. A lie that is on the road
+and kinematically consistent cannot be told apart from the message content alone; that needs an independent signal (signal strength, sensors, RSUs).
+Neighbour attention adds little here (+0.01-0.02); the checks do the work.
+
 ## Limitations
 Simulated benchmark; 14 of 19 attack types (the four Sybil attacks are not run, and the RandomSpeedOffset archive is mislabeled and excluded);
-2 seeds; physically consistent and colluding lies are not detected (see above); dense-traffic transfer on 2 attacks only; no VeReMi NextGen / original VeReMi / MixAll evaluation;
+2 seeds; on-road, kinematically consistent lies are still mostly missed (v2 section); the 97.37% reference is from a different dataset; dense-traffic transfer on 2 attacks only; no VeReMi NextGen / original VeReMi / MixAll evaluation;
 no comparison against published learned detectors. `results/preds*/` (large per-window predictions) are git-ignored; rerun `run_full.py` to regenerate.

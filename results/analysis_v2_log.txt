@@ -1,0 +1,11 @@
+full-noaug_0       message: P 0.9874 R 0.9742 F1 0.9808 Acc 0.9881 | +memory P 0.9870 R 0.9753 F1 0.9811 Acc 0.9883 | vehicle F1 0.9720
+full-noaug_1       message: P 0.9875 R 0.9737 F1 0.9806 Acc 0.9880 | +memory P 0.9847 R 0.9784 F1 0.9816 Acc 0.9885 | vehicle F1 0.9718
+full_0             message: P 0.9857 R 0.9713 F1 0.9784 Acc 0.9867 | +memory P 0.9838 R 0.9759 F1 0.9798 Acc 0.9875 | vehicle F1 0.9698
+full_1             message: P 0.9873 R 0.9710 F1 0.9791 Acc 0.9871 | +memory P 0.9793 R 0.9798 F1 0.9795 Acc 0.9872 | vehicle F1 0.9703
+nonbr_0            message: P 0.9811 R 0.9697 F1 0.9754 Acc 0.9847 | +memory P 0.9770 R 0.9747 F1 0.9758 Acc 0.9850 | vehicle F1 0.9663
+nonbr_1            message: P 0.9787 R 0.9724 F1 0.9755 Acc 0.9848 | +memory P 0.9781 R 0.9762 F1 0.9772 Acc 0.9858 | vehicle F1 0.9668
+full_ens           message: P 0.9900 R 0.9699 F1 0.9798 Acc 0.9876 | +memory P 0.9847 R 0.9786 F1 0.9816 Acc 0.9886 | vehicle F1 0.9717
+full-noaug_ens     message: P 0.9918 R 0.9716 F1 0.9816 Acc 0.9886 | +memory P 0.9857 R 0.9799 F1 0.9828 Acc 0.9893 | vehicle F1 0.9727
+nonbr_ens          message: P 0.9845 R 0.9701 F1 0.9772 Acc 0.9859 | +memory P 0.9775 R 0.9779 F1 0.9777 Acc 0.9861 | vehicle F1 0.9685
+saved results/results_v2.json
+EXIT 0

@@ -1,0 +1,46 @@
+[    44s] runs ['full-noaug_0', 'full-noaug_1', 'full_0', 'full_1', 'nonbr_0', 'nonbr_1'] thr at 1% val FPR {'full-noaug_0': 0.999, 'full-noaug_1': 0.9988, 'full_0': 0.9989, 'full_1': 0.9985, 'nonbr_0': 0.9989, 'nonbr_1': 0.9989}
+[    57s] offset_coordinated m 1 {'full-noaug_0': 0.815, 'full-noaug_1': 0.804, 'full_0': 0.843, 'full_1': 0.847, 'nonbr_0': 0.83, 'nonbr_1': 0.826}
+[    71s] offset_coordinated m 2 {'full-noaug_0': 0.809, 'full-noaug_1': 0.789, 'full_0': 0.832, 'full_1': 0.831, 'nonbr_0': 0.823, 'nonbr_1': 0.822}
+[    84s] offset_coordinated m 4 {'full-noaug_0': 0.823, 'full-noaug_1': 0.782, 'full_0': 0.852, 'full_1': 0.852, 'nonbr_0': 0.845, 'nonbr_1': 0.844}
+[   105s] offset_coordinated m 6 {'full-noaug_0': 0.788, 'full-noaug_1': 0.694, 'full_0': 0.836, 'full_1': 0.837, 'nonbr_0': 0.829, 'nonbr_1': 0.828}
+[   123s] offset_coordinated m 8 {'full-noaug_0': 0.753, 'full-noaug_1': 0.548, 'full_0': 0.825, 'full_1': 0.826, 'nonbr_0': 0.827, 'nonbr_1': 0.824}
+[   139s] offset_independent m 1 {'full-noaug_0': 0.815, 'full-noaug_1': 0.804, 'full_0': 0.843, 'full_1': 0.847, 'nonbr_0': 0.83, 'nonbr_1': 0.826}
+[   155s] offset_independent m 2 {'full-noaug_0': 0.814, 'full-noaug_1': 0.8, 'full_0': 0.847, 'full_1': 0.844, 'nonbr_0': 0.832, 'nonbr_1': 0.826}
+[   171s] offset_independent m 4 {'full-noaug_0': 0.819, 'full-noaug_1': 0.783, 'full_0': 0.857, 'full_1': 0.852, 'nonbr_0': 0.841, 'nonbr_1': 0.842}
+[   187s] offset_independent m 6 {'full-noaug_0': 0.795, 'full-noaug_1': 0.712, 'full_0': 0.849, 'full_1': 0.844, 'nonbr_0': 0.838, 'nonbr_1': 0.836}
+[   204s] offset_independent m 8 {'full-noaug_0': 0.763, 'full-noaug_1': 0.574, 'full_0': 0.843, 'full_1': 0.838, 'nonbr_0': 0.839, 'nonbr_1': 0.837}
+[   220s] stop_coordinated m 1 {'full-noaug_0': 0.001, 'full-noaug_1': 0.017, 'full_0': 0.688, 'full_1': 0.694, 'nonbr_0': 0.692, 'nonbr_1': 0.694}
+[   236s] stop_coordinated m 2 {'full-noaug_0': 0.001, 'full-noaug_1': 0.018, 'full_0': 0.693, 'full_1': 0.7, 'nonbr_0': 0.689, 'nonbr_1': 0.691}
+[   251s] stop_coordinated m 4 {'full-noaug_0': 0.001, 'full-noaug_1': 0.018, 'full_0': 0.711, 'full_1': 0.714, 'nonbr_0': 0.703, 'nonbr_1': 0.704}
+[   270s] stop_coordinated m 6 {'full-noaug_0': 0.001, 'full-noaug_1': 0.016, 'full_0': 0.715, 'full_1': 0.715, 'nonbr_0': 0.704, 'nonbr_1': 0.704}
+[   286s] stop_coordinated m 8 {'full-noaug_0': 0.001, 'full-noaug_1': 0.016, 'full_0': 0.715, 'full_1': 0.715, 'nonbr_0': 0.702, 'nonbr_1': 0.703}
+[   301s] stop_independent m 1 {'full-noaug_0': 0.003, 'full-noaug_1': 0.019, 'full_0': 0.675, 'full_1': 0.682, 'nonbr_0': 0.676, 'nonbr_1': 0.672}
+[   315s] stop_independent m 2 {'full-noaug_0': 0.002, 'full-noaug_1': 0.018, 'full_0': 0.679, 'full_1': 0.685, 'nonbr_0': 0.676, 'nonbr_1': 0.669}
+[   329s] stop_independent m 4 {'full-noaug_0': 0.002, 'full-noaug_1': 0.02, 'full_0': 0.695, 'full_1': 0.699, 'nonbr_0': 0.687, 'nonbr_1': 0.681}
+[   350s] stop_independent m 6 {'full-noaug_0': 0.003, 'full-noaug_1': 0.018, 'full_0': 0.697, 'full_1': 0.698, 'nonbr_0': 0.683, 'nonbr_1': 0.681}
+[   366s] stop_independent m 8 {'full-noaug_0': 0.003, 'full-noaug_1': 0.017, 'full_0': 0.701, 'full_1': 0.703, 'nonbr_0': 0.689, 'nonbr_1': 0.686}
+[   380s] approach_coordinated m 1 {'full-noaug_0': 0.862, 'full-noaug_1': 0.855, 'full_0': 0.865, 'full_1': 0.87, 'nonbr_0': 0.861, 'nonbr_1': 0.869}
+[   396s] approach_coordinated m 2 {'full-noaug_0': 0.862, 'full-noaug_1': 0.856, 'full_0': 0.867, 'full_1': 0.869, 'nonbr_0': 0.855, 'nonbr_1': 0.869}
+[   415s] approach_coordinated m 4 {'full-noaug_0': 0.866, 'full-noaug_1': 0.845, 'full_0': 0.875, 'full_1': 0.878, 'nonbr_0': 0.865, 'nonbr_1': 0.88}
+[   429s] approach_coordinated m 6 {'full-noaug_0': 0.873, 'full-noaug_1': 0.813, 'full_0': 0.893, 'full_1': 0.898, 'nonbr_0': 0.879, 'nonbr_1': 0.901}
+[   445s] approach_coordinated m 8 {'full-noaug_0': 0.835, 'full-noaug_1': 0.607, 'full_0': 0.901, 'full_1': 0.905, 'nonbr_0': 0.892, 'nonbr_1': 0.915}
+[   460s] approach_independent m 1 {'full-noaug_0': 0.865, 'full-noaug_1': 0.861, 'full_0': 0.87, 'full_1': 0.873, 'nonbr_0': 0.853, 'nonbr_1': 0.873}
+[   474s] approach_independent m 2 {'full-noaug_0': 0.875, 'full-noaug_1': 0.861, 'full_0': 0.881, 'full_1': 0.886, 'nonbr_0': 0.867, 'nonbr_1': 0.885}
+[   490s] approach_independent m 4 {'full-noaug_0': 0.872, 'full-noaug_1': 0.844, 'full_0': 0.883, 'full_1': 0.888, 'nonbr_0': 0.87, 'nonbr_1': 0.889}
+[   504s] approach_independent m 6 {'full-noaug_0': 0.843, 'full-noaug_1': 0.781, 'full_0': 0.884, 'full_1': 0.888, 'nonbr_0': 0.872, 'nonbr_1': 0.89}
+[   519s] approach_independent m 8 {'full-noaug_0': 0.765, 'full-noaug_1': 0.573, 'full_0': 0.879, 'full_1': 0.884, 'nonbr_0': 0.871, 'nonbr_1': 0.889}
+[   527s] offset_coordinated off_m 10 {'full-noaug_0': 0.133, 'full-noaug_1': 0.128, 'full_0': 0.158, 'full_1': 0.151, 'nonbr_0': 0.149, 'nonbr_1': 0.144}
+[   534s] offset_coordinated off_m 25 {'full-noaug_0': 0.584, 'full-noaug_1': 0.563, 'full_0': 0.632, 'full_1': 0.629, 'nonbr_0': 0.615, 'nonbr_1': 0.61}
+[   542s] offset_coordinated off_m 50 {'full-noaug_0': 0.826, 'full-noaug_1': 0.784, 'full_0': 0.851, 'full_1': 0.848, 'nonbr_0': 0.844, 'nonbr_1': 0.844}
+[   549s] offset_coordinated off_m 100 {'full-noaug_0': 0.892, 'full-noaug_1': 0.845, 'full_0': 0.917, 'full_1': 0.918, 'nonbr_0': 0.913, 'nonbr_1': 0.911}
+[   557s] offset_coordinated off_m 200 {'full-noaug_0': 0.935, 'full-noaug_1': 0.877, 'full_0': 0.958, 'full_1': 0.959, 'nonbr_0': 0.956, 'nonbr_1': 0.957}
+[   565s] offset_coordinated off_m 400 {'full-noaug_0': 0.963, 'full-noaug_1': 0.868, 'full_0': 0.98, 'full_1': 0.982, 'nonbr_0': 0.975, 'nonbr_1': 0.98}
+[   572s] stop_coordinated stop_at 8 {'full-noaug_0': 0.007, 'full-noaug_1': 0.021, 'full_0': 0.812, 'full_1': 0.813, 'nonbr_0': 0.797, 'nonbr_1': 0.787}
+[   580s] stop_coordinated stop_at 5 {'full-noaug_0': 0.001, 'full-noaug_1': 0.018, 'full_0': 0.712, 'full_1': 0.713, 'nonbr_0': 0.701, 'nonbr_1': 0.705}
+[   588s] stop_coordinated stop_at 2 {'full-noaug_0': 0.001, 'full-noaug_1': 0.015, 'full_0': 0.619, 'full_1': 0.622, 'nonbr_0': 0.607, 'nonbr_1': 0.606}
+[   595s] approach_coordinated v 5 {'full-noaug_0': 0.787, 'full-noaug_1': 0.776, 'full_0': 0.808, 'full_1': 0.804, 'nonbr_0': 0.805, 'nonbr_1': 0.802}
+[   603s] approach_coordinated v 10 {'full-noaug_0': 0.858, 'full-noaug_1': 0.847, 'full_0': 0.869, 'full_1': 0.869, 'nonbr_0': 0.869, 'nonbr_1': 0.87}
+[   611s] approach_coordinated v 15 {'full-noaug_0': 0.885, 'full-noaug_1': 0.869, 'full_0': 0.891, 'full_1': 0.895, 'nonbr_0': 0.88, 'nonbr_1': 0.896}
+[   619s] approach_coordinated v 25 {'full-noaug_0': 0.928, 'full-noaug_1': 0.895, 'full_0': 0.907, 'full_1': 0.909, 'nonbr_0': 0.919, 'nonbr_1': 0.905}
+[   619s] saved results/results_collusion_v2.json
+EXIT 0

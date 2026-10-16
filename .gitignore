@@ -8,3 +8,5 @@ data/
 papers/
 results/preds/
 results/preds14/
+results/preds_v2/
+.pytest_cache/

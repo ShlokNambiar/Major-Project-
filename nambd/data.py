@@ -105,3 +105,55 @@ def load_veremi(trace_dir, gt_file=None, T=10, K=16, comm_range=300.0, stride=3,
             X.append(xs); M.append(ms); Y.append(ys); SID.append(sid); TE.append(te); RID.append(rid)
     return dict(X=np.stack(X), M=np.stack(M), y=np.stack(Y), sid=np.stack(SID),
                 te=np.array(TE), rid=np.array(RID))
+
+
+def load_veremi_raw(trace_dir, T=10, K=16, stride=3, max_receivers=None, with_own=False):
+    """Same windows as load_veremi (same receivers, end times, sender selection), but returns the raw claims so that
+    features can be recomputed after changing them (nambd/features.py, nambd/collusion.py):
+      pos (N,K,T,2) absolute claimed position (m), spd (N,K,T) m/s, hed (N,K,T) rad, acl (N,K,T) claimed acceleration along
+      the claimed heading (m/s^2), cnt (N,K,T) messages heard from the sender in that second, M valid, ctr (N,2) receiver
+      position at the window end, own (list of (x, y, heading) receiver states, used only to build the road map)."""
+    gt = {}
+    for fp in glob.glob(os.path.join(trace_dir, "traceJSON-*.json")):
+        p = os.path.basename(fp).split("-"); gt[int(p[1])] = int(p[3][1:])
+    files = sorted(glob.glob(os.path.join(trace_dir, "traceJSON-*.json")))
+    own_all = []
+    own_files = files                                     # every vehicle's own states feed the road map (with_own=True)
+    if max_receivers and len(files) > max_receivers:
+        files = [files[i] for i in np.linspace(0, len(files) - 1, max_receivers).astype(int)]
+    keep = set(files)
+    if not with_own: own_files = files
+    out = {k: [] for k in ("pos", "spd", "hed", "acl", "cnt", "M", "y", "sid", "te", "rid", "ctr")}
+    for fp in own_files:
+        rid = int(os.path.basename(fp).split('-')[1])
+        own, bsm, cnt = {}, {}, {}
+        with open(fp) as f:
+            for line in f:
+                if fp not in keep and not line.startswith('{"type":2'): continue
+                r = json.loads(line); t = int(r["rcvTime"])
+                if r["type"] == 2:
+                    own[t] = np.array(r["pos"][:2])
+                    if with_own: own_all.append((r["pos"][0], r["pos"][1], np.arctan2(r["hed"][1], r["hed"][0]), np.hypot(*r["spd"][:2])))
+                elif fp in keep:
+                    cnt[(t, r["sender"])] = cnt.get((t, r["sender"]), 0) + 1
+                    h = np.array(r["hed"][:2]); h = h / max(np.linalg.norm(h), 1e-9)
+                    bsm.setdefault(t, {})[r["sender"]] = (np.array(r["pos"][:2]), float(np.linalg.norm(r["spd"][:2])),
+                                                           float(np.arctan2(h[1], h[0])), float(np.dot(r["acl"][:2], h)))
+        if fp not in keep or not own:
+            continue
+        for te in range(min(own) + T - 1, max(own) + 1, stride):
+            if te not in bsm or any(t not in own for t in range(te - T + 1, te + 1)):
+                continue
+            ctr = own[te]
+            senders = sorted(bsm[te], key=lambda s: np.linalg.norm(bsm[te][s][0] - ctr))[:K]
+            pos = np.zeros((K, T, 2)); sp = np.zeros((K, T)); hd = np.zeros((K, T)); ac = np.zeros((K, T)); cn = np.zeros((K, T))
+            ms = np.zeros((K, T), bool); ys = -np.ones(K, np.int64); sid = -np.ones(K, np.int64)
+            for j, s in enumerate(senders):
+                for a, t in enumerate(range(te - T + 1, te + 1)):
+                    if t in bsm and s in bsm[t]:
+                        p, v, h, c = bsm[t][s]; pos[j, a] = p; sp[j, a] = v; hd[j, a] = h; ac[j, a] = c; cn[j, a] = cnt[(t, s)]; ms[j, a] = True
+                ys[j] = gt.get(s, 0); sid[j] = s
+            for k, v in zip(out, (pos, sp, hd, ac, cn, ms, ys, sid, te, rid, ctr)): out[k].append(v)
+    D = {k: np.stack(v) if k not in ("te", "rid") else np.array(v) for k, v in out.items()}
+    D["pos"] = D["pos"].astype(np.float64); D["own"] = np.array(own_all, np.float64)
+    return D
