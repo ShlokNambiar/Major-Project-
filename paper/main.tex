@@ -1,0 +1,346 @@
+\documentclass[conference]{IEEEtran}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{url}
+\usepackage{tikz}
+\usetikzlibrary{positioning, arrows.meta}
+\usepackage[hidelinks]{hyperref}
+
+\begin{document}
+
+\title{Neighbourhood-Aware V2X Misbehaviour Detection\\with Plausibility Checks and a Collusion Stress Test}
+
+% TODO(team): full names and supervisor before submission.
+\author{\IEEEauthorblockN{Shlok (UAI05BTA2317), Jiya (UAI05BTA2313), Caleb (UAI05BTA2319)}
+\IEEEauthorblockA{BTech AI ML, Universal AI University}}
+
+\maketitle
+
+\begin{abstract}
+Connected vehicles broadcast Basic Safety Messages (BSMs) that state their position, speed and heading several times per second, and every
+receiving vehicle builds its picture of the road from them. A vehicle that broadcasts false content (a shifted or frozen position, a wrong speed,
+replayed or delayed messages, or a flood of messages) can make its neighbours brake, change lanes or ignore a real hazard. Digital signatures
+do not help here: they prove who sent a message, not that its content is true, so the content must be judged on the receiving vehicle itself.
+Current learned detectors leave four gaps. They judge each sender on its own, ignoring the other vehicles the receiver hears at the same time; they
+are evaluated on few attack types and often report accuracy alone, which hides the false-alarm rate; they label every message of an attacker
+vehicle as malicious even while it behaves; and they are rarely tested against attackers that tell a physically consistent story or that collude.
+We study the receiver's view. For every receiving vehicle and second, the 16 nearest senders over the last 10 seconds are classified as honest or
+misbehaving by a small transformer (144k parameters) that attends over each sender's history and across the neighbouring senders. Its inputs add
+plausibility checks to the raw claims: kinematic consistency, a road map learned from honest traffic, exact repeats of earlier positions and
+positions copied from another sender's trail. Training adds windows in which honest senders tell careful, mutually consistent lies, and a
+receiver-side memory keeps suspicion of senders already flagged. The system is implemented in PyTorch and trains in 10--15 minutes on a laptop GPU.
+On the public VeReMi Extension benchmark (simulated, 14 of its 19 attack types, 68,971 test windows, two seeds) it reaches precision 98.16\%,
+recall 97.78\%, F1 97.97\% and accuracy 98.74\% when an attacker is scored only in windows where it sends falsified messages, and F1 97.01\% when
+every window of an attacker vehicle counts, against F1 94.9\% for the same model without the checks and 78.9\% for the dataset's
+speed-consistency rule under that stricter labelling. Neighbour attention adds a small but significant 0.3 F1 points and lowers the false-positive
+rate from 0.90\% to 0.60\%, but its benefit disappears when most neighbours are attackers. A collusion stress test shows why the checks matter:
+before them, coordinated colluders with consistent lies were caught in at most 4\% of cases; with them, in 70--90\% at a 1\% false-positive rate,
+including a spoofed convoy never seen in training. Lies that stay on the road and obey the physics remain hard (23--48\%), which marks the limit of
+detection from message content alone.
+\end{abstract}
+
+\begin{IEEEkeywords}
+V2X, VANET, misbehaviour detection, transformer, plausibility checks, collusion, VeReMi Extension
+\end{IEEEkeywords}
+
+\section{The Problem}
+\label{sec:problem}
+\textbf{Setting.} In V2X networks every vehicle periodically broadcasts a BSM with its claimed position, speed, heading and acceleration.
+Message signatures prove \emph{who} sent a message but not that its \emph{content} is true: an authenticated insider, or a vehicle with a faulty or
+manipulated sensor, can send false content that passes all cryptographic checks~\cite{ruj2011, boualouache2022}. Misbehaviour detection must therefore
+judge the content itself, on the receiving vehicle, within a fraction of a second, without ground truth about where the other vehicles really are.
+
+\textbf{Task.} Let receiver $r$ at second $t$ hear a set of senders. We take the $K{=}16$ senders closest to $r$ by claimed distance and their
+claims over the last $T{=}10$ seconds (messages binned to one-second steps) and output, for each sender, the probability that it misbehaves. A window
+is formed every 3 seconds; each sender slot is one decision. The receiver knows its own position but never the true position of a sender.
+
+\textbf{Threat model.} The attacker is an insider: a vehicle with valid credentials that controls the content and the timing of its own
+messages. It may lie about its position, speed, heading and acceleration, replay or delay messages, copy other vehicles' content, or flood the
+channel. Several attackers may coordinate (collusion). The attacker cannot change what the receiver measures about itself, and it does not
+control the honest vehicles. The detector runs on the receiver and sees only received messages and the receiver's own state; it has no access to
+roadside units, other receivers' decisions or the physical layer.
+
+\textbf{Why it is hard.} Honest claims are themselves noisy (GPS error of a few metres, sensor error on speed and heading), vehicles stop
+and accelerate legitimately, and a receiver hears a changing set of senders whose messages arrive irregularly. The detector must keep false alarms
+below about 1\%, because every false alarm discards an honest vehicle's data, and must decide within seconds. A lie that is small, smooth and on
+the road can look exactly like an honest vehicle, and when several attackers agree, the neighbours a receiver could compare against are partly
+malicious themselves.
+
+\textbf{Attacks.} We use VeReMi Extension~\cite{kamel2020}, the successor of VeReMi~\cite{vanderheijden2018}: simulated traffic of the Luxembourg
+scenario with 30\% misbehaving vehicles and 19 attack types. We run 14 of them: constant, random and offset positions (ConstPos, RandomPos,
+ConstPosOffset, RandomPosOffset), constant, random and offset speeds (ConstSpeed, RandomSpeed, ConstSpeedOffset), EventualStop (the vehicle claims
+to have stopped), Disruptive and DataReplay (content taken from other vehicles), DelayedMessages, and three denial-of-service variants (DoS,
+DoSRandom, DoSDisruptive). The four Sybil attacks are not run, and the RandomSpeedOffset archive is excluded because both of its time slices
+contain the same data. The data are simulated; no claim is made about real road traffic. Table~\ref{tab:attacks} lists what each attack
+falsifies and how many attacker slots it contributes to the test set.
+
+\begin{table}[t]\centering
+\caption{The 14 attack types used, what the attacker changes, and the number of attacker slots in the test set (message labels).}
+\label{tab:attacks}\small
+\resizebox{\columnwidth}{!}{\begin{tabular}{llr}\toprule
+Attack & What the attacker sends & Test slots \\\midrule
+ConstPos & a fixed position & 6,179 \\
+ConstPosOffset & true position plus a fixed offset & 6,188 \\
+RandomPos & a random position each message & 6,179 \\
+RandomPosOffset & true position plus a random offset & 6,189 \\
+ConstSpeed & a fixed speed & 6,158 \\
+ConstSpeedOffset & true speed plus a fixed offset & 6,153 \\
+RandomSpeed & a random speed & 6,186 \\
+EventualStop & claims to stop and stay at one position & 4,556 \\
+Disruptive & content of other vehicles' messages & 6,169 \\
+DataReplay & replays another vehicle's messages & 6,175 \\
+DelayedMessages & its own messages, delayed & 6,179 \\
+DoS & true content at a much higher rate & 6,401 \\
+DoSRandom & random content at a high rate & 6,402 \\
+DoSDisruptive & others' content at a high rate & 6,407 \\\bottomrule
+\end{tabular}}
+\end{table}
+
+\textbf{What counts as misbehaviour.} The benchmark labels vehicles: every message of an attacker vehicle is ``malicious''. Some attackers,
+however, send true messages for part of the time; EventualStop, for instance, drives normally until it fakes its stop. Using the per-message ground
+truth shipped with the dataset, we also score at the message level (Section~\ref{sec:labels}) and report both.
+
+\section{Gaps in Current Work}
+\label{sec:gaps}
+\textbf{G1: one sender at a time.} Most learned detectors classify a sender, or a pair of consecutive messages, in isolation, from location and
+movement features~\cite{so2018, singh2019, sharma2022}. Transformer detectors have appeared~\cite{li2025attentionguard, kalogiannis2026pampos},
+including PAMPOS, which flags deviations from a predicted trajectory without attack labels~\cite{kalogiannis2026pampos}. What a receiver can gain
+from comparing a sender with the senders around it, and what it loses when those neighbours are themselves malicious, is rarely measured.
+
+\textbf{G2: metrics.} Results are often a single accuracy figure~\cite{hakeem2025}. Accuracy hides the false-positive rate, which decides whether a
+detector is usable (every false alarm discards an honest vehicle's data), and it says nothing about detection latency.
+
+\textbf{G3: few attacks, unclear comparisons.} Many studies use the original VeReMi with five position attacks~\cite{vanderheijden2018}. The
+survey of Abdel Hakeem and Kim~\cite{hakeem2025}, which we take as our reference point, lists 97.37\% for VeReMi with accuracy, precision, recall and
+F1 reported together, and per-study accuracies of 95--97\%~\cite{so2018, singh2019}; it does not state splits or label definitions, so such
+numbers are hard to compare.
+
+\textbf{G4: consistent lies and collusion.} Plausibility checks~\cite{so2019} catch claims that are impossible, but an attacker can fake a
+trajectory that is internally consistent, and several attackers can agree on one story. Reputation schemes assume most neighbours are
+honest~\cite{gyawali2020}; learned detectors are rarely tested against coordinated, physically consistent lies.
+
+\textbf{G5: vehicle-level labels.} Scoring every message of an attacker vehicle as malicious counts honest-looking periods as missed detections,
+which mixes up the detector's errors with the attacker's choice to behave.
+
+\textbf{G6: where the detector runs.} Recent work moves detection into federated learning, to keep vehicle data
+private~\cite{marmol2024, demir2025}, or into large language models at the network edge~\cite{hamhoum2024}; others target Sybil
+attacks~\cite{thomas2024, khan2026} or combine an LSTM detector with a protocol that reacts to detections~\cite{franceschini2024}. These directions
+need a strong local detector to start from: one that runs on a single vehicle, is small enough to train and run cheaply, and whose behaviour under
+attack is measured. That local detector is the focus of this work.
+
+\textbf{This work.} We address G1--G5 with a single receiver-side detector and an evaluation protocol: neighbour attention measured as an
+ablation and under growing shares of malicious neighbours (G1); precision, recall, F1, accuracy, false-positive rate and latency with significance
+tests (G2); 14 attack types of VeReMi Extension (G3); plausibility checks and training with careful lies, plus a collusion stress test (G4); and
+message-level labels next to vehicle-level ones (G5).
+
+\section{Our Approach}
+\label{sec:approach}
+Fig.~\ref{fig:pipeline} shows the pipeline. Raw messages heard by a receiver are grouped into windows, each claim is checked for plausibility,
+a transformer scores every sender, and a receiver-side memory smooths the scores over time before the alarm threshold is applied.
+
+\begin{figure}[t]\centering
+\begin{tikzpicture}[node distance=3.2mm, every node/.style={font=\scriptsize, align=center},
+  box/.style={draw, rounded corners=1.5pt, minimum width=24mm, minimum height=6.5mm, fill=black!4}, arr/.style={-{Stealth[length=1.6mm]}}]
+\node[box] (a) {Received BSMs\\(+ own state)};
+\node[box, below=of a] (b) {Window: 16 nearest senders\\$\times$ 10 one-second steps};
+\node[box, below=of b] (c) {Inputs: 9 claim values\\+ 10 plausibility checks};
+\node[box, right=7mm of c, minimum width=22mm] (m) {Road map from\\honest traffic};
+\node[box, below=of c] (d) {Transformer: temporal attn.\\+ attention across senders};
+\node[box, below=of d] (e) {Receiver memory\\$s'_t=\max(s_t,\lambda s'_{t-1})$};
+\node[box, below=of e] (f) {Alarm if $s'_t>\tau$\\($\lambda,\tau$ from validation)};
+\node[box, right=7mm of d, minimum width=22mm] (g) {Training only:\\careful injected lies};
+\draw[arr] (a) -- (b); \draw[arr] (b) -- (c); \draw[arr] (c) -- (d); \draw[arr] (d) -- (e); \draw[arr] (e) -- (f);
+\draw[arr] (m) -- (c); \draw[arr, dashed] (g) -- (d);
+\end{tikzpicture}
+\caption{Detection pipeline on one receiving vehicle.}
+\label{fig:pipeline}
+\end{figure}
+
+\subsection{Receiver-centric windows}
+Each sample is one receiver window as defined in Section~\ref{sec:problem}. Per sender and step we keep the raw claim: position, speed, heading,
+claimed acceleration along the heading, and the number of messages heard in that second. Sender identities and the dataset's simulated noise
+fields are never inputs. Windows are skipped when the receiver's own state is missing in any of the 10 steps.
+
+\subsection{Inputs: claims plus plausibility checks}
+\label{sec:features}
+For every sender and step the model receives 19 values. Nine describe the claim itself: position relative to the receiver (scaled by 300\,m),
+speed, cosine and sine of the heading, position change since the previous step, a validity flag, and $\log(1+\text{messages per second})$, which
+makes floods visible. Ten are plausibility checks computed from the claims:
+\begin{itemize}
+\item \emph{Kinematics}: for claimed position $p_t$, speed $v_t$, heading $\theta_t$ and acceleration $a_t$ we use $a_t$,
+$(v_t-v_{t-1})-a_t$, $\lVert p_t-p_{t-1}\rVert - v_t$ and, when the sender moved more than 1\,m,
+$1-\cos(\angle(p_t-p_{t-1})-\theta_t)$. Each is zero for a consistent honest vehicle up to sensor noise.
+\item \emph{Road map}: from the receivers' own positions in the training hour we build a 5\,m grid of where vehicles actually drive (675$\times$667
+cells) with the dominant driving direction per cell. Inputs are the on-road density at the claimed position and the alignment of the claimed heading
+with the road. The map stands in for the digital map a vehicle carries; no test data are used to build it.
+\item \emph{Neighbours}: distance from the claimed position to the nearest other sender's claimed position at the same step.
+\item \emph{Exact repeats}: whether the claimed position equals (to 1\,cm) one of the sender's own earlier claims, and whether it equals a position
+that another sender claimed earlier (a copied trail); plus the logarithm of the distance moved, so centimetre-level movement is visible. Real GPS
+fixes always jitter: no honest step in 1.38 million had zero movement, while frozen and replayed claims repeat exactly.
+\end{itemize}
+
+\subsection{Model}
+A factorised transformer encodes the window: a linear embedding ($d{=}64$) with a learned time encoding, then two blocks, each with
+(i) temporal self-attention of a sender over its own 10 steps, (ii) spatial self-attention across the senders present at the same step (the
+neighbourhood), and (iii) a feed-forward layer; 4 heads, dropout 0.1, pre-normalisation. The representation of the newest step feeds a two-layer
+classification head. Padding and missing steps are masked. The ablation without neighbour attention restricts the spatial attention to the
+sender itself, so both variants have the same 144k parameters.
+
+\subsection{Training with careful lies}
+\label{sec:aug}
+The benchmark's attacks are mostly physically implausible. To teach the model consistent lies as well, we add a copy of half of the training
+windows (those with at least two honest senders) in which 1--4 honest senders are rewritten as liars, coordinated or independent: a position offset
+of 20--300\,m that keeps the true motion, or a fake stop (position frozen with GPS-like jitter, speed zero, acceleration consistent with the
+braking). A third lie type, a convoy driving at the receiver, is \emph{held out} of training to test generalisation. All checks are recomputed on
+the rewritten claims. This adds 39,691 windows with about 74,000 liar slots.
+
+\subsection{Receiver memory}
+A receiver that has flagged a sender keeps a decaying suspicion of it: $s'_t=\max(s_t,\lambda s'_{t-1})$ over that receiver's windows of the same
+sender, forgotten after 30\,s of silence. $\lambda$ and the alarm threshold are chosen on validation data.
+
+\subsection{Message-level labels}
+\label{sec:labels}
+A received message is \emph{falsified} if its claimed position differs from the sender's true position at reception by more than 1\,m or its
+speed by more than 0.5\,m/s, using the dataset's ground-truth trace. Honest claims match the ground truth exactly, so the tolerance only absorbs
+rounding. An attacker slot is positive if the sender sent at least one falsified message in the window; DoS attackers, whose misbehaviour is the flood
+itself, are always positive. Attacker slots without any falsified message are left out of message-level scoring. They are 2.0\% of all attacker
+slots, almost all from EventualStop before its stop (26\% of its slots).
+
+\subsection{Implementation}
+Everything is written in Python with PyTorch, NumPy and scikit-learn. The VeReMi Extension logs (one JSON file per vehicle, Zenodo record 20090854,
+CC-BY 4.0) are parsed into windows by a loader that reads message type 2 (the receiver's own state) and type 3 (received BSMs) and takes labels from
+the file names; 250 receivers are sampled evenly per simulation slice. Parsing runs in parallel and is cached; the features of all windows are
+written once to half-precision memory-mapped files, so training needs about 1\,GB of GPU memory and little RAM. Training uses weighted binary cross
+entropy (positive weight 2), AdamW (learning rate $2{\times}10^{-3}$, weight decay $10^{-2}$), a one-cycle schedule, batch size 128 and 8 epochs,
+about 10--15 minutes per model on a laptop GPU (RTX 3050 Ti). Inference takes well under a millisecond per window. The code, trained models, logs and the scripts
+that produce every table are in the project repository; the main entry points are \texttt{run\_v2.py} (features and training),
+\texttt{label\_active.py} (message labels), \texttt{run\_analysis\_v2.py} and \texttt{run\_collusion\_v2.py}. Table~\ref{tab:impl} summarises the
+settings. All random choices (receiver sampling, augmentation, injected lies, bootstrap) use fixed seeds; rebuilding the test windows of our first model from
+its saved weights on a second machine reproduced its reported numbers exactly.
+
+\begin{table}[t]\centering
+\caption{Implementation and training settings.}\label{tab:impl}\small
+\resizebox{\columnwidth}{!}{\begin{tabular}{ll}\toprule
+Data & VeReMi Extension, 14 attack subsets, 14:00--16:00 traffic \\
+Split & first hour: train; second hour: validation 30\% / test 70\% of receivers \\
+Windows & 109,823 train (+39,691 with injected lies), 29,547 val., 68,971 test \\
+Window & $K{=}16$ senders, $T{=}10$ steps of 1\,s, stride 3\,s, 250 receivers per slice \\
+Inputs & 19 per sender and step (9 claim values, 10 checks) \\
+Road map & 5\,m grid, 675$\times$667 cells, receivers' own positions (training hour) \\
+Model & factorised transformer, $d{=}64$, 4 heads, 2 blocks, 144k parameters \\
+Training & weighted BCE (pos.\ weight 2), AdamW $2{\times}10^{-3}$, one-cycle, batch 128, 8 epochs \\
+Hardware & laptop, RTX 3050 Ti (4\,GB), 16\,GB RAM; 10--15 min per model \\
+Software & Python 3.12, PyTorch 2.5, NumPy, scikit-learn \\
+Seeds & 2 per model; thresholds and memory decay picked on validation \\\bottomrule
+\end{tabular}}
+\end{table}
+
+\section{Evaluation}
+\label{sec:eval}
+\textbf{Protocol.} Models are trained on the first simulated hour of each of the 14 attack subsets (109,823 windows) and tested on the second hour,
+whose receivers are split into contiguous validation (30\%, 29,547 windows) and test (70\%, 68,971 windows) blocks. Thresholds, memory decay and
+rule thresholds are chosen on validation only. We report precision, recall, F1, accuracy and false-positive rate (FPR), each the mean of two
+training seeds (the seeds differ by at most 0.5 points). Per-attack F1 scores an attack against the honest senders of its own simulation run.
+Differences between models are tested with a paired bootstrap over receivers (2,000 resamples) and Holm correction across attacks. Baseline rules
+are the range check and the speed-consistency check of VeReMi~\cite{vanderheijden2018}, applied to the same windows.
+
+\input{tables_v2.tex}
+\input{tables_paper.tex}
+
+\textbf{Overall (Table~\ref{tab:v2}).} With message labels the detector reaches F1 97.88\% (recall 97.12\%); with receiver memory F1 is 97.97\%, and
+precision, recall, F1 and accuracy are all above 97.4\% in both seeds. With vehicle labels F1 is 97.01\% (97.12\% with memory): recall falls because the honest-looking
+windows of attackers count as misses. Our first model, with the same architecture but only the nine raw inputs, reached F1 94.9\% (precision 98.4\%,
+recall 91.6\%, accuracy 96.9\%, vehicle labels); the plausibility checks raised ConstPosOffset recall from 0.66 to 0.97 and EventualStop recall
+on active windows to 0.99. The speed-consistency rule reaches F1 80.0\% and fails completely on offset positions, EventualStop, delayed messages and
+DoS (Table~\ref{tab:perattack}). Mean time to the first alarm is 0.9\,s (median 0, counted from the first window that contains the sender, which
+already holds up to 10\,s of history); 96\% of attacker--receiver pairs are flagged at some point.
+
+\textbf{Neighbour attention.} Attending across senders adds 0.3 F1 points (95\% bootstrap interval about [0.2, 0.4] in both seeds and both label
+schemes), is significantly better on 8--10 of the 14 attacks and significantly worse on none, and lowers the FPR from 0.90\% to 0.60\%. Its benefit
+depends on the neighbourhood (Table~\ref{tab:share}): within each attack type, the gain shrinks as the share of attacker vehicles in the window
+grows and turns negative ($-0.004$) once attackers are the majority. In the earlier model without checks the same pattern was stronger (from
+$+0.071$ to $-0.023$). Neighbour context helps while most neighbours are honest; it is not a defence against a malicious majority.
+
+\textbf{Consistent and colluding lies (Table~\ref{tab:traj}).} We inject lies into the test windows, recompute all inputs, and compare models at
+the same 1\% validation FPR. Before the checks, both our models caught at most 4\% of such colluders, coordinated or not; neighbour attention even
+let coordinated convoys raise false alarms on honest neighbours from 0.9\% to 3.0\%. With the checks, a 50\,m offset is caught in 83--86\% of
+cases (63\% at 25\,m, 98\% at 400\,m), a fake stop in about 70\%, and the held-out convoy in 87--90\%. Training with careful lies is what makes fake
+stops detectable (1\% without it) and costs 0.2 F1 points on the benchmark attacks. Fig.~\ref{fig:offset} shows the effect of the
+checks as a function of the size of the lie.
+
+\begin{figure}[t]\centering
+\includegraphics[width=\columnwidth]{fig_offset.pdf}
+\caption{Recall on four coordinated colluders that shift their claimed position, as a function of the shift, at a matched 1\% validation
+false-positive rate (mean of 2 seeds). Solid: with neighbour attention; dashed: without.}
+\label{fig:offset}
+\end{figure} Two map-aware attacks remain hard: shifting the claimed position
+50\,m \emph{along} the road (23--25\%) and a convoy that follows the receiver's own road (36--48\%).
+
+\textbf{Reference numbers.} The survey~\cite{hakeem2025} lists 97.37\% for VeReMi (accuracy, precision, recall and F1 reported together) and
+F1 98\% for positional attacks with a reputation-based detector~\cite{gyawali2020}; So \emph{et al.} report precision 95.91\% and detection rate
+83.73\% with physical-layer checks~\cite{so2019}. Our message-level results exceed 97.37\% on all four measures (position attacks alone: F1 97.5--99.4\%).
+These figures come from a different dataset (original VeReMi, five attacks) and partly undocumented protocols; they place our results but are not a
+like-for-like comparison.
+
+\section{Discussion}
+\label{sec:discussion}
+\textbf{What the detector relies on.} The progression from our first model to the final one shows where the accuracy comes from. The first model
+saw the same senders and the same neighbourhood but only the raw claims; it learned to flag claims that are physically impossible (positions beyond
+radio range, speed that does not match movement) and missed everything else, including 34\% of ConstPosOffset attackers. The plausibility checks
+turn knowledge a vehicle already has (a map, the laws of motion, the fact that GPS readings never repeat exactly) into explicit inputs, and the
+largest gains come from exactly the attacks that are consistent in themselves: offsets inside the radio range, frozen positions and replayed
+trails. Neighbour attention is a second-order effect on top: it lowers false alarms, probably because an honest vehicle that looks unusual (for
+example, one stopping hard) is easier to accept when its neighbours behave the same way.
+
+\textbf{Neighbours as evidence, and as a risk.} The attacker-share analysis and the stress test agree. Comparing a sender with its neighbours is
+useful when the neighbours are mostly honest, and it becomes a liability when they are not: coordinated liars barely affect their own detection
+but can make the model doubt honest vehicles around them. A deployed system should therefore not treat agreement among neighbours as proof,
+and it should cap how much any group of senders can change the score of another sender.
+
+\textbf{Deployment.} The model has 144k parameters and scores a window in well under a millisecond on a laptop GPU, so a single vehicle could
+run it on every incoming window. Three parts need care in practice. The road map must come from map data rather than from recorded traffic; the
+alarm threshold trades false alarms against missed attackers and should be set per deployment; and the receiver memory delays the release of a
+falsely flagged sender by a few seconds, which is acceptable for misbehaviour reports but not for discarding safety-critical messages outright.
+
+\textbf{An adaptive attacker.} An attacker who knows the checks will keep its lies on the road, smooth and consistent with its claimed speed and
+acceleration, and will add jitter to frozen positions. Our map-aware stress test models this attacker, and detection drops to 23--48\%. Content
+checks alone cannot close this gap: the receiver would need independent evidence of where the sender really is, such as signal strength or
+angle of arrival, its own camera and radar, or reports from roadside units.
+
+\section{Limitations and Conclusion}
+\label{sec:conclusion}
+The benchmark is simulated; 14 of 19 attack types are covered (no Sybil attacks); results are the mean of two seeds; dense rush-hour traffic was
+evaluated only for the earlier model; the road map assumes the receiver has a map of the area; and the collusion test rewrites honest vehicles of the
+trace instead of simulating new attackers, without re-selecting the 16 senders after the lie. The message-level labels are a choice we make
+explicit, and we report vehicle-level results next to them.
+
+Within these limits, the study gives three answers. Plausibility checks computed from the claims (kinematics, a learned road map, exact repeats and
+copied trails) did most of the work: they moved the detector from F1 94.9\% to about 98\% and turned consistent lies from invisible to mostly
+detected. Neighbour attention gives a small, significant gain and fewer false alarms, but its benefit disappears once most neighbours are
+malicious. A lie that stays on the road and obeys the physics cannot be separated from the truth using message content alone; closing that gap needs
+an independent signal such as received signal strength, on-board sensors or roadside units, together with Sybil attacks and the newer VeReMi
+NextGen data, which are our next steps.
+
+\begin{thebibliography}{99}
+\bibitem{vanderheijden2018} R. W. van der Heijden, T. Lukaseder, and F. Kargl, ``VeReMi: A dataset for comparable evaluation of misbehavior detection in VANETs,'' in \emph{Security and Privacy in Communication Networks (SecureComm)}. Cham, Switzerland: Springer, 2018, pp. 318--337.
+\bibitem{kamel2020} J. Kamel, M. Wolf, R. W. van der Heijden, A. Kaiser, P. Urien, and F. Kargl, ``VeReMi Extension: A dataset for comparable evaluation of misbehavior detection in VANETs,'' in \emph{Proc. IEEE Int. Conf. Commun. (ICC)}, Jun. 2020, doi: 10.1109/ICC40277.2020.9149132.
+\bibitem{hakeem2025} S. A. Abdel Hakeem and H. Kim, ``Advancing intrusion detection in V2X networks: A comprehensive survey on machine learning, federated learning, and edge AI for V2X security,'' \emph{IEEE Trans. Intell. Transp. Syst.}, vol. 26, no. 8, pp. 11137--11205, Aug. 2025.
+\bibitem{so2019} S. So, J. Petit, and D. Starobinski, ``Physical layer plausibility checks for misbehavior detection in V2X networks,'' in \emph{Proc. 12th Conf. Security and Privacy in Wireless and Mobile Networks (WiSec)}, 2019, pp. 84--93.
+\bibitem{so2018} S. So, P. Sharma, and J. Petit, ``Integrating plausibility checks and machine learning for misbehavior detection in VANET,'' in \emph{Proc. 17th IEEE Int. Conf. Machine Learning and Applications (ICMLA)}, 2018, pp. 564--571.
+\bibitem{singh2019} P. K. Singh, S. Gupta, R. Vashistha, S. K. Nandi, and S. Nandi, ``Machine learning-based approach to detect position falsification attack in VANETs,'' in \emph{Security and Privacy}. Singapore: Springer, 2019, pp. 166--178.
+\bibitem{sharma2022} A. Sharma and A. Jaekel, ``Machine learning based misbehaviour detection in VANET using consecutive BSM approach,'' \emph{IEEE Open J. Veh. Technol.}, vol. 3, pp. 1--14, 2022.
+\bibitem{gyawali2020} S. Gyawali, Y. Qian, and R. Q. Hu, ``Machine learning and reputation based misbehavior detection in vehicular communication networks,'' \emph{IEEE Trans. Veh. Technol.}, vol. 69, no. 8, pp. 8871--8885, Aug. 2020.
+\bibitem{kalogiannis2026pampos} K. Kalogiannis, A. M. Hussain, and P. Papadimitratos, ``PAMPOS: Causal transformer-based trajectory prediction for attack-agnostic misbehavior detection in V2X networks,'' arXiv:2605.06833, 2026.
+\bibitem{li2025attentionguard} H. Li, K. Kalogiannis, A. M. Hussain, and P. Papadimitratos, ``AttentionGuard: Transformer-based misbehavior detection for secure vehicular platoons,'' arXiv:2505.10273, 2025.
+\bibitem{ruj2011} S. Ruj, M. A. Cavenaghi, Z. Huang, A. Nayak, and I. Stojmenovic, ``Data-centric misbehavior detection in VANETs,'' arXiv:1103.2404, 2011.
+\bibitem{marmol2024} E. M\'armol Campos, A. Gonz\'alez Vidal, J. L. Hern\'andez Ramos, and A. Skarmeta, ``Federated learning for misbehaviour detection with variational autoencoders and Gaussian mixture models,'' arXiv:2405.09903, 2024.
+\bibitem{demir2025} U. Demir, Y. E. Sagduyu, T. Erpek, H. Jafari, S. Kompella, and M. Xue, ``Distributed federated learning for vehicular network security: Anomaly detection benefits and multi-domain attack threats,'' arXiv:2505.23706, 2025.
+\bibitem{hamhoum2024} W. Hamhoum and S. Cherkaoui, ``MistralBSM: Leveraging Mistral-7B for vehicular networks misbehavior detection,'' arXiv:2407.18462, 2024.
+\bibitem{thomas2024} M. Thomas, A. Borah, and A. Paranjothi, ``Trust-aware Sybil attack detection for resilient vehicular communication,'' \emph{Internet Technology Letters}, 2024, arXiv:2411.07520.
+\bibitem{khan2026} M. S. T. Khan, M. S. A. Utsho, and M. Jahan, ``A robust framework for Sybil attack detection in vehicular ad hoc networks,'' arXiv:2606.11667, 2026.
+\bibitem{franceschini2024} M. Franceschini, ``A neural-network based anomaly detection system and a safety protocol to protect vehicular network,'' Master's thesis, arXiv:2411.07013, 2024.
+\bibitem{boualouache2022} A. Boualouache and T. Engel, ``A survey on machine learning-based misbehavior detection systems for 5G and beyond vehicular networks,'' arXiv:2201.10500, 2022.
+\end{thebibliography}
+
+\end{document}

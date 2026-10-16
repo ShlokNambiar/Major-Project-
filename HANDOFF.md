@@ -26,7 +26,7 @@ and (2) analysis of behaviour when neighbouring vehicles are themselves maliciou
 | 14-attack experiment, 2 models x 2 seeds, significance tests, rule baselines, latency | **Done**, final (`results/results_full14.json`) |
 | Earlier 8-attack run incl. restricted per-sender model, dense-traffic transfer | Done (`results/results_full.json`, `results/results_dense.json`) |
 | Paper tables + figure from results | Done (`paper/tables.tex`, `paper/fig_perattack.pdf`, via `make_tables.py`) |
-| **Paper text (`main.tex`)** | **Does not exist anywhere. Never written.** |
+| Paper (`paper/main.tex` -> `paper/main.pdf`, IEEE conference, 6 pages, 18 verified references) | **First full draft 2026-10-16**; compile with `tectonic -X compile main.tex` in `paper/`; tables from `make_v2_tables.py` + `make_paper_assets.py`; author full names/supervisor still TODO |
 | Literature table (20 sources + ours) | Done, but mostly abstract-level reading (`docs/literature_review.docx`) |
 | Blueprint PDF, worksheet PDF, research-plan PDF | Done but **numbers are outdated** (see section 9) |
 | Progress deck (`presentation/progress_update.pptx`) | Done but **numbers are outdated**; human said "don't update the deck yet" |
