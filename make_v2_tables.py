@@ -17,7 +17,7 @@ for sch in ("message", "vehicle"):
     L.append("\\midrule")
 L[-1] = "\\bottomrule\\end{tabular}}\\end{table}"
 runs = C["setup"]["runs"]; avg = lambda key, m, mode: np.mean([C["injected"][key][str(m)][r]["injected"]["colluder_recall_fpr1"] for r in runs if r.rsplit("_", 1)[0] == mode])
-L += ["\\begin{table}[t]\\centering\\caption{Injected consistent lies (careful: acceleration consistent, GPS-like jitter), $m$ colluders per window, coordinated; colluder recall at a matched 1\\% validation FPR, mean of 2 seeds. Training saw offset and stop lies only. Before the plausibility checks both models caught at most 4\\%.}\\label{tab:traj}\\small",
+L += ["\\begin{table}[t]\\centering\\caption{Injected consistent lies (careful: acceleration consistent, GPS-like jitter), $m$ colluders per window, coordinated; colluder recall at a matched 1\\% validation FPR, mean of 2 seeds. Training saw offset and stop lies only. Before the plausibility checks both models caught at most 4\\% at these sizes. In the two on-road rows the last two columns are single runs (seed 0).}\\label{tab:traj}\\small",
       "\\resizebox{\\columnwidth}{!}{\\begin{tabular}{lccc}\\toprule", "Scenario & " + " & ".join(nm[m] for m in ("full", "nonbr", "full-noaug")) + " \\\\\\midrule"]
 for key, lab in (("offset_coordinated", "Offset 50 m"), ("stop_coordinated", "Fake stop"), ("approach_coordinated", "Convoy (unseen)")):
     for m in (1, 8):

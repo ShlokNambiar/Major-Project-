@@ -31,11 +31,11 @@ plausibility checks to the raw claims: kinematic consistency, a road map learned
 positions copied from another sender's trail. Training adds windows in which honest senders tell careful, mutually consistent lies, and a
 receiver-side memory keeps suspicion of senders already flagged. The system is implemented in PyTorch and trains in 10--15 minutes on a laptop GPU.
 On the public VeReMi Extension benchmark (simulated, 14 of its 19 attack types, 68,971 test windows, two seeds) it reaches precision 98.16\%,
-recall 97.78\%, F1 97.97\% and accuracy 98.74\% when an attacker is scored only in windows where it sends falsified messages, and F1 97.01\% when
+recall 97.78\%, F1 97.97\% and accuracy 98.74\% with receiver memory when an attacker is scored only in windows where it sends falsified messages, and F1 97.01\% without memory when
 every window of an attacker vehicle counts, against F1 94.9\% for the same model without the checks and 78.9\% for the dataset's
 speed-consistency rule under that stricter labelling. Neighbour attention adds a small but significant 0.3 F1 points and lowers the false-positive
 rate from 0.90\% to 0.60\%, but its benefit disappears when most neighbours are attackers. A collusion stress test shows why the checks matter:
-before them, coordinated colluders with consistent lies were caught in at most 4\% of cases; with them, in 70--90\% at a 1\% false-positive rate,
+before them, coordinated colluders with consistent lies of the default sizes were caught in at most 4\% of cases; with them, in 68--90\% at a 1\% false-positive rate,
 including a spoofed convoy never seen in training. Lies that stay on the road and obey the physics remain hard (23--48\%), which marks the limit of
 detection from message content alone.
 \end{abstract}
@@ -176,8 +176,8 @@ cells) with the dominant driving direction per cell. Inputs are the on-road dens
 with the road. The map stands in for the digital map a vehicle carries; no test data are used to build it.
 \item \emph{Neighbours}: distance from the claimed position to the nearest other sender's claimed position at the same step.
 \item \emph{Exact repeats}: whether the claimed position equals (to 1\,cm) one of the sender's own earlier claims, and whether it equals a position
-that another sender claimed earlier (a copied trail); plus the logarithm of the distance moved, so centimetre-level movement is visible. Real GPS
-fixes always jitter: no honest step in 1.38 million had zero movement, while frozen and replayed claims repeat exactly.
+that another sender claimed earlier (a copied trail); plus the logarithm of the distance moved, so centimetre-level movement is visible. In the
+dataset's GPS traces honest positions always jitter: none of 1.38 million honest steps had zero movement, while frozen and replayed claims repeat exactly.
 \end{itemize}
 
 \subsection{Model}
@@ -251,8 +251,8 @@ are the range check and the speed-consistency check of VeReMi~\cite{vanderheijde
 \textbf{Overall (Table~\ref{tab:v2}).} With message labels the detector reaches F1 97.88\% (recall 97.12\%); with receiver memory F1 is 97.97\%, and
 precision, recall, F1 and accuracy are all above 97.4\% in both seeds. With vehicle labels F1 is 97.01\% (97.12\% with memory): recall falls because the honest-looking
 windows of attackers count as misses. Our first model, with the same architecture but only the nine raw inputs, reached F1 94.9\% (precision 98.4\%,
-recall 91.6\%, accuracy 96.9\%, vehicle labels); the plausibility checks raised ConstPosOffset recall from 0.66 to 0.97 and EventualStop recall
-on active windows to 0.99. The speed-consistency rule reaches F1 80.0\% and fails completely on offset positions, EventualStop, delayed messages and
+recall 91.6\%, accuracy 96.9\%, vehicle labels); the plausibility checks raised ConstPosOffset recall from 0.68 to 0.96 and EventualStop recall
+on active windows to 0.99. The speed-consistency rule reaches F1 80.0\% and fails completely on constant position offsets, EventualStop, delayed messages and
 DoS (Table~\ref{tab:perattack}). Mean time to the first alarm is 0.9\,s (median 0, counted from the first window that contains the sender, which
 already holds up to 10\,s of history); 96\% of attacker--receiver pairs are flagged at some point.
 
@@ -263,7 +263,7 @@ grows and turns negative ($-0.004$) once attackers are the majority. In the earl
 $+0.071$ to $-0.023$). Neighbour context helps while most neighbours are honest; it is not a defence against a malicious majority.
 
 \textbf{Consistent and colluding lies (Table~\ref{tab:traj}).} We inject lies into the test windows, recompute all inputs, and compare models at
-the same 1\% validation FPR. Before the checks, both our models caught at most 4\% of such colluders, coordinated or not; neighbour attention even
+the same 1\% validation FPR. Before the checks, both our models caught at most 4\% of such colluders at these sizes, coordinated or not (larger offsets were caught more often, Fig.~\ref{fig:offset}); neighbour attention even
 let coordinated convoys raise false alarms on honest neighbours from 0.9\% to 3.0\%. With the checks, a 50\,m offset is caught in 83--86\% of
 cases (63\% at 25\,m, 98\% at 400\,m), a fake stop in about 70\%, and the held-out convoy in 87--90\%. Training with careful lies is what makes fake
 stops detectable (1\% without it) and costs 0.2 F1 points on the benchmark attacks. Fig.~\ref{fig:offset} shows the effect of the
@@ -279,7 +279,7 @@ false-positive rate (mean of 2 seeds). Solid: with neighbour attention; dashed: 
 
 \textbf{Reference numbers.} The survey~\cite{hakeem2025} lists 97.37\% for VeReMi (accuracy, precision, recall and F1 reported together) and
 F1 98\% for positional attacks with a reputation-based detector~\cite{gyawali2020}; So \emph{et al.} report precision 95.91\% and detection rate
-83.73\% with physical-layer checks~\cite{so2019}. Our message-level results exceed 97.37\% on all four measures (position attacks alone: F1 97.5--99.4\%).
+83.73\% with physical-layer checks~\cite{so2019}. With receiver memory, our message-level results exceed 97.37\% on all four measures (without it, recall is 97.12\%) (position attacks alone: F1 97.5--99.4\%).
 These figures come from a different dataset (original VeReMi, five attacks) and partly undocumented protocols; they place our results but are not a
 like-for-like comparison.
 
@@ -287,8 +287,8 @@ like-for-like comparison.
 \label{sec:discussion}
 \textbf{What the detector relies on.} The progression from our first model to the final one shows where the accuracy comes from. The first model
 saw the same senders and the same neighbourhood but only the raw claims; it learned to flag claims that are physically impossible (positions beyond
-radio range, speed that does not match movement) and missed everything else, including 34\% of ConstPosOffset attackers. The plausibility checks
-turn knowledge a vehicle already has (a map, the laws of motion, the fact that GPS readings never repeat exactly) into explicit inputs, and the
+radio range, speed that does not match movement) and missed everything else, including 32\% of ConstPosOffset attackers. The plausibility checks
+turn knowledge a vehicle already has (a map, the laws of motion, the fact that measured positions jitter and do not repeat exactly) into explicit inputs, and the
 largest gains come from exactly the attacks that are consistent in themselves: offsets inside the radio range, frozen positions and replayed
 trails. Neighbour attention is a second-order effect on top: it lowers false alarms, probably because an honest vehicle that looks unusual (for
 example, one stopping hard) is easier to accept when its neighbours behave the same way.
@@ -304,8 +304,8 @@ alarm threshold trades false alarms against missed attackers and should be set p
 falsely flagged sender by a few seconds, which is acceptable for misbehaviour reports but not for discarding safety-critical messages outright.
 
 \textbf{An adaptive attacker.} An attacker who knows the checks will keep its lies on the road, smooth and consistent with its claimed speed and
-acceleration, and will add jitter to frozen positions. Our map-aware stress test models this attacker, and detection drops to 23--48\%. Content
-checks alone cannot close this gap: the receiver would need independent evidence of where the sender really is, such as signal strength or
+acceleration, and will add jitter to frozen positions. Our map-aware stress test models this attacker, and detection drops to 23--48\%. In our
+experiments content checks did not close this gap: the receiver would need independent evidence of where the sender really is, such as signal strength or
 angle of arrival, its own camera and radar, or reports from roadside units.
 
 \section{Limitations and Conclusion}
@@ -316,9 +316,9 @@ trace instead of simulating new attackers, without re-selecting the 16 senders a
 explicit, and we report vehicle-level results next to them.
 
 Within these limits, the study gives three answers. Plausibility checks computed from the claims (kinematics, a learned road map, exact repeats and
-copied trails) did most of the work: they moved the detector from F1 94.9\% to about 98\% and turned consistent lies from invisible to mostly
+copied trails) did most of the work: they moved the detector from F1 94.9\% to 97.0\% under the same vehicle labels (97.9\% with message labels) and turned consistent lies from invisible to mostly
 detected. Neighbour attention gives a small, significant gain and fewer false alarms, but its benefit disappears once most neighbours are
-malicious. A lie that stays on the road and obeys the physics cannot be separated from the truth using message content alone; closing that gap needs
+malicious. A lie that stays on the road and obeys the physics was caught only 23--48\% of the time from message content; closing that gap likely needs
 an independent signal such as received signal strength, on-board sensors or roadside units, together with Sybil attacks and the newer VeReMi
 NextGen data, which are our next steps.
 

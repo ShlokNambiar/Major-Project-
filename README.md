@@ -8,7 +8,7 @@ as well as across time, so a sender's claims are judged in the context of what s
 
 ```
 nambd/sim.py     VeReMi-style highway simulator (5 attacks) used when real logs are unavailable
-nambd/data.py    receiver-centric windows (K nearest senders x T steps); load_veremi() for real VeReMi logs
+nambd/data.py    receiver-centric windows (K nearest senders x T steps); load_veremi() for the VeReMi Extension logs
 nambd/model.py   factorised temporal/spatial transformer, spatial-off ablation, gradient reversal (DANN)
 nambd/train.py   training, threshold selection, per-attack F1/AUC
 nambd/collusion.py   collusion generator: rewrites m honest senders of a finished window into colluders
@@ -17,13 +17,13 @@ make_tables.py       results -> paper/tables.tex + figure
 run_collusion.py     malicious-neighbour / collusion study -> results/results_collusion.json
 make_collusion_fig.py  -> paper/tables_collusion.tex + paper/fig_collusion.pdf
 tests/               python -m pytest tests -q (collusion generator; no data needed)
-paper/            tables.tex + fig_perattack.pdf generated from the real-data results (main.tex not in this repo)
+paper/            tables.tex + fig_perattack.pdf generated from the real-data results (main.tex -> main.pdf: the paper; build with `tectonic -X compile main.tex`)
 ```
 
 Run: `pip install -r requirements.txt && python run_experiments.py && python make_tables.py`
 (`--quick` for a smoke test).
 
-## Results (VeReMi Extension, 14 attack types, 14:00-16:00; 2 seeds)
+## First model results (superseded by the v2 section below; VeReMi Extension, 14 attack types, 14:00-16:00; 2 seeds)
 Pipeline: `run_full.py` (RATE=1: 9th feature = message rate, so DoS floods are visible; MODES=nonbr,full; outputs to `results/preds14`, `results/models14`),
 `run_analysis.py` (PREDS=results/preds14 -> `results/results_full14.json`), `make_tables.py` (-> `paper/tables.tex`, `paper/fig_perattack.pdf`).
 Trained on the first hour of each attack subset, tested on the later hour (receiver-disjoint val/test blocks, 68,971 test windows).
@@ -50,7 +50,7 @@ Per-attack F1 scores each attack against the benign senders of its own simulatio
 Uses the same test windows and trained models as above; no retraining. The no-neighbour model cannot see other senders,
 so it is the control: an effect that appears only in the neighbourhood-aware model comes from neighbour attention.
 
-1. **Real VeReMi attackers, by share of attackers in the window** (0-20 / 20-40 / 40-60 / >60%): the neighbourhood-aware model's recall falls
+1. **VeReMi attackers (not injected), by share of attackers in the window** (0-20 / 20-40 / 40-60 / >60%): the neighbourhood-aware model's recall falls
    0.943 / 0.929 / 0.917 / 0.877 while the no-neighbour model stays flat (0.905 / 0.908 / 0.904 / 0.900). Computed within each attack type
    (so the attack mix cannot explain it), the recall gain from neighbour attention is +0.021 / +0.013 / **-0.023** in the 20-40 / 40-60 / >60% bins
    (14 attack types each). Neighbour context helps while most neighbours are honest and stops helping once attackers are the majority.
@@ -59,7 +59,7 @@ so it is the control: an effect that appears only in the neighbourhood-aware mod
    (c) claim to be a convoy driving at the receiver; each coordinated (one shared story) and independent. With both models at the same 1% validation FPR,
    colluder recall is at most 0.04 in every setting, for both models. Larger offsets are caught more often (offset 100 / 200 / 400 m, 4 colluders:
    recall about 0.04 / 0.10 / 0.41), with no consistent difference between the two models.
-   Why: real VeReMi attackers are mostly caught because their claims are physically implausible (positions beyond radio range, speed that does not match displacement),
+   Why: the dataset's own attackers are mostly caught because their claims are physically implausible (positions beyond radio range, speed that does not match displacement),
    not because neighbours contradict them. The models learned plausibility, not cross-checking between senders.
 3. **Framing.** A spoofed convoy makes the neighbourhood-aware model flag honest neighbours: honest-sender FPR rises from 0.90% to 2.98% with 8 coordinated colluders
    (2.56% independent). The no-neighbour model's FPR is unaffected. Coordinated 50 m offsets give a smaller rise (0.90% to 1.25%).
@@ -101,7 +101,7 @@ Thresholds (and the memory decay) are always chosen on the validation block.
 - ConstPosOffset recall 0.66 -> 0.97 (road map). Remaining weak spots: DelayedMessages (recall 0.87), DataReplay (0.93).
 - Latency: mean 0.9 s to first alarm (median 0), 96% of attacker-receiver pairs flagged.
 
-**Trajectory lies after v2** (colluder recall at a matched 1% FPR; before v2 at most 0.04): 50 m position offset 0.83-0.85; fake stop 0.69-0.72
+**Trajectory lies after v2** (colluder recall at a matched 1% FPR; before v2 at most 0.04): 50 m position offset 0.83-0.86; fake stop 0.69-0.72
 (0.01 without augmentation); spoofed convoy, never seen in training, 0.87-0.90. Offset size: 10 / 25 / 100 / 400 m -> 0.15 / 0.63 / 0.92 / 0.98.
 **Map-aware liars stay hard:** shifting 50 m *along the road* is caught 0.23-0.25, a convoy *along the receiver's road* 0.36-0.48. A lie that is on the road
 and kinematically consistent cannot be told apart from the message content alone; that needs an independent signal (signal strength, sensors, RSUs).

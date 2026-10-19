@@ -8,9 +8,9 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 INK = colors.HexColor("#111111")
 TITLE = ParagraphStyle("T", fontName="Helvetica-Bold", fontSize=15, alignment=1, spaceAfter=8, textColor=INK)
 HDR = ParagraphStyle("Hd", fontName="Helvetica", fontSize=10.5, leading=15, textColor=INK)
-SEC = ParagraphStyle("S", fontName="Helvetica-Bold", fontSize=11, spaceBefore=7, spaceAfter=1, textColor=INK)
-LBL = ParagraphStyle("L", fontName="Helvetica-Bold", fontSize=8.9, leading=11.4, leftIndent=10, textColor=INK)
-TXT = ParagraphStyle("X", fontName="Helvetica", fontSize=8.9, leading=11.4, leftIndent=20, spaceAfter=1.5, textColor=INK)
+SEC = ParagraphStyle("S", fontName="Helvetica-Bold", fontSize=11, spaceBefore=5, spaceAfter=1, textColor=INK)
+LBL = ParagraphStyle("L", fontName="Helvetica-Bold", fontSize=8.6, leading=10.7, leftIndent=10, textColor=INK)
+TXT = ParagraphStyle("X", fontName="Helvetica", fontSize=8.6, leading=10.7, leftIndent=20, spaceAfter=1.5, textColor=INK)
 BUL = ParagraphStyle("B", parent=TXT, leftIndent=30, bulletIndent=21)
 
 def item(label, text=None):
@@ -29,46 +29,51 @@ S += [hdr]
 
 S += [Paragraph("1. PROBLEM FORMULATION:", SEC)]
 S += item("Specific ML/AI Problem or Failure Mode Addressed:",
-  "Connected vehicles broadcast position, speed and heading. A misbehaving vehicle sends false data (random or spoofed position, frozen speed) that misleads others. "
+  "Connected vehicles broadcast position, speed and heading; a misbehaving vehicle sends false data (spoofed position, frozen speed, copied trails) that misleads others. "
   "Most learned detectors judge each sender <b>in isolation</b>, so evidence from the surrounding vehicles goes unused, and it is untested how a neighbour-aware "
-  "detector behaves when many neighbours are themselves malicious (cooperative schemes often assume an honest majority). "
+  "detector behaves when many neighbours are themselves malicious or when attackers collude and tell consistent lies. "
   "Failure mode: missed or slow detection of falsified data, and unknown robustness to malicious neighbours.")
 
 S += [Paragraph("2. HYPOTHESIS FORMULATION:", SEC)]
 S += item("Null Hypothesis (H0):",
-  "A detector that also attends to the 16 nearest neighbours has the same F1 as the per-sender baseline on held-out traffic (F1 full = F1 per-sender).")
+  "Adding attention across nearby senders (neighbours) gives the same F1 as the same model without it on held-out traffic (F1 with neighbours = F1 without).")
 S += item("Alternative Hypothesis (H1):",
-  "The neighbourhood-aware detector has higher F1 (F1 full &gt; F1 per-sender), with higher recall and shorter detection latency and no increase in false positives. "
-  "Secondary (H1b): its recall stays within about 2 points of its clean value even when over half of a sender's neighbours are malicious (H0b: recall falls as malicious neighbours increase).")
+  "Neighbour attention gives higher F1 (F1 with &gt; F1 without) with no increase in false positives. "
+  "Secondary (H1b): the gain holds even when most of a sender's neighbours are attackers (H0b: the gain shrinks as malicious neighbours increase).")
 
 S += [Paragraph("3. RESEARCH &amp; EXPERIMENTAL DESIGN:", SEC)]
 S += item("Dataset to be used (e.g., ImageNet, Kaggle, Custom collected):",
-  "VeReMi Extension (public benchmark, Zenodo; simulated traffic and attackers, F2MD/VEINS/SUMO, Luxembourg scenario, 30% attackers, 19 attack types). "
-  "Done: RandomPos and ConstSpeed (14:00-16:00). Planned: other attacks, dense 07:00-09:00 subsets, MixAll_0024, VeReMi NextGen. "
-  "Windows: 16 nearest senders x 10 s (61,708 train / 11,251 val / 26,255 test).")
+  "VeReMi Extension (public simulated benchmark, Zenodo 20090854; F2MD/VEINS/SUMO, Luxembourg scenario). 14 of its 19 attack types are used "
+  "(no Sybil; the RandomSpeedOffset archive is excluded as mislabeled). Windows: 109,823 train / 29,547 validation / 68,971 test.")
 S += item("Baseline Model vs. Proposed Architecture/Modification:",
-  "<b>Baseline:</b> per-sender transformer (no neighbour information); also a no-spatial ablation. "
-  "<b>Proposed:</b> factorised temporal + spatial transformer in which each sender attends over its own history and over the other senders in the window.")
+  "<b>Baselines:</b> a speed-check rule; our first model (transformer on raw claims, no checks); the same model with neighbour attention switched off. "
+  "<b>Proposed (v2):</b> small transformer (144k parameters) with temporal and cross-sender (neighbour) attention. Inputs: 9 claim values + 10 plausibility checks "
+  "(kinematics, a road map learned from honest traffic, nearest other claim, exact self-repeat, copied trail, log movement). Training adds carefully injected lies "
+  "(offset, fake stop); optional receiver-side memory.")
 S += item("Evaluation Metrics (e.g., F1-Score, mAP, BLEU, AUC-ROC):")
 S += bullets(["<b>Precision:</b> of the senders we flag as malicious, the share that really are (few false alarms).",
               "<b>Recall:</b> of all malicious senders, the share we catch (few missed attackers).",
               "<b>F1-score:</b> balance of precision and recall (their harmonic mean); one-number summary of detection quality.",
+              "<b>Accuracy:</b> share of all windows (honest and malicious) classified correctly.",
               "<b>False-positive rate (FPR):</b> share of honest senders wrongly flagged as malicious.",
-              "<b>AUC-ROC:</b> how well the model ranks malicious senders above honest ones over all thresholds (1.0 perfect, 0.5 random).",
-              "<b>Detection latency:</b> seconds from a sender's first appearance to the first alarm raised on it.",
-              "<b>Recall/FPR by malicious-neighbour share:</b> checks the detector still works when many of a sender's neighbours are attackers."])
+              "<b>Detection latency:</b> seconds from an attacker's first appearance at a receiver to the first alarm on it.",
+              "<b>Colluder recall at matched 1% FPR:</b> how many colluding attackers are caught when false alarms are held at 1%."])
 
 S += [Paragraph("4. PROPOSED VALIDATION STRATEGY:", SEC)]
 S += item("(e.g., K-Fold Cross Validation, Statistical Significance Test):")
-S += bullets(["<b>Done:</b> train on the first hour, test on the later hour; receiver-disjoint validation/test blocks; threshold chosen on validation only; 3 seeds per model (mean and std). No formal significance test yet.",
-              "<b>Planned:</b> grouped 5-fold cross-validation by receiver vehicle (5-10 seeds); paired bootstrap 95% CIs on the F1 difference; Wilcoxon signed-rank test across folds/seeds and McNemar's test on paired decisions; "
-              "Holm-Bonferroni correction across attack types; colluding-attacker stress test; low-to-high density transfer."])
+S += bullets(["Train on the first simulated hour; test on the second hour, whose receivers are split into separate validation (30%) and test (70%) blocks; thresholds and memory decay chosen on validation only; 2 seeds per model.",
+              "Two label views: <b>message labels</b> (attacker counted only in windows where it sent a falsified message) and <b>vehicle labels</b> (every window of an attacker vehicle).",
+              "Paired bootstrap over receivers (95% CI) with Holm correction across attacks; results by malicious-neighbour share; collusion stress test with consistent lies (offset, fake stop, spoofed convoy, on-road lies)."])
 
 S += [Paragraph("5. EXPECTED AI / COMPUTATIONAL OUTCOME:", SEC)]
-S += bullets(["The neighbour-aware model is expected to beat the per-sender baseline by about 1 F1 point, mainly through recall. Preliminary (2 attacks, 3 seeds): F1 0.982 vs 0.973, recall 0.975 vs 0.959, precision 0.989 vs 0.987, FPR about 0.5% for both.",
-              "Faster alarms (preliminary mean latency 0.15 s vs 0.70 s) and recall near 0.97 even with over 50% malicious neighbours (0.971 vs 0.973 clean).",
-              "Some attacks may not benefit: ConstSpeed was slightly worse with neighbours (0.948 vs 0.960), so H0 should be rejected overall, not necessarily for every attack.",
-              "Small model (about 0.6 MB, about 10 min CPU training). Scope: simulated benchmark, independent attackers; no collusion or crash intent."])
+S += bullets(["<b>Results (14 attacks, 68,971 test windows, 2 seeds).</b> Message labels: v2 precision 98.65%, recall 97.12%, F1 97.88%, accuracy 98.69%, FPR 0.60%; with memory P 98.16%, R 97.78%, F1 97.97%, accuracy 98.74%. "
+              "Vehicle labels: v2 F1 97.01% (recall 95.41%); with memory F1 97.12%. First model F1 94.9% (vehicle labels); speed-check rule F1 78.9%.",
+              "<b>Neighbour attention:</b> +0.3 F1 points (95% CI about [0.2, 0.4]), significant on 8-10 of 14 attacks, FPR 0.90% to 0.60%, so H0 is rejected. "
+              "H1b is not supported: the gain shrinks and turns slightly negative when attackers are the majority of neighbours.",
+              "<b>Latency:</b> mean 0.9 s to first alarm (median 0); 96% of attacker-receiver pairs flagged. <b>Collusion:</b> v2 catches 50 m offsets (recall 0.83-0.86), fake stops (about 0.70) and unseen spoofed convoys (0.87-0.90), "
+              "where the first model caught at most 0.04; lies that follow the road map stay hard (0.23-0.48).",
+              "Reference: a 2025 IEEE T-ITS survey lists 97.37% for VeReMi (original 5-attack version); v2 + memory is above it on all four metrics with message labels, but this is not a like-for-like comparison. "
+              "Open: Sybil attacks, original VeReMi/NextGen check, dense traffic, a 3rd seed; on-road lies need an independent signal (signal strength, sensors, RSUs)."])
 
-SimpleDocTemplate("docs/research_methodology_blueprint.pdf", pagesize=A4, leftMargin=2.2*cm, rightMargin=2.2*cm, topMargin=1.1*cm, bottomMargin=1.0*cm,
+SimpleDocTemplate("docs/research_methodology_blueprint.pdf", pagesize=A4, leftMargin=2.2*cm, rightMargin=2.2*cm, topMargin=1.1*cm, bottomMargin=0.8*cm,
                   title="AI/ML Research Methodology Blueprint").build(S)

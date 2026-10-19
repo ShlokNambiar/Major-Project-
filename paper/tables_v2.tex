@@ -13,7 +13,7 @@ vehicle & No lie augm. & 98.75 & 95.68 & 97.19 & 98.25 & 0.56 \\
 vehicle & Ours + memory & 98.16 & 96.09 & 97.12 & 98.20 & -- \\
 vehicle & Speed check (rule) & 95.64 & 67.21 & 78.94 & 88.67 & 1.41 \\
 \bottomrule\end{tabular}}\end{table}
-\begin{table}[t]\centering\caption{Injected consistent lies (careful: acceleration consistent, GPS-like jitter), $m$ colluders per window, coordinated; colluder recall at a matched 1\% validation FPR, mean of 2 seeds. Training saw offset and stop lies only. Before the plausibility checks both models caught at most 4\%.}\label{tab:traj}\small
+\begin{table}[t]\centering\caption{Injected consistent lies (careful: acceleration consistent, GPS-like jitter), $m$ colluders per window, coordinated; colluder recall at a matched 1\% validation FPR, mean of 2 seeds. Training saw offset and stop lies only. Before the plausibility checks both models caught at most 4\% at these sizes. In the two on-road rows the last two columns are single runs (seed 0).}\label{tab:traj}\small
 \resizebox{\columnwidth}{!}{\begin{tabular}{lccc}\toprule
 Scenario & Ours & No nbr. attention & No lie augm. \\\midrule
 Offset 50 m, $m=1$ & 0.85 & 0.83 & 0.81 \\
