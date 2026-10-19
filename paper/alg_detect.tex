@@ -1,0 +1,21 @@
+\begin{algorithm}[t]
+\caption{Receiver-side detection and training}\label{alg:detect}
+\footnotesize
+\begin{algorithmic}[1]
+\Statex \textbf{Part 1: detection} (each receiver $r$, every 3\,s; $K{=}16$, $T{=}10$)
+\State $\mathcal{B}\gets$ BSMs heard in the last $T$ seconds, grouped by pseudonym
+\State $\mathcal{S}\gets$ the $K$ senders nearest to $r$ by \emph{claimed} position
+\State $W\gets$ $K\times T$ raw claims: position, speed, heading, accel., msgs/s
+\State $X\gets W$ plus checks: kinematics; road map; nearest other claim; exact repeat; copied trail; identity age, handover, lockstep
+\State $s\gets\sigma(\mathrm{Transformer}(X))\in[0,1]^K$ \Comment{one score per sender}
+\ForAll{sender $j\in\mathcal{S}$}
+  \State $s'_j\gets\max(s_j,\lambda\,s'_{j,\mathrm{prev}})$ \Comment{memory; reset after 30\,s silence}
+  \State \textbf{flag} $j$ if $s'_j>\tau$
+\EndFor
+\Statex \textbf{Part 2: training} (first simulated hour only)
+\State Road map $\gets$ 5\,m grid of vehicles' own positions, headings
+\State $\mathcal{D}\gets$ windows (lines 1--4) $+$ a copy of half of the windows with $\geq 2$ honest senders, 1--4 of them made careful liars (offset 20--300\,m or stop)
+\State Train 8 epochs: BCE (pos.\ weight 2), AdamW, one-cycle LR
+\State Pick $\tau$, $\lambda\in\{.9,.95,.97,.99\}$ by max.\ F1 on validation
+\end{algorithmic}
+\end{algorithm}

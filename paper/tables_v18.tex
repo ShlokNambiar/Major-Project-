@@ -1,27 +1,8 @@
-\begin{table}[t]\centering\caption{Extension to 18 of the 19 attack types (the 14 above plus four Sybil attacks), 88,695 test windows. Ours: mean score of three models; no-neighbour rows: mean of two models (seeds 0, 1); thresholds picked on validation; per-attack recall and F1 on message labels.}\label{tab:v18}\small
+\begin{table}[t]\centering\caption{Extension to 18 of the 19 attack types (the 14 above plus four Sybil attacks), 88,695 test windows. Ours: mean score of three models; no-neighbour rows: mean of two models (seeds 0, 1); thresholds picked on validation; per-attack F1 in Fig.~\ref{fig:attacks18}.}\label{tab:v18}\small
 \resizebox{\columnwidth}{!}{\begin{tabular}{lcccc}\toprule
 Overall & Precision & Recall & F1 & Accuracy \\\midrule
 Ours, message labels & 96.30 & 95.46 & 95.88 & 97.04 \\
 No nbr.\ attention, message & 96.28 & 92.69 & 94.45 & 96.07 \\
 Ours, vehicle labels & 96.33 & 94.44 & 95.38 & 96.66 \\
 No nbr.\ attention, vehicle & 96.31 & 91.69 & 93.94 & 95.68 \\
-\midrule Attack & Test slots & Recall & F1 & \\\midrule
-ConstPos & 6,179 & 1.000 & 0.988 & \\
-ConstPosOffset & 6,188 & 0.974 & 0.968 & \\
-RandomPos & 6,179 & 1.000 & 0.987 & \\
-RandomPosOffset & 6,189 & 0.988 & 0.981 & \\
-ConstSpeed & 6,158 & 0.991 & 0.982 & \\
-ConstSpeedOffset & 6,153 & 0.970 & 0.970 & \\
-RandomSpeed & 6,186 & 0.997 & 0.986 & \\
-EventualStop & 4,556 & 0.999 & 0.967 & \\
-Disruptive & 6,169 & 0.984 & 0.977 & \\
-DataReplay & 6,175 & 0.958 & 0.960 & \\
-DelayedMessages & 6,179 & 0.912 & 0.935 & \\
-DoS & 6,401 & 0.980 & 0.977 & \\
-DoSRandom & 6,402 & 1.000 & 0.988 & \\
-DoSDisruptive & 6,407 & 0.990 & 0.981 & \\
-GridSybil & 20,598 & 0.823 & 0.875 & \\
-DataReplaySybil & 6,174 & 0.914 & 0.920 & \\
-DoSRandomSybil & 12,017 & 0.997 & 0.992 & \\
-DoSDisruptiveSybil & 12,082 & 0.969 & 0.964 & \\
 \bottomrule\end{tabular}}\end{table}

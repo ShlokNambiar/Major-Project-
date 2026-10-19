@@ -1,0 +1,67 @@
+% Model architecture (nambd/model.py: Detector, Block, Attn; features: nambd/features.py).
+% TikZ body only; the integrator wraps it in a figure. Needs tikz libraries positioning, arrows.meta, fit.
+\begin{tikzpicture}[
+  x=1cm, y=1cm, >={Stealth[length=1.3mm]},
+  every node/.style={font=\scriptsize, inner sep=1.5pt},
+  op/.style={draw, rounded corners=1pt, fill=black!4, align=center, minimum height=6mm, text width=4.3cm},
+  sm/.style={draw, rounded corners=1pt, fill=black!4, align=center, minimum height=6mm},
+  add/.style={draw, circle, inner sep=0pt, minimum size=2.8mm, fill=white, font=\scriptsize},
+  arr/.style={->, thin}, res/.style={->, thin, archblue!70!black},
+  cell/.style={draw=black!45, line width=0.2pt}, note/.style={font=\scriptsize, black!65}]
+\definecolor{archblue}{HTML}{2A78D6}
+\def\cs{0.12}
+\def\mx{4.55}   % x of the main column
+\def\rx{6.95}   % x of the residual lane
+% ---------------- input window: K senders (rows) x T steps (columns) ----------------
+\begin{scope}[shift={(0.55,7.45)}]
+  \foreach \i in {0,...,5} \foreach \j in {0,...,7} \draw[cell, fill=white] (\j*\cs,-\i*\cs) rectangle ++(\cs,-\cs);
+  \node[anchor=south, inner sep=1pt] at (4*\cs,0) {$T{=}10$ steps};
+  \node[anchor=south, inner sep=1pt, rotate=90] at (-0.02,-3*\cs) {$K{=}16$};
+  \node[anchor=north, inner sep=1pt] at (4*\cs,-6*\cs) {senders $\times$ 22 features};
+  \coordinate (gin) at (8*\cs+0.04,-3*\cs);
+\end{scope}
+\node[sm, text width=4.3cm] (emb) at (\mx,7.09) {linear embedding $22\!\to\!d{=}64$\\$+$ learned time encoding (per step)};
+\draw[arr] (gin) -- (emb.west);
+% ---------------- pre-LN Transformer block (x2) ----------------
+\node[op, below=10mm of emb] (tmp) {LN $\to$ \textbf{temporal} self-attention\\(a sender over its own 10 steps)};
+\node[add, below=2mm of tmp] (a1) {$+$};
+\node[op, below=2mm of a1] (spa) {LN $\to$ \textbf{spatial} self-attention\\(across senders at each step)};
+\node[add, below=2mm of spa] (a2) {$+$};
+\node[op, below=2mm of a2] (ffn) {LN $\to$ feed-forward\\$64\!\to\!256\!\to\!64$, GELU};
+\node[add, below=2mm of ffn] (a3) {$+$};
+\draw[arr] (emb) -- (tmp); \draw[arr] (tmp) -- (a1); \draw[arr] (a1) -- (spa);
+\draw[arr] (spa) -- (a2); \draw[arr] (a2) -- (ffn); \draw[arr] (ffn) -- (a3);
+% residuals: branch off just above each sub-layer, rejoin at its sum
+\path (emb.south) -- (tmp.north) coordinate[pos=0.78] (r1);
+\path (a1.south) -- (spa.north) coordinate[pos=0.5] (r2);
+\path (a2.south) -- (ffn.north) coordinate[pos=0.5] (r3);
+\foreach \r/\ad in {r1/a1, r2/a2, r3/a3} {
+  \fill[archblue!70!black] (\r) circle (0.6pt);
+  \draw[res] (\r) -- (\rx,0 |- \r) |- (\ad.east);
+}
+\node[note, text=archblue!70!black, rotate=90, anchor=north, inner sep=1pt] at (\rx, 0 |- spa.center) {residual};
+% mini icons: which tokens each attention mixes (rows = senders, columns = steps)
+\begin{scope}[shift={(0.75,0)}]
+  \begin{scope}[shift={(0,0 |- tmp.center)}, yshift=2*\cs cm]
+    \foreach \i in {0,...,3} \foreach \j in {0,...,5} \draw[cell, fill=white] (\j*\cs,-\i*\cs) rectangle ++(\cs,-\cs);
+    \foreach \j in {0,...,5} \draw[cell, fill=archblue!50] (\j*\cs,-1*\cs) rectangle ++(\cs,-\cs);
+  \end{scope}
+  \begin{scope}[shift={(0,0 |- spa.center)}, yshift=2*\cs cm]
+    \foreach \i in {0,...,3} \foreach \j in {0,...,5} \draw[cell, fill=white] (\j*\cs,-\i*\cs) rectangle ++(\cs,-\cs);
+    \foreach \i in {0,...,3} \draw[cell, fill=archblue!50] (5*\cs,-\i*\cs) rectangle ++(\cs,-\cs);
+  \end{scope}
+\end{scope}
+\draw[black!40, thin] (0.75+6*\cs, 0 |- tmp.center) -- (tmp.west);
+\draw[black!40, thin] (0.75+6*\cs, 0 |- spa.center) -- (spa.west);
+% block frame
+\node[draw, dashed, rounded corners=2pt, black!60, inner sep=2pt,
+      fit={(0.08,0 |- r1) (tmp) (a3) (\rx+0.22,0 |- r1)}] (blk) {};
+\node[anchor=south west, inner sep=2.5pt] at (blk.south west) {\textbf{pre-LN block} $\times 2$};
+% ---------------- read-out ----------------
+\node[sm, text width=1.75cm, minimum height=8.6mm, below=4.5mm of blk.south west, anchor=north west] (last) {newest step\\$t{=}T$, $K{\times}64$};
+\node[sm, text width=1.75cm, minimum height=8.6mm, anchor=north east, fill=archblue!18] (out) at (blk.south east |- last.north) {misbehaviour\\score per sender};
+\path (last.east) -- (out.west) coordinate[midway] (hm);
+\node[sm, text width=2.6cm, minimum height=8.6mm, anchor=north] (head) at (hm |- last.north) {2-layer head\\LN, Lin, GELU, Lin};
+\draw[arr] (a3.south) -- (blk.south -| a3) -- ++(0,-0.2) -| (last.north);
+\draw[arr] (last) -- (head); \draw[arr] (head) -- (out);
+\end{tikzpicture}
