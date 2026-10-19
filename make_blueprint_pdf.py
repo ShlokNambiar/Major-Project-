@@ -8,9 +8,9 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Spacer, Table, Tabl
 INK = colors.HexColor("#111111")
 TITLE = ParagraphStyle("T", fontName="Helvetica-Bold", fontSize=15, alignment=1, spaceAfter=8, textColor=INK)
 HDR = ParagraphStyle("Hd", fontName="Helvetica", fontSize=10.5, leading=15, textColor=INK)
-SEC = ParagraphStyle("S", fontName="Helvetica-Bold", fontSize=11, spaceBefore=5, spaceAfter=1, textColor=INK)
-LBL = ParagraphStyle("L", fontName="Helvetica-Bold", fontSize=8.6, leading=10.7, leftIndent=10, textColor=INK)
-TXT = ParagraphStyle("X", fontName="Helvetica", fontSize=8.6, leading=10.7, leftIndent=20, spaceAfter=1.5, textColor=INK)
+SEC = ParagraphStyle("S", fontName="Helvetica-Bold", fontSize=11, spaceBefore=3, spaceAfter=1, textColor=INK)
+LBL = ParagraphStyle("L", fontName="Helvetica-Bold", fontSize=8.6, leading=10.4, leftIndent=10, textColor=INK)
+TXT = ParagraphStyle("X", fontName="Helvetica", fontSize=8.6, leading=10.4, leftIndent=20, spaceAfter=1.5, textColor=INK)
 BUL = ParagraphStyle("B", parent=TXT, leftIndent=30, bulletIndent=21)
 
 def item(label, text=None):
@@ -43,8 +43,8 @@ S += item("Alternative Hypothesis (H1):",
 
 S += [Paragraph("3. RESEARCH &amp; EXPERIMENTAL DESIGN:", SEC)]
 S += item("Dataset to be used (e.g., ImageNet, Kaggle, Custom collected):",
-  "VeReMi Extension (public simulated benchmark, Zenodo 20090854; F2MD/VEINS/SUMO, Luxembourg scenario). 14 of its 19 attack types are used "
-  "(no Sybil; the RandomSpeedOffset archive is excluded as mislabeled). Windows: 109,823 train / 29,547 validation / 68,971 test.")
+  "VeReMi Extension (public simulated benchmark, Zenodo 20090854; F2MD/VEINS/SUMO, Luxembourg scenario). Main study: 14 of its 19 attack types "
+  "(RandomSpeedOffset archive excluded as mislabeled); 109,823 train / 29,547 validation / 68,971 test windows. Extension: 18 attacks, adding the 4 Sybil attacks (88,695 test windows).")
 S += item("Baseline Model vs. Proposed Architecture/Modification:",
   "<b>Baselines:</b> a speed-check rule; our first model (transformer on raw claims, no checks); the same model with neighbour attention switched off. "
   "<b>Proposed (v2):</b> small transformer (144k parameters) with temporal and cross-sender (neighbour) attention. Inputs: 9 claim values + 10 plausibility checks "
@@ -72,8 +72,10 @@ S += bullets(["<b>Results (14 attacks, 68,971 test windows, 2 seeds).</b> Messag
               "H1b is not supported: the gain shrinks and turns slightly negative when attackers are the majority of neighbours.",
               "<b>Latency:</b> mean 0.9 s to first alarm (median 0); 96% of attacker-receiver pairs flagged. <b>Collusion:</b> v2 catches 50 m offsets (recall 0.83-0.86), fake stops (about 0.70) and unseen spoofed convoys (0.87-0.90), "
               "where the first model caught at most 0.04; lies that follow the road map stay hard (0.23-0.48).",
-              "Reference: a 2025 IEEE T-ITS survey lists 97.37% for VeReMi (original 5-attack version); v2 + memory is above it on all four metrics with message labels, but this is not a like-for-like comparison. "
-              "Open: Sybil attacks, original VeReMi/NextGen check, dense traffic, a 3rd seed; on-road lies need an independent signal (signal strength, sensors, RSUs)."])
+              "<b>Sybil extension (18 attacks, senders tracked by pseudonym, 3-model ensemble):</b> message labels P 96.30%, R 95.46%, F1 95.88%, accuracy 97.04%, FPR 2.07%; vehicle labels F1 95.38%. "
+              "Neighbour attention adds about +1.3 F1 here. Main miss: GridSybil ghosts (recall 0.82), which pass every content check.",
+              "Reference: a 2025 IEEE T-ITS survey lists 97.37% for VeReMi (original 5 attacks, no Sybil); on 14 attacks v2 + memory is above it on all four metrics with message labels, on 18 attacks all four are below it; not like-for-like. "
+              "Open: original VeReMi/NextGen check, dense traffic, a 3rd seed; on-road lies and GridSybil ghosts need an independent signal (signal strength, sensors, RSUs)."])
 
-SimpleDocTemplate("docs/research_methodology_blueprint.pdf", pagesize=A4, leftMargin=2.2*cm, rightMargin=2.2*cm, topMargin=1.1*cm, bottomMargin=0.8*cm,
+SimpleDocTemplate("docs/research_methodology_blueprint.pdf", pagesize=A4, leftMargin=2.2*cm, rightMargin=2.2*cm, topMargin=0.9*cm, bottomMargin=0.8*cm,
                   title="AI/ML Research Methodology Blueprint").build(S)

@@ -18,8 +18,11 @@ The road map is built only from receivers' own states in the training hour (a st
 import numpy as np
 
 FEAT_NAMES = ["relx", "rely", "spd", "cos", "sin", "dx", "dy", "valid", "rate", "acl", "dv_vs_acl", "disp_vs_spd",
-              "hed_vs_motion", "road", "road_dir", "nearest_other", "self_repeat", "other_trail", "log_disp"]
-GROUPS = {"base": list(range(9)), "kin": [9, 10, 11, 12], "map": [13, 14], "pair": [15], "repeat": [16, 17, 18]}
+              "hed_vs_motion", "road", "road_dir", "nearest_other", "self_repeat", "other_trail", "log_disp",
+              "id_age", "handover", "lockstep"]
+GROUPS = {"base": list(range(9)), "kin": [9, 10, 11, 12], "map": [13, 14], "pair": [15], "repeat": [16, 17, 18], "identity": [19, 20, 21]}
+# 19-21 exist only when the raw windows carry identity history (load_veremi_raw with pseudonym tracking):
+#  19 identity age / 30 s, 20 handover distance / 30 m, 21 lockstep: log10(spread of the offset to the most rigidly co-moving other sender + 1 cm), scaled
 
 
 class RoadMap:
@@ -52,7 +55,7 @@ class RoadMap:
         return road.astype(np.float32), align.astype(np.float32)
 
 
-def featurize(D, rmap, idx=None, comm_range=300.0, chunk=4000):
+def featurize(D, rmap, idx=None, comm_range=300.0, chunk=1000):
     """D: raw dict from load_veremi_raw (or a collusion-modified copy). Returns X (N,K,T,16) float32. idx: optional window subset."""
     idx = np.arange(len(D["M"])) if idx is None else np.asarray(idx)
     return np.concatenate([_featurize(D, rmap, idx[i:i + chunk], comm_range) for i in range(0, len(idx), chunk)])
@@ -78,10 +81,14 @@ def _featurize(D, rmap, idx, comm_range):
     near = np.nan_to_num(np.nanmin(np.where(np.isnan(dd), np.inf, dd), axis=2), posinf=50.0)
     near = np.minimum(near / 50.0, 1.0) * M
     rep, trail = _repeats(pos, M)
+    extra = []
+    if "age" in D:
+        a = D["age"][idx][:, :, None] * Mf; h = D["hand"][idx][:, :, None] * Mf
+        extra = [a, h, _lockstep(pos, M)[:, :, None] * Mf]
     ldisp = (np.log10(disp + 1e-3) + 3) / 3 * okf
     ex = M.any(-1, keepdims=True)                                                  # empty sender slots stay all-zero, as in load_veremi
     X = np.stack([rel[..., 0], rel[..., 1], sp / 30.0, np.cos(hd) * ex, np.sin(hd), d[..., 0] * 3, d[..., 1] * 3, Mf,
-                  np.log1p(cnt) / 3.0 * Mf, ac / 5.0, dv / 5.0, np.clip(dsp / 10.0, -5, 5), hm, road, align, near, rep, trail, ldisp], -1)
+                  np.log1p(cnt) / 3.0 * Mf, ac / 5.0, dv / 5.0, np.clip(dsp / 10.0, -5, 5), hm, road, align, near, rep, trail, ldisp] + [e * np.ones_like(Mf) for e in extra], -1)
     return X.astype(np.float32)
 
 
@@ -102,10 +109,23 @@ def _repeats(pos, M, tol=0.01, sub=500):
     return rep * M, trail * M
 
 
-def featurize_to_file(D, rmap, path, n_feat=19, start=0, out=None, chunk=4000):
+def featurize_to_file(D, rmap, path, n_feat=19, start=0, out=None, chunk=1000):
     """Write features of all windows of D into a float16 .npy memmap at rows [start, start + N) (created if `out` is None)."""
     N = len(D["M"]); K, T = D["M"].shape[1:]
     if out is None: out = np.lib.format.open_memmap(path, mode="w+", dtype=np.float16, shape=(N, K, T, n_feat))
     for i in range(0, N, chunk):
         out[start + i:start + min(i + chunk, N)] = _featurize(D, rmap, np.arange(i, min(i + chunk, N)), 300.0).astype(np.float16)
     out.flush(); return out
+
+
+def _lockstep(pos, M, min_common=5):
+    """(N,K): log10 of the smallest spread (std over time) of the offset to any other sender with >= min_common common steps, scaled to ~[0,1]."""
+    N, K, T, _ = pos.shape; out = np.ones((N, K))
+    both = M[:, :, None, :] & M[:, None, :, :]                                     # (N,K,K,T)
+    off = pos[:, :, None, :, :] - pos[:, None, :, :, :]                            # (N,K,K,T,2)
+    n = both.sum(-1); w = both[..., None]
+    mu = (off * w).sum(-2) / np.maximum(n, 1)[..., None]
+    sd = np.sqrt((((off - mu[..., None, :]) ** 2) * w).sum(-2).sum(-1) / np.maximum(n, 1))
+    sd[(n < min_common)] = np.inf; sd[:, np.arange(K), np.arange(K)] = np.inf
+    m = sd.min(-1)
+    return np.where(np.isfinite(m), (np.log10(np.minimum(m, 100.0) + 0.01) + 2) / 4, 1.0)

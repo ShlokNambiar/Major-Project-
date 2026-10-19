@@ -1,7 +1,7 @@
 # HANDOFF: context packet for the next agent
 
 Read this file first, then `README.md`. It states what the project is, what is done, what is open, the rules the
-human has set, and the traps that already cost time. Everything here was verified against the repo and result files on 2026-10-15.
+human has set, and the traps that already cost time. Everything here was verified against the repo and result files on 2026-10-15 (section 3d added and document status updated 2026-10-19).
 If anything here conflicts with a result file, **the result file wins**; fix this document.
 
 - Repo: `shloknambiar/major-project-`, working branch **`claude/ecstatic-pasteur-0piqiz`** (all work is on this branch; no PR has been opened; do not open one unless asked).
@@ -26,15 +26,16 @@ and (2) analysis of behaviour when neighbouring vehicles are themselves maliciou
 | 14-attack experiment, 2 models x 2 seeds, significance tests, rule baselines, latency | **Done**, final (`results/results_full14.json`) |
 | Earlier 8-attack run incl. restricted per-sender model, dense-traffic transfer | Done (`results/results_full.json`, `results/results_dense.json`) |
 | Paper tables + figure from results | Done (`paper/tables.tex`, `paper/fig_perattack.pdf`, via `make_tables.py`) |
-| Paper (`paper/main.tex` -> `paper/main.pdf`, IEEE conference, 6 pages, 18 verified references) | **First full draft 2026-10-16**; compile with `tectonic -X compile main.tex` in `paper/`; tables from `make_v2_tables.py` + `make_paper_assets.py`; author full names/supervisor still TODO |
-| Literature table (20 sources + ours) | Done, but mostly abstract-level reading (`docs/literature_review.docx`) |
-| Blueprint PDF, worksheet PDF, research-plan PDF | Done but **numbers are outdated** (see section 9) |
-| Progress deck (`presentation/progress_update.pptx`) | Done but **numbers are outdated**; human said "don't update the deck yet" |
-| Attacks covered | 14 of 19 |
+| Paper (`paper/main.tex` -> `paper/main.pdf`, IEEE conference, 6 pages, 18 verified references) | **6-page draft incl. the 18-attack Sybil extension** (section "Extension to Sybil attacks", `paper/tables_v18.tex`), fact-checked twice against `results/*.json`; compile with `tectonic -X compile main.tex` in `paper/`; tables from `make_v2_tables.py` + `make_paper_assets.py` + `make_v18_assets.py`; author full names/supervisor still TODO (marked TODO in `main.tex`) |
+| Literature table (20 sources + ours) | Done, current (final numbers incl. Sybil extension), but mostly abstract-level reading (`docs/literature_review.docx`) |
+| Blueprint PDF, worksheet PDF, research-plan PDF | **Done, current** (final numbers incl. Sybil extension; see section 9) |
+| Progress deck (`presentation/progress_update.pptx`) | **Done, current**: rebuilt, 10 slides, final 14-attack (v2) and 18-attack (v18) numbers |
+| Attacks covered | 18 of 19 (14 in v2; + 4 Sybil in v18; RandomSpeedOffset excluded, mislabeled archive) |
 | Other datasets (original VeReMi, NextGen, MixAll_0024) | **Not run** |
 | Malicious-neighbour / collusion / crash-intent study (injected, on saved test windows) | **Done** (`results/results_collusion.json`, section 3b) |
-| Sybil attacks | **Not run** |
+| Sybil attacks (GridSybil, DataReplaySybil, DoSRandomSybil, DoSDisruptiveSybil) | **Done** (v18, `results/results_v18_final.json`, section 3d); GridSybil recall 0.82 is the weak spot |
 | **v2 detector** (plausibility checks + road map + lie augmentation; message-level labels; receiver memory) | **Done** (`results/results_v2.json`, section 3c) |
+| **v18: 18-attack extension** (pseudonym tracking, 3 identity inputs, 3-model ensemble) | **Done** (`results/results_v18_final.json`, `paper/tables_v18.tex`, section 3d) |
 
 ## 3. Final results (14 attacks; use these numbers)
 
@@ -90,7 +91,31 @@ human's Downloads) lists for VeReMi in Table XIII (accuracy/precision/recall/F1 
 - Neighbour attention: +0.003 F1, significant (CIs exclude 0, both seeds/schemes), 8-10/14 attacks; FPR 0.60% vs 0.90%.
 - Trajectory: careful injected lies now caught (offset 50 m 0.84, fake stop 0.70, unseen convoy 0.88 at 1% FPR; before: <= 0.04). On-road map-aware lies remain hard
   (along-road offset 0.25, on-road convoy 0.42; `results/results_collusion_v2_onroad.json`). Do not claim the trajectory problem is fully solved.
-- Memory: this laptop has 15.7 GB RAM with ~2-3 GB free; Claude Code kills background jobs under memory pressure. `run_v2.py` is written to stay low (memmaps); run analysis jobs one at a time.
+- Memory: this laptop has 15.7 GB RAM with ~2-3 GB free; Claude Code stops background jobs under memory pressure (see section 10). `run_v2.py` is written to stay low (memmaps); run analysis jobs one at a time.
+
+## 3d. v18: Sybil extension (18 of 19 attacks; added 2026-10-19)
+
+Adds GridSybil (attack id 16), DataReplaySybil (17), DoSRandomSybil (18), DoSDisruptiveSybil (19) to the 14 attacks. 88,695 test windows (train 141,260 + 51,033 augmented).
+- **Pseudonyms**: `load_veremi_raw` now tracks senders by `senderPseudo` (all a receiver sees), so a Sybil attacker's ghost identities are separate senders;
+  labels and ground truth come from the true vehicle (`sender` field), never an input. Outside the Sybil runs each vehicle uses one pseudonym, so the 14-attack windows are identical.
+- Ghost messages differ from the true position in 74-100% of cases; honest messages never. Message labels: DoS*Sybil attackers always active (`FLOOD_EXTRA=18,19`); GridSybil 96% of attacker slots active.
+- New inputs (22 in total): identity age (following pseudonym changes), handover distance, lockstep (rigidity of the offset to the most co-moving other sender).
+- Final system = mean score of 3 models: `results/models_v18/full_{0,1}.pt` (144k parameters, seeds 0/1) + `results/models_v18big/full_0.pt` (d=96, 3 blocks, 16 epochs); threshold on validation.
+- Results (`results/results_v18_final.json`): **message labels P 96.30 R 95.46 F1 95.88 Acc 97.04 FPR 2.07%**; vehicle labels P 96.33 R 94.44 F1 95.38 Acc 96.66.
+  No-neighbour two-model ensemble F1 94.45 (message) / 93.94 (vehicle); compared with the two-model `full` ensemble (message F1 95.76), neighbour attention is worth **about +1.3 F1 with Sybil** (vs +0.3 on 14 attacks).
+  Compare two-model with two-model ensembles; do not set the 3-model final number against the 2-model no-neighbour ensemble.
+- Per attack (message labels, final ensemble recall): GridSybil 0.823 (largest attack, 20,598 message-label / 21,484 vehicle-label test slots), DataReplaySybil 0.914,
+  DoSDisruptiveSybil 0.969, DoSRandomSybil 0.997; the 14 original attacks mostly >= 0.96 (DelayedMessages 0.912). Single models are lower (GridSybil about 0.79-0.80; `results/results_v18.json`).
+- On the 14 original attack runs the 18-attack model scores message F1 about 97.5 with FPR 1.4% (14-attack model: 0.6%): it lowers its threshold to catch ghosts.
+- Tried, did not help: bigger model alone (message F1 95.19 vs 95.76 for the 2-seed small ensemble); receiver memory (ghosts change pseudonyms).
+  Missed GridSybil ghosts look honest on every content check (on road, consistent motion); no timing or formation cue separated them. This is a content limit; it needs an independent signal.
+- **97.37% reference, say it honestly**: the 14-attack system is above it (message labels + memory P 98.16 R 97.78 F1 97.97 Acc 98.74); on 18 attacks all four numbers are below it
+  (P 96.3 R 95.5 F1 95.9 Acc 97.0). Never present the 18-attack numbers as beating it. The 14-attack results in section 3c are unchanged.
+- Pipeline: `FEAT=data/cache_feat18b PREDS=results/preds_v18 MODELS=results/models_v18 python run_v2.py`; `PREDS=results/preds_v18 FLOOD_EXTRA=18,19 python label_active.py`;
+  `FEAT=data/cache_feat18b PREDS=results/preds_v18 MODELS=results/models_v18 OUT=results/results_v18.json python run_analysis_v2.py`; capacity model:
+  `MODEL_D=96 MODEL_L=3 EPOCHS=16 SEEDS=1 VARIANTS=full FEAT=data/cache_feat18b PREDS=results/preds_v18big MODELS=results/models_v18big EPOCH_CKPT=results/models_v18big/full_0.epoch.ckpt python run_v2.py`
+  (copy the `*_meta.npz` files from `results/preds_v18` first; the feature phase is skipped because the cache exists); then `python make_v18_assets.py` -> `results/results_v18_final.json` + `paper/tables_v18.tex`.
+  `run_v2.py` saves each model before scoring (a stopped run reloads it; set `MODEL_D`/`MODEL_L` again for the big model) and `EPOCH_CKPT` resumes training per epoch.
 
 ## 4. How the system works (so you can modify it)
 
@@ -136,11 +161,15 @@ make_tables.py             results JSON -> paper/tables.tex + paper/fig_perattac
 run_real.py, run_real_extra.py, save_model.py, run_experiments.py   older scripts (2-attack runs / simulator); superseded but kept
 scripts/download_veremi_ext.sh   resumable Zenodo downloader + nested unzip
 make_blueprint_pdf.py make_worksheet_pdf.py make_plan_pdf.py make_litreview_docx.py   generators for the documents in docs/
-presentation/build_deck.js progress_update.pptx   deck generator + deck (OUTDATED numbers)
+presentation/build_deck.js progress_update.pptx   deck generator + deck (current: 10 slides, final v2 + v18 numbers)
 docs/                      blueprint PDF, worksheet PDF, research plan PDF, literature review docx
 results/results_full14.json   FINAL numbers (14 attacks)   | results_full.json, results_dense.json: 8-attack run
 results/models14/ models/ models (small .pt files, committed)   | results/preds*/ (large, git-ignored; regenerate)
 results/full14_log.txt     training log of the final run
+run_v2.py label_active.py run_analysis_v2.py   v2 and v18 pipeline (env: FEAT, PREDS, MODELS, OUT, FLOOD_EXTRA, MODEL_D, MODEL_L, EPOCHS, EPOCH_CKPT, SEEDS, VARIANTS)
+make_v18_assets.py         3-model 18-attack ensemble -> results/results_v18_final.json + paper/tables_v18.tex
+results/models_v18/ models_v18big/   18-attack models (models_v18big/full_0.epoch.ckpt = per-epoch checkpoint)
+results/results_v18.json   per-model 18-attack analysis | results_v18_final.json: FINAL 18-attack numbers
 ```
 Git-ignored on purpose: `data/` (several GB), `papers/` (downloaded PDFs, copyright), `results/preds/`, `results/preds14/` (big), `*.npz`, `*.log` (except `results/log.txt`).
 
@@ -171,29 +200,37 @@ To reproduce it, set `EXCLUDE=RandomSpeed,ConstSpeedOffset,Disruptive,DoS` and `
 3. Some archives (DataReplay, DelayedMessages, EventualStop) contain extra tiny slices (`57600_61200`); the glob ignores them because tags are `50400_54000`, `54000_57600`, `25200_28800`.
 4. Slices run slightly past the hour (first-hour windows end at about 54166 s), so do not "validate" slices with strict end-time bounds; check the start time.
 5. The VeReMi Extension is called "VeReMi++" in some papers (PAMPOS); it has **19** attack types, not "about 20".
-6. Sybil attacks (DataReplaySybil, GridSybil, DoSRandomSybil, DoSDisruptiveSybil) forge sender identities; the filename-based labelling may not be valid for ghost ids. Not run. Inspect before using.
+6. Sybil attacks (DataReplaySybil, GridSybil, DoSRandomSybil, DoSDisruptiveSybil) forge sender identities. Handled in v18 (section 3d): senders are tracked by `senderPseudo`, labels come from the true vehicle (`sender`). Do not go back to vehicle-id tracking: it would hide the ghosts.
 7. NextGen (Zenodo 19665762, InTAS scenario) and original VeReMi (20081895, 3.6 GB) have **different formats/ids**; the loader will need changes. MixAll_0024 is 3.6 GB.
 
 ## 8. TODO (priority order)
 
-1. **Update the human-facing documents to the final numbers** (section 9). Highest value for the human's next presentation. The human said "don't update the deck yet": ask before touching the deck.
-2. **Write the paper**: IEEE-style `paper/main.tex` using `paper/tables.tex` and `paper/fig_perattack.pdf`. Sections: abstract, introduction, related work (from `docs/literature_review.docx`), method, setup, results, malicious-neighbour/robustness discussion, limitations, conclusion, references with full bibliographic details (several literature rows lack authors/venues; see section 10).
-3. **More evidence**: external check on VeReMi NextGen (needs loader work) and/or the original VeReMi; MixAll_0024; Sybil attacks; a 3rd seed; dense-traffic evaluation on more than 2 attacks.
-4. **Professor's point 2**: done as a stress test (section 3b) and largely addressed by v2 (section 3c); open: on-road consistent lies, Sybil. Open follow-ups: train with injected consistent lies (does `full` then learn real cross-checking?); add a sender-vs-sender
-   consistency input (e.g. claimed inter-vehicle distances vs radio range); re-select window senders after injection; Sybil attacks.
-5. **A published-detector comparison** on the same split (we only compare to our own models and the two VeReMi rule checks). Possible leads: PAMPOS, AttentionGuard (see `docs/literature_review.docx`), but they use different data/splits.
-6. Possible model improvement: add an explicit speed-vs-displacement consistency input (the rule check beats the learned models on some attacks); more epochs; unsupervised variant for unseen attacks.
-7. Housekeeping: pin library versions; add a tiny test for `load_veremi`; consider committing a small sample of preds.
+(Done 2026-10-19 and removed from this list: human-facing documents updated, paper written, v18 results brought into paper/deck/documents. Remaining human TODOs are in section 9.)
 
-## 9. Documents that are OUT OF DATE (do not present them as final)
+1. **More evidence**: external check on VeReMi NextGen (needs loader work) and/or the original VeReMi; MixAll_0024; a 3rd seed; dense-traffic evaluation for v2 (and on more than 2 attacks). (Sybil: done in v18, section 3d.)
+2. **Sybil follow-ups**: GridSybil recall 0.82 is the weakest attack; the missed ghosts pass every content check, so the next step is an independent signal (signal strength, sensors, RSUs), not more content features.
+   The 18-attack model raises FPR on the 14 original runs (1.4% vs 0.6%); choosing between the two models or a better-calibrated threshold is open.
+3. **Professor's point 2**: done as a stress test (section 3b) and largely addressed by v2 (section 3c) and v18 (section 3d, Sybil); open: on-road consistent lies and GridSybil ghosts that look honest. Open follow-ups: train with injected consistent lies (does `full` then learn real cross-checking?); add a sender-vs-sender
+   consistency input (e.g. claimed inter-vehicle distances vs radio range); re-select window senders after injection.
+4. **A published-detector comparison** on the same split (we only compare to our own models and the two VeReMi rule checks). Possible leads: PAMPOS, AttentionGuard (see `docs/literature_review.docx`), but they use different data/splits.
+5. Possible model improvement: add an explicit speed-vs-displacement consistency input (the rule check beats the learned models on some attacks); more epochs; unsupervised variant for unseen attacks.
+6. Housekeeping: pin library versions; add a tiny test for `load_veremi`; consider committing a small sample of preds.
 
-- `presentation/progress_update.pptx` (8 slides, built by `presentation/build_deck.js`): quotes the old 2-attack results (F1 0.982 vs 0.973, latency 0.15 s) and the retracted claim that neighbours raise F1 by 0.9 points.
-- `docs/research_methodology_blueprint.pdf`, `docs/research_methodology_worksheet.pdf`, `docs/research_plan.pdf`: same old numbers and "2 of about 20 attacks"; the validation section says "no significance test yet", which is no longer true.
+## 9. Human-facing documents (all current as of 2026-10-19)
+
+All human-facing documents carry the final numbers: 14-attack v2 (section 3c) and 18-attack v18 incl. the Sybil extension (section 3d).
+- `presentation/progress_update.pptx`: rebuilt, 10 slides, built by `presentation/build_deck.js`. pptxgenjs is installed outside the repo: run with `NODE_PATH` pointing to an npm install of `pptxgenjs@3.12.0`.
+- `docs/research_methodology_blueprint.pdf`, `docs/research_methodology_worksheet.pdf`: one page each, final numbers. `docs/research_plan.pdf`: final numbers.
   Regenerate with `make_blueprint_pdf.py`, `make_worksheet_pdf.py`, `make_plan_pdf.py` after editing the numbers/wording. Blueprint and worksheet are **one page each and the human pinned the header format**: one line
   `Student Name / Roll No: Shlok (UAI05BTA2317), Jiya (UAI05BTA2313), Caleb (UAI05BTA2319)`, then `Branch: BTech AI ML`, then the project title; do not list names twice. The blueprint follows the university template (5 numbered sections, with a one-line explanation under each evaluation metric).
-  The worksheet's question 2 ("Interest") is a **draft written by the AI**; the students must replace it with their real reasons.
-- `docs/literature_review.docx`: 20 sources + this work in the university's 8-column format. Reading depth is stated per row (2 full texts, about 14 abstract-only, 4 second-hand through the 2025 survey or search snippets). It still says "only 2 of 19 attacks" in the last row: update to 14.
-- The deck/blueprint line "neighbour context raises F1 0.973 to 0.982" is **misleading** (position features, not neighbours); the corrected statement is in section 3.
+- `docs/literature_review.docx`: 20 sources + this work in the university's 8-column format, final numbers. Reading depth is stated per row (2 full texts, about 14 abstract-only, 4 second-hand through the 2025 survey or search snippets).
+- `paper/main.tex` -> `paper/main.pdf`: 6 pages incl. the Sybil extension; fact-checked twice against `results/*.json`.
+
+Remaining human TODOs (only the students can do these):
+- Paper: full author names and the supervisor (marked TODO in `paper/main.tex`).
+- Worksheet question 2 ("Interest") is still a **draft written by the AI**, marked "[Draft - replace with your own words]"; the students must replace it with their real reasons.
+- Deck: open it in PowerPoint and check it visually; it could not be rendered here (section 10), only validated.
+- Old wording to watch for if older copies resurface: "neighbour context raises F1 0.973 to 0.982" is **misleading** (position features, not neighbours); the corrected statement is in section 3.
 
 ## 10. Rules set by the human and by the environment
 
@@ -218,6 +255,8 @@ To reproduce it, set `EXCLUDE=RandomSpeed,ConstSpeedOffset,Disruptive,DoS` and `
 **Environment traps (cost real time)**
 - Since 2026-10-15 the work also runs on Shlok's Windows laptop (Git Bash + PowerShell, Python 3.12, torch with CUDA on an RTX 3050 Ti, 20 cores); `data/` is downloaded there
   (14 x 1416 archives; no 0709 dense archives yet). The Linux-sandbox traps below may not apply there. Parallel per-archive downloads reach about 0.8 MB/s total.
+- **Claude Code stops background jobs under memory pressure** (this happened during the v18 runs). `run_v2.py` saves each model before scoring it, and `EPOCH_CKPT=<file>`
+  makes `fit()` resume at the next epoch, so a stopped run loses at most one epoch. The human allows restarting stopped runs without asking. Run one training/analysis job at a time.
 - **`pkill -f` / `pgrep -f` / `kill $(pgrep -f ...)` inside a Bash call kills your own shell** (the pattern matches the command line). Kill by explicit PID, or use `ps -eo pid,args | grep "[p]attern"`.
 - A built-in safety check **blocks any command that contains `rm`** (even inside scripts passed to `bash -c`); the whole command is refused. Avoid deletions; leave partial files and let `curl -C -` resume.
 - Foreground `sleep` is blocked: run long jobs with `setsid nohup python3 -u ... > log 2>&1 < /dev/null &`, then wait with a background `until ... ; do sleep 30; done` or the Monitor tool. A background command stops after its timeout (max 2 h); long waits need re-arming.
@@ -229,7 +268,7 @@ To reproduce it, set `EXCLUDE=RandomSpeed,ConstSpeedOffset,Disruptive,DoS` and `
 ## 11. Open questions for the human
 
 - The human decided (2026-10-15) to **finish the implementation before writing the paper**; scope chosen for that round: the collusion test only.
-- Is the next deadline the paper, the deck, or both? Should the deck be updated now (they previously said not yet)?
-- Do they want NextGen / original VeReMi added, or is 14 attacks on VeReMi Extension sufficient for the submission?
+- Is the next deadline the paper, the deck, or both? (Both are now current with the final numbers.)
+- Do they want NextGen / original VeReMi added, or is VeReMi Extension sufficient for the submission? It now covers 18 of 19 attacks (only RandomSpeedOffset excluded, mislabeled archive).
 - Roll-number mapping was confirmed: Shlok 2317, Jiya 2313, Caleb 2319.
 - The "Interest" answer in the worksheet needs the students' own words.

@@ -1,5 +1,5 @@
 // Builds presentation/progress_update.pptx (pptxgenjs). Run: cd presentation && npm i pptxgenjs && node build_deck.js
-// Numbers: final 14-attack results (see paper/main.tex and results/*.json). Do not edit numbers by hand without checking those.
+// Numbers: final 14-attack results (results/results_v2.json) plus the 18-attack Sybil extension (results/results_v18_final.json, paper/tables_v18.tex). Do not edit numbers by hand without checking those.
 const pptxgen = require("pptxgenjs");
 const pres = new pptxgen(); pres.layout = "LAYOUT_16x9";
 const NAVY="0B1F33", TEAL="1C7C7D", AMBER="F2A541", INK="1B2A38", MUTED="5B6B7A", PALE="EAF2F3", WHITE="FFFFFF", RED="C0392B";
@@ -19,7 +19,7 @@ const foot=(s,t)=>s.addText(t,{x:0.6,y:4.95,w:8.8,h:0.4,fontFace:BF,fontSize:10.
 // 1 title
 let s=pres.addSlide(); s.background={color:NAVY};
 s.addText("Neighbourhood-aware misbehaviour detection for V2X",{x:0.7,y:1.2,w:8.6,h:1.5,fontFace:HF,fontSize:38,bold:true,color:WHITE,margin:0,isTextBox:true});
-s.addText("Final results on 14 attack types",{x:0.7,y:2.9,w:8.6,h:0.5,fontFace:BF,fontSize:20,color:AMBER,margin:0,isTextBox:true});
+s.addText("Final results on 14 attack types, extended to 18 with Sybil",{x:0.7,y:2.9,w:8.6,h:0.5,fontFace:BF,fontSize:20,color:AMBER,margin:0,isTextBox:true});
 s.addText("Evaluated on the VeReMi Extension benchmark (simulated traffic, Zenodo 20090854)",{x:0.7,y:3.5,w:8.6,h:0.4,fontFace:BF,fontSize:15,color:"CADCFC",margin:0,isTextBox:true});
 s.addNotes("Final update. All numbers are on a simulated benchmark, not real-world traffic. Paper: paper/main.pdf (IEEE conference, 6 pages, 18 references).");
 
@@ -32,7 +32,7 @@ s.addNotes("Per-sender view vs neighbourhood-aware view; neighbour attention is 
 // 3 what was built
 s=pres.addSlide(); s.background={color:WHITE}; title(s,"What was built");
 const items=[
- ["Data","VeReMi Extension: 14 of 19 attack types (no Sybil; RandomSpeedOffset archive excluded as mislabeled)"],
+ ["Data","VeReMi Extension: 14 of 19 attack types for the main results; extended to 18 of 19 with the four Sybil attacks (RandomSpeedOffset archive excluded as mislabeled)"],
  ["Splits","Train 109,823 / validation 29,547 / test 68,971 windows; 2 seeds"],
  ["Final model (v2)","Transformer, 144k parameters, temporal + neighbour attention; 9 claim values + 10 plausibility checks per message"],
  ["Checks and training","Kinematics, road map learned from honest traffic, nearest other claim, self-repeat, copied trail; training adds injected lies (offset, fake stop); receiver-side memory"]];
@@ -98,11 +98,32 @@ s.addChart(pres.charts.BAR,[
   valGridLine:{color:"E3E8EC",size:0.5},catGridLine:{style:"none"},showLegend:true,legendPos:"b",legendFontSize:11,legendColor:INK});
 s.addText("Abdel Hakeem & Kim, IEEE T-ITS 26(8), 2025 (survey), Table XIII: 97.37% for VeReMi, one number for accuracy, precision, recall and F1.",{x:6.6,y:1.2,w:2.9,h:1.5,fontFace:BF,fontSize:12,color:INK,margin:0,valign:"top",isTextBox:true});
 s.addText("Not like-for-like: that figure is on the original VeReMi (5 attacks) and its source is not cited. Under vehicle labels our recall (96.09) and F1 (97.12) are below it.",{x:6.6,y:2.8,w:2.9,h:2.0,fontFace:BF,fontSize:12,italic:true,color:RED,margin:0,valign:"top",isTextBox:true});
-s.addNotes("Report the comparison with its caveat; do not claim we beat the reference outright.");
+s.addNotes("Report the comparison with its caveat; do not claim we beat the reference outright. This chart is the 14-attack system; on 18 attacks (with Sybil) all four numbers are below 97.37, see next slide.");
 
-// 9 next steps
+// 9 Sybil extension (18 attacks)
+s=pres.addSlide(); s.background={color:WHITE}; title(s,"Extension: 18 attacks, including Sybil");
+s.addTable([[H("18 attacks, 88,695 test windows"),H("Precision"),H("Recall"),H("F1"),H("Accuracy")],
+ [RL("Ours, message labels",1),R("96.30",1),R("95.46",1),R("95.88",1),R("97.04",1)],
+ [RL("Ours, vehicle labels"),R("96.33"),R("94.44"),R("95.38"),R("96.66")],
+ [RL("No neighbour attention, message"),R("96.28"),R("92.69"),R("94.45"),R("96.07")]],
+ {x:0.6,y:1.15,w:5.6,colW:[2.4,0.8,0.8,0.8,0.8],rowH:0.34,...TB});
+s.addTable([[H("Sybil attack"),H("Recall")],
+ [RL("GridSybil (largest, 20,598 slots)"),R("0.823",1)],
+ [RL("DataReplaySybil"),R("0.914")],
+ [RL("DoSDisruptiveSybil"),R("0.969")],
+ [RL("DoSRandomSybil"),R("0.997")]],
+ {x:6.45,y:1.15,w:3.0,colW:[2.2,0.8],rowH:0.34,...TB});
+s.addText([
+ {text:"Senders are tracked by pseudonym (what a receiver sees); three new inputs: identity age, handover distance, lockstep. Final = mean of 3 models. Message-label FPR 2.07%.",options:{breakLine:true}},
+ {text:"Neighbour attention helps more with Sybil: +1.4 F1 (vs +0.3 on 14 attacks).",options:{bold:true,color:TEAL,breakLine:true}},
+ {text:"Honest result: on 18 attacks all four numbers are below the 97.37% reference. Missed GridSybil ghosts look honest on every content check; they need an independent signal.",options:{bold:true,color:RED}}],
+ {x:0.6,y:3.0,w:8.85,h:1.9,fontFace:BF,fontSize:13,color:INK,margin:0,valign:"top",paraSpaceAfter:6,isTextBox:true});
+foot(s,"All values in % except recall per attack (message labels). Source: results/results_v18_final.json, paper/tables_v18.tex.");
+s.addNotes("The 14-attack results are unchanged. Sybil makes the task harder: fake identities are separate senders. On the 14 original attack runs this model's FPR is 1.6% (vs 0.6% for the 14-attack model) because it lowers its threshold to catch ghosts. A bigger model alone and receiver memory did not help.");
+
+// 10 next steps
 s=pres.addSlide(); s.background={color:NAVY};
 s.addText("Open items and next steps",{x:0.6,y:0.35,w:8.8,h:0.7,fontFace:HF,fontSize:30,bold:true,color:WHITE,margin:0,isTextBox:true});
-const left=["Sybil attacks (not covered yet)","Check on original VeReMi and VeReMi NextGen","Run v2 on dense traffic; add a 3rd seed","On-road consistent lies need an independent signal: signal strength, on-board sensors, roadside units","Paper done: paper/main.pdf, IEEE conference format, 6 pages, 18 references"];
+const left=["GridSybil ghosts that look honest on every content check (recall 0.823)","Check on original VeReMi and VeReMi NextGen","Run v2 on dense traffic; add a 3rd seed","On-road consistent lies need an independent signal: signal strength, on-board sensors, roadside units","Paper done: paper/main.pdf, IEEE conference format, 6 pages, 18 references"];
 s.addText(left.map((t,i)=>({text:t,options:{bullet:true,breakLine:i<left.length-1,paraSpaceAfter:10}})),{x:0.6,y:1.3,w:8.8,h:3.6,fontFace:BF,fontSize:18,color:WHITE,margin:0,valign:"top",isTextBox:true});
 pres.writeFile({fileName:"progress_update.pptx"}).then(()=>console.log("written"));

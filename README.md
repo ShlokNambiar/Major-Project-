@@ -107,7 +107,56 @@ Thresholds (and the memory decay) are always chosen on the validation block.
 and kinematically consistent cannot be told apart from the message content alone; that needs an independent signal (signal strength, sensors, RSUs).
 Neighbour attention adds little here (+0.01-0.02); the checks do the work.
 
+## v18: Sybil extension (18 of 19 attacks) (`results/results_v18_final.json`, `paper/tables_v18.tex`)
+Adds the four Sybil attacks: GridSybil (attack id 16), DataReplaySybil (17), DoSRandomSybil (18), DoSDisruptiveSybil (19). Together with the 14 above
+that is 18 of the 19 VeReMi Extension attack types (RandomSpeedOffset stays out: its archive is mislabeled). 88,695 test windows; training uses
+141,260 windows plus 51,033 augmented ones. VeReMi Extension is a simulated benchmark.
+
+Pipeline:
+```bash
+FEAT=data/cache_feat18b PREDS=results/preds_v18 MODELS=results/models_v18 python run_v2.py    # features, then 2 seeds x (full, nonbr)
+PREDS=results/preds_v18 FLOOD_EXTRA=18,19 python label_active.py                              # message labels; DoS*Sybil count as always active
+FEAT=data/cache_feat18b PREDS=results/preds_v18 MODELS=results/models_v18 OUT=results/results_v18.json python run_analysis_v2.py
+# capacity model (d=96, 3 blocks, 16 epochs); needs val_meta.npz / test_meta.npz (and the other preds_v18 meta files) copied into results/preds_v18big
+MODEL_D=96 MODEL_L=3 EPOCHS=16 SEEDS=1 VARIANTS=full FEAT=data/cache_feat18b PREDS=results/preds_v18big MODELS=results/models_v18big \
+  EPOCH_CKPT=results/models_v18big/full_0.epoch.ckpt python run_v2.py
+python make_v18_assets.py      # 3-model ensemble -> results/results_v18_final.json + paper/tables_v18.tex
+```
+`run_v2.py` saves each model before scoring it (a stopped run reloads it instead of retraining; set `MODEL_D`/`MODEL_L` again when it reloads the
+big model), and `EPOCH_CKPT` makes training resume at the next epoch after a stop.
+
+What changed for Sybil:
+- **Senders are tracked by pseudonym** (`senderPseudo`), which is all a receiver sees, so a Sybil attacker's fake identities are separate senders.
+  Labels still come from the true vehicle (`sender` field). Outside the Sybil runs each vehicle uses one pseudonym, so the 14-attack windows are identical.
+- Ghost messages differ from the true position in 74-100% of cases; honest messages never do. Message labels: DoS*Sybil attackers always count as
+  active; for GridSybil 96% of attacker slots are active.
+- Three new inputs (22 in total): **identity age** (following pseudonym changes), **handover distance** (how far a new pseudonym starts from one that just went silent),
+  and **lockstep** (how rigid the offset is to the sender that moves most closely with it).
+- Final system = mean score of 3 models: two 144k-parameter models (seeds 0 and 1) and one wider/deeper model (d=96, 3 blocks, 16 epochs); threshold picked on validation.
+
+| 18 attacks, 3-model ensemble | Labels | Precision | Recall | F1 | Accuracy | FPR |
+|---|---|---|---|---|---|---|
+| Neighbourhood-aware | message | 96.30 | 95.46 | 95.88 | 97.04 | 2.07% |
+| No neighbour attention (2-model ensemble) | message | 96.28 | 92.69 | 94.45 | 96.07 | 2.02% |
+| Neighbourhood-aware | vehicle | 96.33 | 94.44 | 95.38 | 96.66 | 2.07% |
+| No neighbour attention (2-model ensemble) | vehicle | 96.31 | 91.69 | 93.94 | 95.68 | 2.02% |
+
+- **Neighbour attention matters more with Sybil**: +1.4 F1 (message labels; +1.4 vehicle) vs +0.3 on the 14 attacks.
+- Per-attack recall (message labels, final ensemble): GridSybil 0.823 (the largest attack: 20,598 message-label test slots, 21,484 vehicle-label),
+  DataReplaySybil 0.914, DoSDisruptiveSybil 0.969, DoSRandomSybil 0.997. The 14 original attacks are mostly at or above 0.96 (DelayedMessages 0.912, DataReplay 0.958).
+  Single models are lower on Sybil (GridSybil about 0.79-0.80, DataReplaySybil about 0.89, DoSDisruptiveSybil about 0.95; `results/results_v18.json`).
+- On the 14 original attack runs, the 18-attack model scores message F1 about 97.3 with FPR 1.6% (vs 0.6% for the 14-attack model): it lowers its
+  threshold to catch ghosts, which costs false alarms.
+- Tried and did not help: a bigger model alone (message F1 95.19 vs 95.76 for the 2-seed small ensemble); receiver memory (ghosts change pseudonyms, so
+  per-sender memory has little to hold on to).
+- **Content limit**: the GridSybil ghosts that are missed look honest on every content check (on the road, consistent motion), and no timing or formation
+  cue separated them. Catching them needs an independent signal (signal strength, sensors, RSUs), as for the on-road lies in v2.
+- **Against the 97.37% survey reference** (original VeReMi, 5 attacks, no Sybil): the 14-attack system is above it (message labels + memory: P 98.16 R 97.78
+  F1 97.97 Acc 98.74). On 18 attacks with Sybil all four numbers are below it (P 96.3, R 95.5, F1 95.9, Acc 97.0). Neither is a like-for-like comparison.
+- The 14-attack results in the v2 section are unchanged (`results/results_v2.json`).
+
 ## Limitations
-Simulated benchmark; 14 of 19 attack types (the four Sybil attacks are not run, and the RandomSpeedOffset archive is mislabeled and excluded);
-2 seeds; on-road, kinematically consistent lies are still mostly missed (v2 section); the 97.37% reference is from a different dataset; dense-traffic transfer on 2 attacks only; no VeReMi NextGen / original VeReMi / MixAll evaluation;
-no comparison against published learned detectors. `results/preds*/` (large per-window predictions) are git-ignored; rerun `run_full.py` to regenerate.
+Simulated benchmark; 18 of 19 attack types (the RandomSpeedOffset archive is mislabeled and excluded; the four Sybil attacks are covered only in the v18 section,
+where GridSybil recall is 0.82 and all four headline numbers are below the 97.37% reference);
+2 seeds (the 18-attack system is one 3-model ensemble); on-road, kinematically consistent lies are still mostly missed (v2 section); the 97.37% reference is from a different dataset; dense-traffic transfer on 2 attacks only; no VeReMi NextGen / original VeReMi / MixAll evaluation;
+no comparison against published learned detectors. `results/preds*/` (large per-window predictions) are git-ignored; rerun `run_full.py` (14-attack) or `run_v2.py` (v2, v18) to regenerate.

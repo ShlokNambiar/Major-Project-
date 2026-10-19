@@ -17,7 +17,8 @@ runs = sorted(os.path.basename(f)[:-4] for f in glob.glob(f"{P}/*_[0-9].npz") if
 models = {}
 for r in runs:
     zr = np.load(f"{P}/{r}.npz"); cols = zr["cols"]; mode = r.split("-")[0].rsplit("_", 1)[0]
-    m = Detector(fin=len(cols), spatial=MODES[mode]["spatial"]); m.load_state_dict(torch.load(f"{MD}/{r}.pt", weights_only=True))
+    sd = torch.load(f"{MD}/{r}.pt", weights_only=True)                 # width/depth read from the checkpoint
+    m = Detector(fin=len(cols), spatial=MODES[mode]["spatial"], d=sd["inp.weight"].shape[0], layers=len({k.split(".")[1] for k in sd if k.startswith("blocks.")})); m.load_state_dict(sd)
     models[r] = (m.to(dev).eval(), cols, float(zr["thr"]))
 
 

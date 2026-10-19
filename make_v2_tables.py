@@ -1,12 +1,14 @@
 """results/results_v2.json + results/results_collusion_v2.json (+ _onroad) -> paper/tables_v2.tex"""
 import json, os, numpy as np
-R = json.load(open("results/results_v2.json")); C = json.load(open("results/results_collusion_v2.json"))
-O = json.load(open("results/results_collusion_v2_onroad.json")) if os.path.exists("results/results_collusion_v2_onroad.json") else {}
+TAG = os.environ.get("TAG", "v2")                                   # v2: 14 attacks, v18: 18 attacks
+R = json.load(open(f"results/results_{TAG}.json")); C = json.load(open(f"results/results_collusion_{TAG}.json"))
+OF = f"results/results_collusion_{TAG}_onroad.json"; O = json.load(open(OF)) if os.path.exists(OF) else {}
+NATT = len(json.load(open(f"results/preds_{TAG}/attack_names.json"))); NTW = R["setup"]["test_windows"]
 nm = {"full": "Ours", "nonbr": "No nbr. attention", "full-noaug": "No lie augm."}
 def ms(m, sch, k, mem=False):
     v = [(R["runs"][f"{m}_{s}"][sch]["memory"]["test"] if mem else R["runs"][f"{m}_{s}"][sch]["test"])[k] for s in (0, 1)]
     return "%.2f" % (100 * np.mean(v))
-L = ["\\begin{table}[t]\\centering\\caption{VeReMi Extension, 14 attack types, 68,971 test windows, mean of 2 seeds (\\%). \\emph{Message} labels count an attacker as positive only in windows where it sent a falsified message (ground truth); \\emph{vehicle} labels count every window of an attacker vehicle. Thresholds and memory decay are picked on validation. Reference: 97.37\\% reported for VeReMi (original, 5 attacks) in the survey of Abdel Hakeem and Kim (2025).}\\label{tab:v2}\\small",
+L = ["\\begin{table}[t]\\centering\\caption{VeReMi Extension, %d attack types, %s test windows, mean of 2 seeds (\\%). \\emph{Message} labels count an attacker as positive only in windows where it sent a falsified message (ground truth); \\emph{vehicle} labels count every window of an attacker vehicle. Thresholds and memory decay are picked on validation. Reference: 97.37\\% reported for VeReMi (original, 5 attacks) in the survey of Abdel Hakeem and Kim (2025).}\\label{tab:v2}\\small".replace("%d attack types, %s test", f"{NATT} attack types, {NTW:,} test"),
      "\\resizebox{\\columnwidth}{!}{\\begin{tabular}{llccccc}\\toprule", "Labels & Model & Precision & Recall & F1 & Accuracy & FPR \\\\\\midrule"]
 for sch in ("message", "vehicle"):
     for m in ("full", "nonbr", "full-noaug"):

@@ -19,7 +19,7 @@ def all_dirs(tag):
                    if tag in os.path.dirname(p) and not any(x and x in p for x in EXCLUDE)})
 
 
-def cache_path(d): return os.path.join(CACHE, re.sub(r"[^A-Za-z0-9_]+", "_", d) + f"_{MAXR}.pkl")
+def cache_path(d, tag="_p2"): return os.path.join(CACHE, re.sub(r"[^A-Za-z0-9_]+", "_", d) + f"_{MAXR}{tag}.pkl")   # _p: tracked by pseudonym
 
 
 def build_cache(args):
@@ -42,22 +42,23 @@ def cat(parts):
 def sub(D, sl): return {k: v[sl] for k, v in D.items()}
 
 
-FEAT = "data/cache_feat"
+FEAT = os.environ.get("FEAT", "data/cache_feat")
 
 
 def build_features(log):
     """Phase 1 (once): raw windows -> float16 feature files in FEAT, freeing raw arrays as soon as they are used, so peak RAM stays low."""
-    from nambd.features import RoadMap, featurize_to_file, FEAT_NAMES
+    from nambd.features import RoadMap, featurize_to_file, featurize
     from nambd.collusion import augment
-    nf = len(FEAT_NAMES)
+    nf = None
     tr_dirs, late_dirs = all_dirs("50400_54000"), all_dirs("54000_57600")
     log("train subsets", len(tr_dirs), "late", len(late_dirs))
-    with ProcessPoolExecutor(max_workers=min(4, os.cpu_count())) as ex:
+    with ProcessPoolExecutor(max_workers=int(os.environ.get("WORKERS", 4))) as ex:
         list(ex.map(build_cache, [(d, 50400, 50700, True) for d in tr_dirs] + [(d, 54000, 54300, False) for d in late_dirs]))
     trp = [p for p in (load_one(d) for d in tr_dirs) if p is not None]
     rmap = RoadMap(np.concatenate([p.pop("own") for p in trp])); log("road map", rmap.nx, "x", rmap.ny, "cells")
     pickle.dump(rmap, open(f"{PREDS}/roadmap.pkl", "wb"), protocol=4)
     tr = cat(trp); del trp
+    nf = featurize(tr, rmap, idx=[0]).shape[-1]; log("features per sender and step", nf)
     ntr = len(tr["y"])
     for sd in range(SEEDS):                                         # train rows followed by this seed's augmented rows, one file per seed
         aug = augment(tr, np.random.default_rng(100 + sd), frac=AUGF)
@@ -71,15 +72,15 @@ def build_features(log):
         p = load_one(d)
         if p is None: log("SKIP", d); continue
         p.pop("own", None); p["grp"] = np.full(len(p["te"]), g, np.int32)
-        nm = re.search(r"([A-Za-z]+)_1416", d).group(1)
+        nm = re.search(r"([A-Za-z]+)_1416", d.replace("\\", "/")).group(1)
         for a in np.unique(p["y"][p["y"] > 0]): names[int(a)] = nm
         c = int(0.3 * len(p["te"])); va_p.append(sub(p, slice(None, c))); te_p.append(sub(p, slice(c, None)))
     va = cat(va_p); del va_p
     featurize_to_file(va, rmap, f"{FEAT}/val.npy", nf); np.savez(f"{PREDS}/val_meta.npz", y=va["y"], M=va["M"]); del va
     te = cat(te_p); del te_p
     featurize_to_file(te, rmap, f"{FEAT}/test.npy", nf)
-    np.savez(f"{PREDS}/test_meta.npz", y=te["y"], rid=te["rid"], te=te["te"], sid=te["sid"], grp=te["grp"], M=te["M"])
-    pickle.dump({k: te[k] for k in ("pos", "spd", "hed", "acl", "cnt", "M", "y", "ctr")}, open(f"{PREDS}/test_raw.pkl", "wb"), protocol=4)
+    np.savez(f"{PREDS}/test_meta.npz", y=te["y"], rid=te["rid"], te=te["te"], sid=te["sid"], veh=te["veh"], grp=te["grp"], M=te["M"])
+    pickle.dump({k: te[k] for k in ("pos", "spd", "hed", "acl", "cnt", "M", "y", "ctr", "age", "hand") if k in te}, open(f"{PREDS}/test_raw.pkl", "wb"), protocol=4)
     json.dump(names, open(f"{PREDS}/attack_names.json", "w")); log("features written", FEAT)
 
 
@@ -104,11 +105,17 @@ if __name__ == "__main__":
             cols = sorted(set(sum((GROUPS[g] for g in groups), [])) | set(GROUPS["base"]))
             allc = len(cols) == Xtr.shape[-1]; pick = (lambda X: X) if allc else (lambda X: X[..., cols])
             n = ntr if noaug else len(ytr)
-            m = fit(mode, dict(X=pick(Xtr[:n]), M=Mtr[:n], y=ytr[:n]), epochs=EPOCHS, seed=sd, log=log, device=dev)
+            mp = f"{MD}/{v}_{sd}.pt"
+            if os.path.exists(mp):                                   # trained earlier but not yet scored: reuse, do not retrain
+                from nambd.model import Detector; from nambd.train import MODES as MC
+                m = Detector(fin=len(cols), spatial=MC[mode]["spatial"], d=int(os.environ.get("MODEL_D", 64)), layers=int(os.environ.get("MODEL_L", 2))); m.load_state_dict(torch.load(mp, weights_only=True)); m = m.to(dev); log("loaded", mp)
+            else:
+                m = fit(mode, dict(X=pick(Xtr[:n]), M=Mtr[:n], y=ytr[:n]), epochs=EPOCHS, seed=sd, log=log, device=dev)
+                torch.save(m.state_dict(), mp); log("checkpoint", mp)     # save before scoring, so a stopped run keeps the model
             sv, yv = scores(m, dict(X=pick(Xva), M=va["M"], y=va["y"]), mode); thr = float(best_thr(sv, yv, fine=True))
             st, _ = scores(m, dict(X=pick(Xte), M=te["M"], y=te["y"]), mode)
             Sfull = np.full(te["y"].shape, np.nan, np.float32); Sfull[te["y"] >= 0] = st
-            np.savez_compressed(f, thr=thr, test=Sfull, cols=np.array(cols)); torch.save(m.state_dict(), f"{MD}/{v}_{sd}.pt")
+            np.savez_compressed(f, thr=thr, test=Sfull, cols=np.array(cols))
             yy = te["y"][te["y"] >= 0] > 0; ff = st > thr; tp = (ff & yy).sum(); fp = (ff & ~yy).sum(); fn = (~ff & yy).sum()
             log(f"saved {v}_{sd} thr {thr:.2f}  P {tp / (tp + fp):.4f} R {tp / (tp + fn):.4f} F1 {2 * tp / (2 * tp + fp + fn):.4f} Acc {(ff == yy).mean():.4f}")
             del m; torch.cuda.empty_cache()

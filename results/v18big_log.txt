@@ -1,0 +1,27 @@
+[   386s]   [full] epoch 1/16 loss 0.2955
+[   703s]   [full] epoch 2/16 loss 0.2113
+[  1024s]   [full] epoch 3/16 loss 0.1957
+[  1380s]   [full] epoch 4/16 loss 0.1885
+[  1739s]   [full] epoch 5/16 loss 0.1824
+[  2096s]   [full] epoch 6/16 loss 0.1740
+[   323s]   [full] epoch 1/16 loss 0.2955
+[   689s]   [full] epoch 2/16 loss 0.2113
+[  1062s]   [full] epoch 3/16 loss 0.1957
+[  1424s]   [full] epoch 4/16 loss 0.1885
+[  1675s]   [full] epoch 5/16 loss 0.1824
+[  1986s]   [full] epoch 6/16 loss 0.1740
+[  2362s]   [full] epoch 7/16 loss 0.1663
+[  2738s]   [full] epoch 8/16 loss 0.1587
+[ 11412s]   [full] epoch 9/16 loss 0.1509
+[    32s]   [full] resumed at epoch 10/16
+[   171s]   [full] epoch 10/16 loss 0.1430
+[   325s]   [full] epoch 11/16 loss 0.1354
+[   480s]   [full] epoch 12/16 loss 0.1272
+[   657s]   [full] epoch 13/16 loss 0.1198
+[   886s]   [full] epoch 14/16 loss 0.1124
+[  1119s]   [full] epoch 15/16 loss 0.1074
+[  1353s]   [full] epoch 16/16 loss 0.1051
+[  1353s] checkpoint results/models_v18big/full_0.pt
+[  1413s] saved full_0 thr 0.84  P 0.9572 R 0.9373 F1 0.9471 Acc 0.9618
+[  1413s] done
+EXIT 0

@@ -1,8 +1,8 @@
 """Paper assets for the v2 models: per-attack table and the attacker-share analysis (professor's point 2) on v2 predictions.
 -> results/results_v2_share.json, paper/tables_paper.tex, paper/fig_share_v2.pdf"""
-import json, numpy as np
+import json, os, numpy as np
 import matplotlib; matplotlib.use("Agg"); import matplotlib.pyplot as plt
-P = "results/preds_v2"; R = json.load(open("results/results_v2.json"))
+TAG = os.environ.get("TAG", "v2"); P = f"results/preds_{TAG}"; R = json.load(open(f"results/results_{TAG}.json"))
 z = np.load(f"{P}/test_meta.npz"); y = z["y"].copy(); act = np.load(f"{P}/test_active.npz")["active"]
 y[(y > 0) & ~act] = -1                                                      # message labels
 names = {int(k): v for k, v in json.load(open(f"{P}/attack_names.json")).items()}
@@ -23,7 +23,7 @@ for a in sorted(names):                                                     # wi
     out["within_attack_gain"][names[a]] = g
 G = np.array([[np.nan if v is None else v for v in g] for g in out["within_attack_gain"].values()])
 out["mean_within_attack_gain"] = [float(x) for x in np.nanmean(G, 0)]; out["n_attacks_in_bin"] = [int(x) for x in (~np.isnan(G)).sum(0)]
-json.dump(out, open("results/results_v2_share.json", "w"), indent=1)
+json.dump(out, open(f"results/results_{TAG}_share.json", "w"), indent=1)
 avg = lambda m, i, k: np.mean([out["overall"][f"{m}_{s}"][i][k] for s in (0, 1)])
 print("share bins", out["n_windows"]); print("full recall", [round(avg("full", i, "recall"), 4) for i in range(4)]); print("nonbr recall", [round(avg("nonbr", i, "recall"), 4) for i in range(4)])
 print("within-attack gain", [round(x, 4) for x in out["mean_within_attack_gain"]], out["n_attacks_in_bin"])
@@ -46,7 +46,7 @@ L.append("\\bottomrule\\end{tabular}}\\end{table}")
 open("paper/tables_paper.tex", "w").write("\n".join(L))
 
 # figure: colluder recall vs offset size, first model (no checks) vs v2, matched 1% FPR, 4 coordinated colluders
-C1 = json.load(open("results/results_collusion.json")); C2 = json.load(open("results/results_collusion_v2.json"))
+C1 = json.load(open("results/results_collusion.json")); C2 = json.load(open(f"results/results_collusion_{TAG}.json"))
 def curve(C, mode):
     d = C["magnitude"]["offset_coordinated"]; xs = sorted(d, key=float)
     return [float(x) for x in xs], [np.mean([d[x][r]["colluder_recall_fpr1"] for r in d[x] if r.rsplit("_", 1)[0] == mode]) for x in xs]

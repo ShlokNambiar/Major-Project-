@@ -112,7 +112,16 @@ def load_veremi_raw(trace_dir, T=10, K=16, stride=3, max_receivers=None, with_ow
     features can be recomputed after changing them (nambd/features.py, nambd/collusion.py):
       pos (N,K,T,2) absolute claimed position (m), spd (N,K,T) m/s, hed (N,K,T) rad, acl (N,K,T) claimed acceleration along
       the claimed heading (m/s^2), cnt (N,K,T) messages heard from the sender in that second, M valid, ctr (N,2) receiver
-      position at the window end, own (list of (x, y, heading) receiver states, used only to build the road map)."""
+      position at the window end, own (list of (x, y, heading) receiver states, used only to build the road map).
+    Senders are tracked by their pseudonym (`senderPseudo`), which is all a real receiver sees: a Sybil attacker's fake identities
+    become separate senders. sid = pseudonym, veh = the vehicle behind it (labels and ground truth only, never an input).
+    Outside the Sybil attacks every vehicle uses one pseudonym, so windows are the same as when tracking by vehicle id.
+    Identity history (what the receiver itself has heard, all pseudonyms, not only the K selected):
+      age (N,K): seconds since the receiver first heard this identity, following pseudonym changes (a new pseudonym within 5 m of
+        one that went silent in the same or the previous 2 s continues its chain), capped at 30, / 30
+      hand (N,K): for a pseudonym first heard inside the window, distance from its first claimed position to the last claimed
+        position of the nearest pseudonym that went silent in the same or the previous 2 s (an honest pseudonym change), capped at 30 m, / 30;
+        1 when there is none or the pseudonym is older than the window."""
     gt = {}
     for fp in glob.glob(os.path.join(trace_dir, "traceJSON-*.json")):
         p = os.path.basename(fp).split("-"); gt[int(p[1])] = int(p[3][1:])
@@ -123,10 +132,10 @@ def load_veremi_raw(trace_dir, T=10, K=16, stride=3, max_receivers=None, with_ow
         files = [files[i] for i in np.linspace(0, len(files) - 1, max_receivers).astype(int)]
     keep = set(files)
     if not with_own: own_files = files
-    out = {k: [] for k in ("pos", "spd", "hed", "acl", "cnt", "M", "y", "sid", "te", "rid", "ctr")}
+    out = {k: [] for k in ("pos", "spd", "hed", "acl", "cnt", "M", "y", "sid", "te", "rid", "ctr", "veh", "age", "hand")}
     for fp in own_files:
         rid = int(os.path.basename(fp).split('-')[1])
-        own, bsm, cnt = {}, {}, {}
+        own, bsm, cnt, veh = {}, {}, {}, {}
         with open(fp) as f:
             for line in f:
                 if fp not in keep and not line.startswith('{"type":2'): continue
@@ -135,25 +144,40 @@ def load_veremi_raw(trace_dir, T=10, K=16, stride=3, max_receivers=None, with_ow
                     own[t] = np.array(r["pos"][:2])
                     if with_own: own_all.append((r["pos"][0], r["pos"][1], np.arctan2(r["hed"][1], r["hed"][0]), np.hypot(*r["spd"][:2])))
                 elif fp in keep:
-                    cnt[(t, r["sender"])] = cnt.get((t, r["sender"]), 0) + 1
+                    ps = r["senderPseudo"]; veh[ps] = r["sender"]
+                    cnt[(t, ps)] = cnt.get((t, ps), 0) + 1
                     h = np.array(r["hed"][:2]); h = h / max(np.linalg.norm(h), 1e-9)
-                    bsm.setdefault(t, {})[r["sender"]] = (np.array(r["pos"][:2]), float(np.linalg.norm(r["spd"][:2])),
+                    bsm.setdefault(t, {})[ps] = (np.array(r["pos"][:2]), float(np.linalg.norm(r["spd"][:2])),
                                                            float(np.arctan2(h[1], h[0])), float(np.dot(r["acl"][:2], h)))
         if fp not in keep or not own:
             continue
+        first, last = {}, {}
+        for t in sorted(bsm):
+            for q in bsm[t]: first.setdefault(q, t); last[q] = t
+        gone = {}
+        for q, t in last.items(): gone.setdefault(t, []).append(q)
+        hand_d, chain = {}, {}                             # handover distance and start of the linked identity chain
+        for q in sorted(first, key=first.get):
+            t0 = first[q]; p0 = bsm[t0][q][0]
+            cand = [(np.linalg.norm(bsm[tq][o][0] - p0), o) for tq in (t0, t0 - 1, t0 - 2) for o in gone.get(tq, []) if o != q and first[o] < t0]
+            d, o = min(cand) if cand else (np.inf, None)
+            hand_d[q] = d; chain[q] = chain[o] if (o is not None and d < 5.0) else t0
         for te in range(min(own) + T - 1, max(own) + 1, stride):
             if te not in bsm or any(t not in own for t in range(te - T + 1, te + 1)):
                 continue
             ctr = own[te]
             senders = sorted(bsm[te], key=lambda s: np.linalg.norm(bsm[te][s][0] - ctr))[:K]
             pos = np.zeros((K, T, 2)); sp = np.zeros((K, T)); hd = np.zeros((K, T)); ac = np.zeros((K, T)); cn = np.zeros((K, T))
-            ms = np.zeros((K, T), bool); ys = -np.ones(K, np.int64); sid = -np.ones(K, np.int64)
+            ms = np.zeros((K, T), bool); ys = -np.ones(K, np.int64); sid = -np.ones(K, np.int64); vh = -np.ones(K, np.int64)
+            ag = np.zeros(K); hn = np.ones(K)
             for j, s in enumerate(senders):
                 for a, t in enumerate(range(te - T + 1, te + 1)):
                     if t in bsm and s in bsm[t]:
                         p, v, h, c = bsm[t][s]; pos[j, a] = p; sp[j, a] = v; hd[j, a] = h; ac[j, a] = c; cn[j, a] = cnt[(t, s)]; ms[j, a] = True
-                ys[j] = gt.get(s, 0); sid[j] = s
-            for k, v in zip(out, (pos, sp, hd, ac, cn, ms, ys, sid, te, rid, ctr)): out[k].append(v)
+                ys[j] = gt.get(veh[s], 0); sid[j] = s; vh[j] = veh[s]
+                ag[j] = min(te - chain[s], 30) / 30.0
+                if te - first[s] < T: hn[j] = min(hand_d[s], 30.0) / 30.0
+            for k, v in zip(out, (pos, sp, hd, ac, cn, ms, ys, sid, te, rid, ctr, vh, ag, hn)): out[k].append(v)
     D = {k: np.stack(v) if k not in ("te", "rid") else np.array(v) for k, v in out.items()}
     D["pos"] = D["pos"].astype(np.float64); D["own"] = np.array(own_all, np.float64)
     return D

@@ -128,7 +128,7 @@ def make_set_raw(D, m, scenario, coordinated, rng, n_windows=4000, min_honest=No
     if win is None:
         ok = np.nonzero((D["y"] == 0).sum(1) >= min_honest)[0]
         win = np.sort(rng.choice(ok, min(n_windows, len(ok)), replace=False))
-    S = {k: D[k][win].copy() for k in ("pos", "spd", "hed", "acl", "cnt", "M", "y", "ctr")}
+    S = {k: D[k][win].copy() for k in ("pos", "spd", "hed", "acl", "cnt", "M", "y", "ctr", "age", "hand") if k in D}
     picks = [rng.choice(np.nonzero(S["y"][w] == 0)[0], m, replace=False) for w in range(len(win))]
     for w, idx in enumerate(picks):
         ww = {k: S[k][w] for k in ("pos", "spd", "hed", "acl", "M")}
@@ -142,7 +142,7 @@ def augment(D, rng, frac=0.5, scenarios=("offset", "stop"), max_m=4, label=99):
     senders turned into careful liars of a random scenario and random size (offset 20-300 m), coordinated or not; liars get `label`."""
     ok = np.nonzero((D["y"] == 0).sum(1) >= 2)[0]
     win = np.sort(rng.choice(ok, int(frac * len(ok)), replace=False))
-    S = {k: D[k][win].copy() for k in ("pos", "spd", "hed", "acl", "cnt", "M", "y", "ctr")}
+    S = {k: D[k][win].copy() for k in ("pos", "spd", "hed", "acl", "cnt", "M", "y", "ctr", "age", "hand") if k in D}
     for w in range(len(win)):
         hon = np.nonzero(S["y"][w] == 0)[0]; m = int(rng.integers(1, min(max_m, len(hon) - 1) + 1))
         idx = rng.choice(hon, m, replace=False); sc = scenarios[int(rng.integers(len(scenarios)))]

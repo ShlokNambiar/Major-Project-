@@ -8,9 +8,9 @@ from reportlab.platypus import SimpleDocTemplate, Paragraph, Table, TableStyle
 INK = colors.HexColor("#111111")
 TITLE = ParagraphStyle("T", fontName="Helvetica-Bold", fontSize=13.5, alignment=1, spaceAfter=6, textColor=INK)
 HDR = ParagraphStyle("Hd", fontName="Helvetica", fontSize=10, leading=13.5, textColor=INK)
-PART = ParagraphStyle("P", fontName="Helvetica-Bold", fontSize=10.5, spaceBefore=7, spaceAfter=1, textColor=INK)
+PART = ParagraphStyle("P", fontName="Helvetica-Bold", fontSize=10.5, spaceBefore=4, spaceAfter=1, textColor=INK)
 Q = ParagraphStyle("Q", fontName="Helvetica-Bold", fontSize=9, leading=11.5, leftIndent=8, textColor=INK)
-A = ParagraphStyle("A", fontName="Helvetica", fontSize=8.7, leading=10.6, leftIndent=18, spaceAfter=1.5, textColor=INK)
+A = ParagraphStyle("A", fontName="Helvetica", fontSize=8.7, leading=10.3, leftIndent=18, spaceAfter=1.5, textColor=INK)
 AB = ParagraphStyle("AB", parent=A, leftIndent=28, bulletIndent=19)
 def q(label, *paras):
     out = [Paragraph(label, Q)]
@@ -44,8 +44,8 @@ S += q("2. Interest (Why are you personally invested or curious about solving th
 S += [Paragraph("PART 2: DATA STRATEGY", PART)]
 S += q("3. Data Availability (Where will you source your data? Provide repository or collection method):",
   "Public benchmark <b>VeReMi Extension</b>, downloaded from Zenodo (record 20090854, CC-BY 4.0). It is a <b>simulated</b> benchmark (F2MD / VEINS / SUMO, Luxembourg traffic scenario, 19 attack types), "
-  "so no data collection is needed. Used: 14 of the 19 attack types at 14:00-16:00 (no Sybil attacks; the RandomSpeedOffset archive is excluded because it is mislabeled). "
-  "Windows: 109,823 train, 29,547 validation, 68,971 test. Code, logs and weights: our GitHub repository.")
+  "so no data collection is needed. Main study: 14 of the 19 attack types at 14:00-16:00 (RandomSpeedOffset archive excluded as mislabeled); "
+  "109,823 train, 29,547 validation, 68,971 test windows. Extension: 18 attacks, adding the 4 Sybil attacks (88,695 test windows). Code, logs, weights: our GitHub repository.")
 S += q("4. Choice of Data (What specific features/attributes will you include, and what will you filter out?):",
   "<b>Included</b> (19 per sender per second): 9 claim values (position relative to the receiver, speed, heading, movement, acceleration) and 10 plausibility checks: "
   "kinematic consistency, a road map learned from honest traffic, distance to the nearest other claim, exact self-repeat, copied trail, log movement. "
@@ -64,7 +64,7 @@ S += qb("5. Analysis of Data (Outline your ML pipeline: preprocessing, missing v
 S += [Paragraph("PART 4: VALIDATION, GENERALIZATION, &amp; INTERPRETATION", PART)]
 S += qb("6. Generalization (How will you test if your model works beyond your specific training dataset?):",
  ["<b>Done:</b> train on the first hour, test on the later hour (unseen time), receiver-disjoint validation and test blocks; collusion stress test with injected consistent lies (incl. a convoy never seen in training).",
-  "<b>Open:</b> Sybil attacks; external check on original VeReMi / VeReMi NextGen; dense traffic for v2; a 3rd seed."])
+  "<b>Open:</b> external check on original VeReMi / VeReMi NextGen; dense traffic for v2; a 3rd seed."])
 S += [Paragraph("7. Analysis Validity Testing:", Q)]
 S += [Paragraph("<b>Null Hypothesis (H0):</b> the neighbour-aware detector has the same F1 as the same model without neighbour attention. Alternative (H1): it is higher.", A)]
 S += [Paragraph("<b>Evaluation Metrics:</b> precision, recall, F1, accuracy, false-positive rate, detection latency (seconds to first alarm), and colluder recall at a matched 1% false-positive rate.", A)]
@@ -73,10 +73,11 @@ S += [Paragraph("<b>Statistical Test:</b> paired bootstrap 95% confidence interv
 S += qb("8. Interpretation (What actionable engineering or real-world insight will your final results yield?):",
  ["Final model (v2 + memory), message labels: precision 98.16, recall 97.78, F1 97.97, accuracy 98.74 (v2 alone: F1 97.88, FPR 0.60%). "
   "Vehicle labels: v2 + memory recall 96.09, F1 97.12. First model F1 94.9; speed-check rule F1 78.9. Mean 0.9 s to first alarm; 96% of attacker-receiver pairs flagged.",
-  "Reference survey (Abdel Hakeem &amp; Kim, T-ITS 2025): 97.37% on the original VeReMi (5 attacks). We are above it on all four metrics with message labels, not on recall/F1 with vehicle labels; not like-for-like.",
+  "Sybil extension (18 attacks), message labels: P 96.30, R 95.46, F1 95.88, accuracy 97.04, FPR 2.07%; vehicle F1 95.38. Neighbour attention about +1.3 F1; main miss: GridSybil ghosts (recall 0.82).",
+  "Reference survey (Abdel Hakeem &amp; Kim, T-ITS 2025): 97.37% on the original VeReMi (5 attacks, no Sybil). 14 attacks: above it on all four metrics (message labels); 18 attacks: all four below it. Not like-for-like.",
   "Neighbour attention cuts false alarms (FPR 0.90% to 0.60%), but its gain turns slightly negative when attackers are most of the neighbours. "
   "Plausibility checks plus lie training raise recall on careful colluding lies from at most 0.04 to 0.70-0.90; lies that stay on the road remain hard (0.23-0.48). "
   "Insight: deploy behind message signatures; on-road lies need an independent signal (signal strength, sensors, RSUs). Limit: simulated data."])
 
-SimpleDocTemplate("docs/research_methodology_worksheet.pdf", pagesize=A4, leftMargin=2.1*cm, rightMargin=2.1*cm, topMargin=0.8*cm, bottomMargin=0.7*cm,
+SimpleDocTemplate("docs/research_methodology_worksheet.pdf", pagesize=A4, leftMargin=2.1*cm, rightMargin=2.1*cm, topMargin=0.65*cm, bottomMargin=0.7*cm,
                   title="B.Tech Research Methodology & Project Blueprint Worksheet").build(S)

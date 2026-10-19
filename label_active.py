@@ -8,7 +8,7 @@ Inactive attacker slots (e.g. EventualStop before the fake stop starts) are excl
 import bisect, glob, json, os, re, sys, numpy as np
 from concurrent.futures import ProcessPoolExecutor
 
-P = os.environ.get("PREDS", "results/preds_v2"); T = 10; FLOOD = {13, 14, 15}
+P = os.environ.get("PREDS", "results/preds_v2"); T = 10; FLOOD = {13, 14, 15} | {int(x) for x in os.environ.get("FLOOD_EXTRA", "").split(",") if x}
 
 
 def falsified_slice(args):
@@ -48,13 +48,15 @@ if __name__ == "__main__":
     sys.path.insert(0, ".")
     from run_v2 import all_dirs, load_one
     late = all_dirs("54000_57600")
-    z = np.load(f"{P}/test_meta.npz"); y, rid, te, sid, grp = z["y"], z["rid"], z["te"], z["sid"], z["grp"]
+    z = np.load(f"{P}/test_meta.npz"); y, rid, te, grp = z["y"], z["rid"], z["te"], z["grp"]
+    sid = z["veh"] if "veh" in z.files else z["sid"]          # ground truth is keyed by vehicle id, not pseudonym
     V = {k: [] for k in ("y", "rid", "te", "sid", "grp")}                       # validation windows: first 30% of each slice (as run_v2.py)
     for g, d in enumerate(late):
         p = load_one(d)
         if p is None: continue
         c = int(0.3 * len(p["te"]))
-        for k in ("y", "rid", "te", "sid"): V[k].append(p[k][:c])
+        for k in ("y", "rid", "te"): V[k].append(p[k][:c])
+        V["sid"].append(p.get("veh", p["sid"])[:c])
         V["grp"].append(np.full(c, g, np.int32))
     V = {k: np.concatenate(v) for k, v in V.items()}
     jobs = [(d, set(rid[grp == g].tolist()) | set(V["rid"][V["grp"] == g].tolist())) for g, d in enumerate(late)]

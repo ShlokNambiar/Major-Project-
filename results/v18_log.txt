@@ -1,0 +1,56 @@
+[    42s] train subsets 18 late 18
+[   453s] road map 675 x 668 cells
+[   455s] features per sender and step 22
+[   877s] seed 0 train 141260 augmented 51033 liars 95168
+[  1082s] seed 1 train 141260 augmented 51033 liars 94961
+[  1224s] features written data/cache_feat18b
+[  1310s]   [full] epoch 1/8 loss 0.3131
+[  1403s]   [full] epoch 2/8 loss 0.2106
+[  1507s]   [full] epoch 3/8 loss 0.1918
+[  1617s]   [full] epoch 4/8 loss 0.1790
+[  1732s]   [full] epoch 5/8 loss 0.1689
+[  1854s]   [full] epoch 6/8 loss 0.1582
+[  1975s]   [full] epoch 7/8 loss 0.1473
+[  2097s]   [full] epoch 8/8 loss 0.1399
+[   107s]   [full] epoch 1/8 loss 0.3131
+[   199s]   [full] epoch 2/8 loss 0.2106
+[   298s]   [full] epoch 3/8 loss 0.1918
+[   393s]   [full] epoch 4/8 loss 0.1790
+[   487s]   [full] epoch 5/8 loss 0.1689
+[   590s]   [full] epoch 6/8 loss 0.1582
+[   700s]   [full] epoch 7/8 loss 0.1473
+[   817s]   [full] epoch 8/8 loss 0.1399
+[   817s] checkpoint results/models_v18/full_0.pt
+[   851s] saved full_0 thr 0.76  P 0.9624 R 0.9374 F1 0.9497 Acc 0.9638
+[   972s]   [nonbr] epoch 1/8 loss 0.3446
+[  1094s]   [nonbr] epoch 2/8 loss 0.2727
+[  1220s]   [nonbr] epoch 3/8 loss 0.2553
+[  1342s]   [nonbr] epoch 4/8 loss 0.2441
+[  1478s]   [nonbr] epoch 5/8 loss 0.2356
+[  1623s]   [nonbr] epoch 6/8 loss 0.2268
+[  1760s]   [nonbr] epoch 7/8 loss 0.2171
+[  1897s]   [nonbr] epoch 8/8 loss 0.2112
+[  1897s] checkpoint results/models_v18/nonbr_0.pt
+[  1940s] saved nonbr_0 thr 0.76  P 0.9572 R 0.9188 F1 0.9376 Acc 0.9554
+[  2072s]   [full] epoch 1/8 loss 0.3159
+[  2195s]   [full] epoch 2/8 loss 0.2119
+[  2315s]   [full] epoch 3/8 loss 0.1929
+[  2435s]   [full] epoch 4/8 loss 0.1808
+[  2556s]   [full] epoch 5/8 loss 0.1707
+[  2676s]   [full] epoch 6/8 loss 0.1593
+[  2798s]   [full] epoch 7/8 loss 0.1486
+[  2928s]   [full] epoch 8/8 loss 0.1415
+[  2928s] checkpoint results/models_v18/full_1.pt
+[  2966s] saved full_1 thr 0.74  P 0.9607 R 0.9386 F1 0.9496 Acc 0.9636
+[  3102s]   [nonbr] epoch 1/8 loss 0.3504
+[  3236s]   [nonbr] epoch 2/8 loss 0.2727
+[  3359s]   [nonbr] epoch 3/8 loss 0.2546
+[  3479s]   [nonbr] epoch 4/8 loss 0.2441
+[  3608s]   [nonbr] epoch 5/8 loss 0.2351
+[  3765s]   [nonbr] epoch 6/8 loss 0.2259
+[  3886s]   [nonbr] epoch 7/8 loss 0.2162
+[  4006s]   [nonbr] epoch 8/8 loss 0.2102
+[  4006s] checkpoint results/models_v18/nonbr_1.pt
+[  4041s] saved nonbr_1 thr 0.76  P 0.9524 R 0.9203 F1 0.9361 Acc 0.9541
+[  4041s] done
+EXIT 0

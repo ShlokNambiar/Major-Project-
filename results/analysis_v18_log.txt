@@ -1,0 +1,8 @@
+full_0             message: P 0.9621 R 0.9476 F1 0.9548 Acc 0.9676 | +memory P 0.9574 R 0.9467 F1 0.9520 Acc 0.9656 | vehicle F1 0.9497
+full_1             message: P 0.9629 R 0.9466 F1 0.9547 Acc 0.9676 | +memory P 0.9700 R 0.9375 F1 0.9535 Acc 0.9670 | vehicle F1 0.9496
+nonbr_0            message: P 0.9612 R 0.9257 F1 0.9431 Acc 0.9597 | +memory P 0.9653 R 0.9217 F1 0.9429 Acc 0.9598 | vehicle F1 0.9376
+nonbr_1            message: P 0.9520 R 0.9301 F1 0.9410 Acc 0.9579 | +memory P 0.9599 R 0.9231 F1 0.9412 Acc 0.9584 | vehicle F1 0.9361
+full_ens           message: P 0.9649 R 0.9504 F1 0.9576 Acc 0.9697 | +memory P 0.9673 R 0.9450 F1 0.9560 Acc 0.9686 | vehicle F1 0.9520
+nonbr_ens          message: P 0.9628 R 0.9269 F1 0.9445 Acc 0.9607 | +memory P 0.9629 R 0.9256 F1 0.9439 Acc 0.9603 | vehicle F1 0.9394
+saved results/results_v18.json
+EXIT 0

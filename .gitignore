@@ -10,3 +10,7 @@ results/preds/
 results/preds14/
 results/preds_v2/
 .pytest_cache/
+results/preds_v18/
+results/preds_v18big/
+*.bak
+*.ckpt

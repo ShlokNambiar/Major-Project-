@@ -35,7 +35,8 @@ def val_scores(r):
     f = f"{P}/valscores_{r}.npy"
     if os.path.exists(f): return np.load(f)
     zr = np.load(f"{P}/{r}.npz"); cols = zr["cols"]; mode = r.split("-")[0].rsplit("_", 1)[0]
-    m = Detector(fin=len(cols), spatial=MODES[mode]["spatial"]); m.load_state_dict(torch.load(f"{MD}/{r}.pt", weights_only=True)); m = m.to(dev).eval()
+    sd = torch.load(f"{MD}/{r}.pt", weights_only=True)                 # width/depth read from the checkpoint
+    m = Detector(fin=len(cols), spatial=MODES[mode]["spatial"], d=sd["inp.weight"].shape[0], layers=len({k.split(".")[1] for k in sd if k.startswith("blocks.")})); m.load_state_dict(sd); m = m.to(dev).eval()
     X = np.load(f"{FEAT}/val.npy", mmap_mode="r")
     with torch.no_grad():
         S = np.concatenate([torch.sigmoid(m(torch.tensor(X[i:i + 1024][..., cols], dtype=torch.float32).to(dev), torch.tensor(va["M"][i:i + 1024]).to(dev))).cpu().numpy()
