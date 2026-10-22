@@ -93,11 +93,15 @@ open(os.path.join(B, "main_word.tex"), "w", encoding="utf-8").write(w)
 ref = os.path.join(B, "reference.docx")
 subprocess.run(["pandoc", "-o", ref, "--print-default-data-file", "reference.docx"], check=True)
 doc = Document(ref)
-for name, size, bold in (("Normal", 10, None), ("Body Text", 10, None), ("First Paragraph", 10, None), ("Compact", 10, None), ("Title", 20, None),
-                         ("Author", 11, None), ("Abstract", 9, None), ("Heading 1", 12, True), ("Heading 2", 10.5, True), ("Heading 3", 10, True),
-                         ("Caption", 8.5, None), ("Image Caption", 8.5, None), ("Table Caption", 8.5, None), ("Bibliography", 8.5, None)):
+# body text 12 pt (= 16 px at 96 dpi, the professor's requirement); headings scaled up, captions/tables/references slightly smaller
+for name, size, bold in (("Normal", 12, None), ("Body Text", 12, None), ("First Paragraph", 12, None), ("Compact", 11, None), ("Title", 18, True),
+                         ("Author", 12, None), ("Abstract", 12, None), ("Heading 1", 14, True), ("Heading 2", 12, True), ("Heading 3", 12, True),
+                         ("Caption", 10, None), ("Image Caption", 10, None), ("Table Caption", 10, None), ("Bibliography", 11, None)):
     try:
         st = doc.styles[name]; st.font.name = "Times New Roman"; st.font.size = Pt(size)
+        rf = st.element.rPr.rFonts                            # drop theme-font links, which otherwise override the name (headings stayed sans)
+        for a in ("asciiTheme", "hAnsiTheme", "eastAsiaTheme", "cstheme"): rf.attrib.pop("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}" + a, None)
+        for a in ("ascii", "hAnsi", "cs", "eastAsia"): rf.set("{http://schemas.openxmlformats.org/wordprocessingml/2006/main}" + a, "Times New Roman")
         if bold is not None: st.font.bold = bold
         st.font.color.rgb = None
     except KeyError:
