@@ -14,3 +14,4 @@ results/preds_v18/
 results/preds_v18big/
 *.bak
 *.ckpt
+build_word/
