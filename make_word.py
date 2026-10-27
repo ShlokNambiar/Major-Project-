@@ -78,7 +78,7 @@ def number_heading(mt):                                       # IEEE-style "III.
 w = re.sub(r"\\(section|subsection)\{([^}]*)\}", number_heading, w)
 w = re.sub(r"\\ref\{([^}]+)\}", lambda x: labels.get(x.group(1), "?"), w)
 w = re.sub(r"\\cite\{([^}]+)\}", lambda x: "[" + ", ".join(cites.get(k.strip(), "?") for k in x.group(1).split(",")) + "]", w)
-w = re.sub(r"\\author\{.*?\\maketitle", lambda _: BS + "author{Shlok (UAI05BTA2317), Jiya (UAI05BTA2313), Caleb (UAI05BTA2319) -- BTech AI ML, Universal AI University" + BS + BS + " Guides: Rajesh Bhise and Laxman Buddhewad}\n" + BS + "maketitle", w, flags=re.S)
+w = re.sub(r"\\author\{.*?\\maketitle", lambda _: BS + "author{Jiya Rathod (UAI05BTA2313), Shlok Nambiar (UAI05BTA2317), Caleb Medere (UAI05BTA2319) -- BTech AI ML, Universal AI University" + BS + BS + " Guides: Rajesh Bhise and Laxman Buddhewad}\n" + BS + "maketitle", w, flags=re.S)
 w = re.sub(r"\\begin\{IEEEkeywords\}(.*?)\\end\{IEEEkeywords\}", lambda x: BS + "noindent" + BS + "textbf{Index Terms}: " + x.group(1).strip(), w, flags=re.S)
 bib = re.search(r"\\begin\{thebibliography\}\{\d+\}(.*?)\\end\{thebibliography\}", w, re.S)
 items = re.split(r"\\bibitem\{([^}]+)\}", bib.group(1))[1:]
