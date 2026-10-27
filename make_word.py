@@ -127,4 +127,41 @@ for t in d.tables:
         tcPr = c._tc.get_or_add_tcPr(); cb = OxmlElement("w:tcBorders"); border(cb, "bottom", 4); tcPr.append(cb)
 for p in d.paragraphs:
     if p._p.xpath(".//pic:pic"): p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+# 6. IEEE two-column layout: title, authors, abstract and index terms span the page, the rest runs in two columns
+from docx.shared import Inches
+import copy
+COL_W = Inches(3.3)
+for t in d.tables:                                            # table text 8 pt, columns auto-fitted to content so numbers never wrap
+    tblPr = t._tbl.tblPr
+    for tag in ("w:tblW", "w:tblLayout"):
+        old = tblPr.find(qn(tag))
+        if old is not None: tblPr.remove(old)
+    tw = OxmlElement("w:tblW"); tw.set(qn("w:w"), "5000"); tw.set(qn("w:type"), "pct"); tblPr.append(tw)
+    tl = OxmlElement("w:tblLayout"); tl.set(qn("w:type"), "autofit"); tblPr.append(tl)
+    for gc in t._tbl.tblGrid.findall(qn("w:gridCol")): gc.attrib.pop(qn("w:w"), None)
+    for row in t.rows:
+        for c in row.cells:
+            tcW = c._tc.tcPr.find(qn("w:tcW")) if c._tc.tcPr is not None else None
+            if tcW is not None: tcW.set(qn("w:type"), "auto"); tcW.set(qn("w:w"), "0")
+            for p in c.paragraphs:
+                for r in p.runs: r.font.size = Pt(8)
+for shp in d.inline_shapes:                                   # every figure scaled to the column width
+    if shp.width > COL_W: shp.height = int(shp.height * COL_W / shp.width); shp.width = COL_W
+for p in d.paragraphs:
+    if p.style.name in ("Body Text", "First Paragraph") and not p._p.xpath(".//pic:pic"): p.alignment = WD_ALIGN_PARAGRAPH.JUSTIFY
+sec = d.sections[0]
+sec.left_margin = sec.right_margin = Inches(0.7); sec.top_margin = sec.bottom_margin = Inches(0.75)
+body_sp = d.element.body.sectPr
+def set_cols(sp, n):
+    old = sp.find(qn("w:cols"))
+    if old is not None: sp.remove(old)
+    c = OxmlElement("w:cols"); c.set(qn("w:num"), str(n)); c.set(qn("w:space"), "360")
+    pg = sp.find(qn("w:docGrid"))
+    sp.insert(list(sp).index(pg), c) if pg is not None else sp.append(c)
+split = next(p for p in d.paragraphs if p.text.startswith("Index Terms")); split.alignment = WD_ALIGN_PARAGRAPH.LEFT
+first_sp = copy.deepcopy(body_sp); set_cols(first_sp, 1)
+split._p.get_or_add_pPr().append(first_sp)                   # section 1 (one column) ends after the index terms
+set_cols(body_sp, 2)
+ty = OxmlElement("w:type"); ty.set(qn("w:val"), "continuous"); body_sp.insert(0, ty)
 d.save(out); print("wrote", out)
